@@ -7,36 +7,35 @@
         <item
             android:id="@+id/nav_new"
             android:icon="@drawable/ic_fiber_new_black_24dp"
-            android:title="Tin Tức" />
+            android:title="@string/new_fragment_title" />
         <item
             android:id="@+id/nav_dental"
             android:icon="@drawable/ic_airline_seat_flat_angled_black_24dp"
-            android:title="Nha Khoa" />
+            android:title="@string/dental_fragment_title" />
         <item
-            android:id="@+id/nav_schedule"
+            android:id="@+id/nav_appointment"
             android:icon="@drawable/ic_add_alert_black_24dp"
-            android:title="Đặt Lịch" />
+            android:title="@string/appointment_fragment_title" />
         <item
             android:id="@+id/nav_promotion"
             android:icon="@drawable/ic_whatshot_black_24dp"
-            android:title="Khuyến Mãi" />
-
+            android:title="@string/promotion_fragment_title" />
     </group>
 
     <item android:title="Tài Khoản">
         <menu>
             <item
-                android:id="@+id/nav_history"
+                android:id="@+id/nav_history_treatment"
                 android:icon="@drawable/ic_history_black_24dp"
-                android:title="Lịch Sử Khám Bệnh" />
+                android:title="@string/history_treatment_fragment_title" />
             <item
                 android:id="@+id/nav_history_appointment"
                 android:icon="@drawable/ic_add_to_photos_black_24dp"
-                android:title="Lịch Sử Đặt Lịch" />
+                android:title="@string/history_appointment_title" />
             <item
                 android:id="@+id/nav_log_out"
                 android:icon="@drawable/ic_power_settings_new_black_24dp"
-                android:title="Đăng Xuất" />
+                android:title="@string/logout_titile" />
             <!--<item-->
                 <!--android:id="@+id/nav_send"-->
                 <!--android:icon="@drawable/ic_menu_send"-->

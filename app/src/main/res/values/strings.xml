@@ -21,4 +21,23 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="logout_titile">Log Out</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="new_fragment_title">New Fagment</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="dental_fragment_title">Dental Fragment</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="appointment_fragment_title">Appointment Fragment</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="promotion_fragment_title">Promotion Fragment</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="history_treatment_fragment_title">History Treatment Fragment</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="history_appointment_title">History Appointment Fragment</string>
 </resources>

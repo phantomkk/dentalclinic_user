@@ -3,6 +3,7 @@ package com.dentalclinic.capstone.activities;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,11 +13,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.dentalclinic.capstone.dentalclinicuser.R;
 
-public class MainActivity extends AppCompatActivity
+import com.dentalclinic.capstone.fragment.AppointmentFragment;
+import com.dentalclinic.capstone.fragment.DentalFragment;
+import com.dentalclinic.capstone.fragment.HistoryAppointmentFragment;
+import com.dentalclinic.capstone.fragment.HistoryTreatmentFragment;
+import com.dentalclinic.capstone.fragment.NewFragment;
+import com.dentalclinic.capstone.fragment.PromotionFragment;
+
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,15 +32,18 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        setTitle(getResources().getString(R.string.new_fragment_title));
+        NewFragment newFragment = new NewFragment();
+        fragmentManager.beginTransaction().replace(R.id.main_fragment, newFragment).commit();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -81,19 +92,52 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+//        switch (id){
+//            case R.id.nav_new:
+//                break;
+//            case R.id.nav_dental:
+//                break;
+//            case R.id.nav_appointment:
+//                break;
+//            case R.id.nav_promotion:
+//            case R.id.nav_history_treatment:
+//            case R.id.nav_history_appointment:
+//            case R.id.nav_log_out:
+//                default:
+//
+//
+//        }
         if (id == R.id.nav_new) {
-            // Handle the camera action
+            setTitle(getResources().getString(R.string.new_fragment_title));
+            NewFragment newFragment = new NewFragment();
+            fragmentManager.beginTransaction().replace(R.id.main_fragment, newFragment).commit();
         } else if (id == R.id.nav_dental) {
-
-        } else if (id == R.id.nav_schedule) {
-
+            setTitle(getResources().getString(R.string.dental_fragment_title));
+            DentalFragment dentalFragment = new DentalFragment();
+            fragmentManager.beginTransaction().replace(R.id.main_fragment, dentalFragment).commit();
+        } else if (id == R.id.nav_appointment) {
+            setTitle(getResources().getString(R.string.appointment_fragment_title));
+            AppointmentFragment dentalFragment = new AppointmentFragment();
+            fragmentManager.beginTransaction().replace(R.id.main_fragment, dentalFragment).commit();
         } else if (id == R.id.nav_promotion) {
-
+            setTitle(getResources().getString(R.string.promotion_fragment_title));
+            PromotionFragment dentalFragment = new PromotionFragment();
+            fragmentManager.beginTransaction().replace(R.id.main_fragment, dentalFragment).commit();
+        } else if (id == R.id.nav_history_treatment) {
+            setTitle(getResources().getString(R.string.history_treatment_fragment_title));
+            HistoryTreatmentFragment dentalFragment = new HistoryTreatmentFragment();
+            fragmentManager.beginTransaction().replace(R.id.main_fragment, dentalFragment).commit();
+        } else if (id == R.id.nav_history_appointment) {
+            setTitle(getResources().getString(R.string.history_appointment_title));
+            HistoryAppointmentFragment dentalFragment = new HistoryAppointmentFragment();
+            fragmentManager.beginTransaction().replace(R.id.main_fragment, dentalFragment).commit();
+        }else if (id == R.id.nav_log_out) {
+            showMessage("Đăng xuất");
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }
