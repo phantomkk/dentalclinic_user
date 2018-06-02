@@ -3,9 +3,17 @@ package com.dentalclinic.capstone.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.util.Log;
 
 import com.dentalclinic.capstone.models.User;
 import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
 
 
 /**
@@ -39,5 +47,21 @@ public class Utils {
         User u = gson.fromJson(jsonUser, User.class);
         return u;
     }
+    public static String getErrorMsg(ResponseBody responseBody) {
+        try {
+            if (responseBody != null) {
+                JSONObject errorObject = new JSONObject(responseBody.string());
+                return errorObject.getString("error");
+            } else {
+                Log.d("MYTAG", "ResponseBody or ResponseBody.string() null");
+                return "";
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
 
+    }
 }

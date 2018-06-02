@@ -33,7 +33,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dentalclinic.capstone.dentalclinicuser.R;
+import com.dentalclinic.capstone.R;
 
 import static android.Manifest.permission.READ_CONTACTS;
 

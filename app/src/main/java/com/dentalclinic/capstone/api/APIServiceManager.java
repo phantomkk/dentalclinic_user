@@ -8,15 +8,9 @@ import com.dentalclinic.capstone.utils.AppConst;
  */
 
 public class APIServiceManager {
-    private static final String getURL(){
-//        if(Utils.isEmulator()){
-//            return "http://10.0.2.2:51390/";
-//        }else{
-            return AppConst.SERVER_NAME;
-//        }
-    }
-    public static UserService getUserService(){
-        return RetrofitClient.getClient(getURL()).create(UserService.class);
+
+    public static <T> T getService(final Class<T> tClass) {
+        return RetrofitClient.getClient().create(tClass);
     }
 
 }
