@@ -20,27 +20,29 @@
             android:id="@+id/nav_promotion"
             android:icon="@drawable/ic_whatshot_black_24dp"
             android:title="@string/promotion_fragment_title" />
+        <item android:title="Tài Khoản">
+            <menu>
+                <group android:checkableBehavior="single">
+                    <item
+                        android:id="@+id/nav_my_accout"
+                        android:icon="@drawable/ic_account_circle_black_24dp"
+                        android:title="@string/my_accout_fragment_title" />
+                    <item
+                        android:id="@+id/nav_history_treatment"
+                        android:icon="@drawable/ic_history_black_24dp"
+                        android:title="@string/history_treatment_fragment_title" />
+                    <item
+                        android:id="@+id/nav_history_appointment"
+                        android:icon="@drawable/ic_add_to_photos_black_24dp"
+                        android:title="@string/history_appointment_title" />
+                </group>
+                <item
+                    android:id="@+id/nav_log_out"
+                    android:icon="@drawable/ic_power_settings_new_black_24dp"
+                    android:title="@string/logout_titile" />
+            </menu>
+        </item>
     </group>
 
-    <item android:title="Tài Khoản">
-        <menu>
-            <item
-                android:id="@+id/nav_history_treatment"
-                android:icon="@drawable/ic_history_black_24dp"
-                android:title="@string/history_treatment_fragment_title" />
-            <item
-                android:id="@+id/nav_history_appointment"
-                android:icon="@drawable/ic_add_to_photos_black_24dp"
-                android:title="@string/history_appointment_title" />
-            <item
-                android:id="@+id/nav_log_out"
-                android:icon="@drawable/ic_power_settings_new_black_24dp"
-                android:title="@string/logout_titile" />
-            <!--<item-->
-                <!--android:id="@+id/nav_send"-->
-                <!--android:icon="@drawable/ic_menu_send"-->
-                <!--android:title="Send" />-->
-        </menu>
-    </item>
 
 </menu>

@@ -2,13 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.dentalclinic.capstone.fragment.HistoryTreatmentFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    tools:context="com.dentalclinic.capstone.fragment.HistoryTreatmentFragment"
+    android:background="@color/color_blue_grey_500">
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="50dp"
-        android:text="@string/history_treatment_fragment_title" />
-
+        android:layout_height="wrap_content"
+        android:id="@+id/list_profile"
+        android:dividerHeight="30dp"
+        android:layout_margin="30dp"
+        android:divider="@color/color_blue_grey_500"
+        android:background="@color/color_blue_grey_500"
+        android:cacheColorHint="@color/color_blue_grey_500" />
 </FrameLayout>

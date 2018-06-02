@@ -37,6 +37,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="history_treatment_fragment_title">History Treatment Fragment</string>
+    <string name="my_accout_fragment_title">My Accout Fragment</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="history_appointment_title">History Appointment Fragment</string>

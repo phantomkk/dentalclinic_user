@@ -8,6 +8,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.dentalclinic.capstone.R;
@@ -16,12 +17,15 @@ import com.dentalclinic.capstone.fragment.AppointmentFragment;
 import com.dentalclinic.capstone.fragment.DentalFragment;
 import com.dentalclinic.capstone.fragment.HistoryAppointmentFragment;
 import com.dentalclinic.capstone.fragment.HistoryTreatmentFragment;
+import com.dentalclinic.capstone.fragment.MyAccoutFragment;
 import com.dentalclinic.capstone.fragment.NewFragment;
 import com.dentalclinic.capstone.fragment.PromotionFragment;
+import com.rupins.drawercardbehaviour.CardDrawerLayout;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
    FragmentManager fragmentManager = getSupportFragmentManager();
+    private CardDrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +46,7 @@ public class MainActivity extends BaseActivity
 //            }
 //        });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -50,6 +54,9 @@ public class MainActivity extends BaseActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        drawer.setViewScale(Gravity.START, 0.9f);
+        drawer.setRadius(Gravity.START, 35);
+        drawer.setViewElevation(Gravity.START, 20);
     }
 
     @Override
@@ -128,6 +135,10 @@ public class MainActivity extends BaseActivity
             setTitle(getResources().getString(R.string.history_appointment_title));
             HistoryAppointmentFragment dentalFragment = new HistoryAppointmentFragment();
             fragmentManager.beginTransaction().replace(R.id.main_fragment, dentalFragment).commit();
+        } else if (id == R.id.nav_my_accout) {
+            setTitle(getResources().getString(R.string.my_accout_fragment_title));
+            MyAccoutFragment myAccoutFragment = new MyAccoutFragment();
+            fragmentManager.beginTransaction().replace(R.id.main_fragment, myAccoutFragment).commit();
         }else if (id == R.id.nav_log_out) {
             showMessage("Đăng xuất");
         }
