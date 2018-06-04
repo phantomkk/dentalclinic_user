@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="30dp"
+        android:padding="16dp"
         tools:context="com.dentalclinic.capstone.activities.QuickRegisterActivity">
 
 
@@ -24,6 +24,8 @@
                 android:layout_width="130dp"
                 android:layout_height="130dp"
                 android:layout_gravity="center"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:src="@drawable/dental_icon" />
 
             <TextView
@@ -40,10 +42,10 @@
                 android:layout_height="wrap_content">
 
                 <AutoCompleteTextView
-                    android:id="@+id/compl_tv_email_quickregister"
+                    android:id="@+id/tv_fullname_quickregister"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_account_circle_black_24dp"
+                    android:drawableStart="@drawable/ic_account_circle_black_24dp"
                     android:drawablePadding="10dp"
                     android:hint="@string/tv_promt_fullname"
                     android:inputType="text"
@@ -57,7 +59,7 @@
                 android:layout_height="wrap_content">
 
                 <AutoCompleteTextView
-                    android:id="@+id/compl_tv_phone_quickregister"
+                    android:id="@+id/tv_phone_quickregister"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/ic_phone_iphone_black_24dp"
@@ -90,7 +92,7 @@
             </android.support.design.widget.TextInputLayout>
 
             <Button
-                style="@style/custom_button"
+                style="@style/custom_button_green"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
