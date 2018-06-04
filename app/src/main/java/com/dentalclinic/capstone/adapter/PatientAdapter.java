@@ -124,7 +124,19 @@ public class PatientAdapter extends AnimatedExpandableListView.AnimatedExpandabl
         treatmentImages.add(new TreatmentImage("http://nhakhoalouis.com.vn/wp-content/uploads/2016/10/chup-xquang-rang-1.jpg"));
         treatmentDetail.setTreatmentImages(treatmentImages);
         ImageAdapter imageAdapter = new ImageAdapter(context,treatmentDetail.getTreatmentImages());
+
         gridView.setAdapter(imageAdapter);
+        gridView.setOnTouchListener(new View.OnTouchListener(){
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_MOVE){
+                    return true;
+                }
+                return false;
+            }
+
+        });
         return convertView;
     }
 
