@@ -44,10 +44,17 @@
     <string name="history_appointment_title">History Appointment Fragment</string>
     <string name="text_make_quickly_appointment">Make appointment</string>
     <!-- Quick register section -->
-    <string name="tv_quickregister">Quick register</string>
+    <string name="tv_quickbook">Quick book appointment</string>
     <string name="tv_promt_fullname">Full name</string>
     <string name="tv_promt_phone">Phone number</string>
-    <string name="tv_promt_content">Content</string>
-    <string name="btn_quickregister">Quick register</string>
-
+    <string name="tv_promt_content">Nội dung</string>
+    <string name="btn_quickbook">Quick book appointment</string>
+<!--Book appointment-->
+    <string name="label_title_quickbook">Đặt lịch khám nhanh</string>
+    <string name="label_fullname_quickbook">Họ và tên</string>
+    <string name="label_phone_quickbook">Số điện thoại</string>
+    <string name="label_date_quickbook">Ngày đặt</string>
+    <string name="label_time_quickbook">Giờ đặt</string>
+    <string name="label_content_quickbook">Nội dung</string>
+    <string name="label_button_book_quickbook">Đặt lịch</string>
 </resources>
