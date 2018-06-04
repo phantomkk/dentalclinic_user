@@ -22,9 +22,10 @@ import okhttp3.ResponseBody;
 
 public class Utils {
 
-    private static final String PREF_NAME ="ACCOUNT";
-    private static final String USER_KEY ="USER_KEY";
-    public static boolean isEmulator(){
+    private static final String PREF_NAME = "ACCOUNT";
+    private static final String USER_KEY = "USER_KEY";
+
+    public static boolean isEmulator() {
         return Build.FINGERPRINT.startsWith("generic")
                 || Build.FINGERPRINT.startsWith("unknown")
                 || Build.MODEL.contains("google_sdk")
@@ -32,7 +33,7 @@ public class Utils {
                 || Build.MODEL.contains("Android SDK built for x86");
     }
 
-    public static void saveUserInSharePref(Context context, User user){
+    public static void saveUserInSharePref(Context context, User user) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
@@ -40,13 +41,14 @@ public class Utils {
         editor.apply();
     }
 
-    public static User getUserInSharePref(Context context){
+    public static User getUserInSharePref(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         String jsonUser = sharedPreferences.getString(USER_KEY, null);
         Gson gson = new Gson();
         User u = gson.fromJson(jsonUser, User.class);
         return u;
     }
+
     public static String getErrorMsg(ResponseBody responseBody) {
         try {
             if (responseBody != null) {
@@ -72,5 +74,14 @@ public class Utils {
         array[0] = Character.toUpperCase(array[0]);
         // Return string.
         return new String(array);
+    }
+
+    /// Tên thuốc: hello .......... 30 viên
+    public static String getMedicineLine(String medicineName, String quantity, int numDot) {
+        String dots = "";
+        for (int i = 0; i < numDot; i++) {
+            dots.concat(".");
+        }
+        return "Tên thuốc: " + medicineName + " " + dots + " " + quantity + " viên";
     }
 }
