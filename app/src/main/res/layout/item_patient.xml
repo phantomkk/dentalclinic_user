@@ -1,34 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/color_white"
     app:cardUseCompatPadding="true">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:padding="10dp">
 
-        <TextView
-            android:id="@+id/txt_code_item_history"
-            style="@style/value_style"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:text="hard" />
 
-        <TextView
-            android:id="@+id/txt_name_item_history"
-            style="@style/value_style"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:text="hard" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_avatar"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/avatar"
+            app:civ_border_color="@color/color_grey_50"
+            app:civ_border_width="2dp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/color_blue_grey_100" />
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:textSize="20dp"
+                android:text="tên" />
+
+            <TextView
+                android:id="@+id/txt_date_of_birth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="date of birth" />
+
+            <TextView
+                android:id="@+id/txt_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="address" />
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/img_expand_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="right"
+            android:src="@drawable/ic_keyboard_arrow_down_black_24dp" />
     </LinearLayout>
 </android.support.v7.widget.CardView>

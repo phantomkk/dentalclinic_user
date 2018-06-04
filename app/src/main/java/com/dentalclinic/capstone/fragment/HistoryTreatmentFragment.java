@@ -3,28 +3,37 @@ package com.dentalclinic.capstone.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.adapter.PatientAdapter;
+import com.dentalclinic.capstone.animation.AnimatedExpandableListView;
+import com.dentalclinic.capstone.animation.ExpandCollapseAnimation;
+import com.dentalclinic.capstone.models.City;
 import com.dentalclinic.capstone.models.Patient;
+import com.dentalclinic.capstone.models.TreatmentDetail;
 import com.dentalclinic.capstone.models.User;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class HistoryTreatmentFragment extends BaseFragment {
-    ListView listView;
+    AnimatedExpandableListView listView;
     User user = new User();
     PatientAdapter adapter;
-    Patient patient = new Patient("trinh vo", "go vap");
-    Patient patient1 = new Patient("trinh vo", "go vap");
+//    Patient patient1 = new Patient("trinh vo", "go vap");
 
     private static HistoryTreatmentFragment instance= new HistoryTreatmentFragment();
 
@@ -47,15 +56,74 @@ public class HistoryTreatmentFragment extends BaseFragment {
         // Inflate the layout for this fragment
 //        return inflater.inflate(R.layout.fragment_history_treatment, container, false);
         View v = inflater.inflate(R.layout.fragment_history_treatment, container, false);
-        List<Patient> patientList = new ArrayList<Patient>();
-        patientList.add(patient);
-        patientList.add(patient1);
+
+//        patientList.add(patient1);
         user.setPatients(patientList);
-        listView = (ListView) v.findViewById(R.id.list_profile);
-        adapter = new PatientAdapter(getContext(),R.layout.item_patient,user.getPatients());
+        listView = (AnimatedExpandableListView) v.findViewById(R.id.list_profile);
+        prepareListData();
+        adapter = new PatientAdapter(getContext(),patientList,listDataChild);
         listView.setAdapter(adapter);
-        listView.setDivider(null);
+        listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                if (listView.isGroupExpanded(groupPosition))
+                    listView.collapseGroupWithAnimation(groupPosition);
+                else
+                    listView.expandGroupWithAnimation(groupPosition);
+                return true;
+            }
+
+        });
+
+
         return v;
     }
 
+    HashMap<Patient, List<TreatmentDetail>> listDataChild;
+    List<Patient> patientList;
+    private void prepareListData() {
+
+        listDataChild = new HashMap<Patient, List<TreatmentDetail>>();
+        patientList= new ArrayList<Patient>();
+        Patient patient = new Patient();
+        patient.setName("vo quoc trinh");
+        patient.setAddress("go vap");
+        patient.setPhone("01685149049");
+        String dtStart = "30-06-1996";
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            patient.setDateOfBirth(format.parse(dtStart));
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        patient.setAvatar("https://cdn.iconscout.com/public/images/icon/free/png-512/avatar-user-coder-3579ca3abc3fd60f-512x512.png");
+        Patient patient2 = new Patient();
+        patient2.setName("nhieu sy luc");
+        patient2.setAddress("quan 12");
+        patient2.setPhone("01685149049");
+        String dtStart2 = "01-01-1996";
+        try {
+            patient2.setDateOfBirth(format.parse(dtStart2));
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        patient2.setAvatar("https://cdn.iconscout.com/public/images/icon/free/png-512/avatar-user-hacker-3830b32ad9e0802c-512x512.png");
+        patientList.add(patient);
+        patientList.add(patient2);
+
+        // Adding child data
+        List<TreatmentDetail> details = new ArrayList<TreatmentDetail>();
+        TreatmentDetail detail = new TreatmentDetail("hahah");
+        TreatmentDetail detai2 = new TreatmentDetail("hihih");
+        TreatmentDetail detai3 = new TreatmentDetail("hohoho");
+        details.add(detail);
+        details.add(detai2);
+        details.add(detai3);
+
+        listDataChild.put(patientList.get(0), details); // Header, Child data
+        listDataChild.put(patientList.get(1), details);
+    }
 }

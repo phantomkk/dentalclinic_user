@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class Patient implements Serializable {
     @SerializedName("id")
@@ -13,7 +14,7 @@ public class Patient implements Serializable {
     @SerializedName("address")
     private String address;
     @SerializedName("phone")
-    private int phone;
+    private String phone;
     @SerializedName("date_of_birth")
     private Date dateOfBirth;
     @SerializedName("gender")
@@ -24,8 +25,10 @@ public class Patient implements Serializable {
     private String districtId;
     @SerializedName("district")
     private District district;
+    @SerializedName("treatmentHistories")
+    private List<TreatmentHistory> treatmentHistories;
 
-    public Patient(int id, String name, String address, int phone, Date dateOfBirth, String gender, String avatar, String districtId, District district) {
+    public Patient(int id, String name, String address, String phone, Date dateOfBirth, String gender, String avatar, String districtId, District district) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -37,6 +40,14 @@ public class Patient implements Serializable {
         this.district = district;
     }
 
+    public Patient(String name, String address, String phone, Date dateOfBirth, String avatar) {
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.dateOfBirth = dateOfBirth;
+        this.avatar = avatar;
+    }
+
     public Patient(String name, String address) {
         this.name = name;
         this.address = address;
@@ -45,6 +56,7 @@ public class Patient implements Serializable {
     public Patient() {
 
     }
+
 
     public int getId() {
         return id;
@@ -70,11 +82,11 @@ public class Patient implements Serializable {
         this.address = address;
     }
 
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
@@ -116,5 +128,13 @@ public class Patient implements Serializable {
 
     public void setDistrict(District district) {
         this.district = district;
+    }
+
+    public List<TreatmentHistory> getTreatmentHistories() {
+        return treatmentHistories;
+    }
+
+    public void setTreatmentHistories(List<TreatmentHistory> treatmentHistories) {
+        this.treatmentHistories = treatmentHistories;
     }
 }
