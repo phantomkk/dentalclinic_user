@@ -1,6 +1,7 @@
 package com.dentalclinic.capstone.activities;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
@@ -120,9 +121,11 @@ public class MainActivity extends BaseActivity
             DentalFragment dentalFragment = new DentalFragment();
             fragmentManager.beginTransaction().replace(R.id.main_fragment, dentalFragment).commit();
         } else if (id == R.id.nav_appointment) {
-            setTitle(getResources().getString(R.string.appointment_fragment_title));
-            AppointmentFragment dentalFragment = new AppointmentFragment();
-            fragmentManager.beginTransaction().replace(R.id.main_fragment, dentalFragment).commit();
+//            setTitle(getResources().getString(R.string.appointment_fragment_title));
+////            AppointmentFragment dentalFragment = new AppointmentFragment();
+////            fragmentManager.beginTransaction().replace(R.id.main_fragment, dentalFragment).commit();
+            Intent intent = new Intent(MainActivity.this, QuickRegisterActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_promotion) {
             setTitle(getResources().getString(R.string.promotion_fragment_title));
             PromotionFragment dentalFragment = new PromotionFragment();
