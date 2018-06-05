@@ -57,7 +57,7 @@
                     android:id="@+id/txt_phone_loginact"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_phone"
+                    android:hint="@string/label_phone_quickbook"
                     android:inputType="text"
                     android:maxLines="1"
                     android:drawableStart="@drawable/ic_phone_iphone_black_24dp"
@@ -77,7 +77,7 @@
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_password"
+                    android:hint="@string/label_password_promt"
                     android:imeActionId="6"
                     android:imeActionLabel="@string/action_sign_in_short"
                     android:imeOptions="actionUnspecified"
@@ -101,7 +101,7 @@
                     style="@style/custom_button_green"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/action_sign_in"
+                    android:text="@string/label_button_login"
                     android:textStyle="bold" />
                 <Button
                     android:id="@+id/link_book_appointment_loginact"
@@ -109,7 +109,7 @@
                     android:layout_height="wrap_content"
                     style="@style/custom_button_orange"
                     android:layout_marginTop="20dp"
-                    android:text="Đăng lịch hẹn nhanh."
+                    android:text="@string/label_suggest_quickbook"
                     android:textSize="@dimen/text_link_medium" />
 
             </LinearLayout>
@@ -122,13 +122,13 @@
             style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="15dp"
             android:layout_weight="1"
             android:autoLink="web"
             android:clickable="true"
             android:linksClickable="true"
             android:gravity="center_horizontal"
-            android:text="@string/action_register"
+            android:text="@string/label_suggest_register"
             android:textStyle="bold" />
     </LinearLayout>
 

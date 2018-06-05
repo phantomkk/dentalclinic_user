@@ -49,7 +49,12 @@
     <string name="tv_promt_phone">Phone number</string>
     <string name="tv_promt_content">Nội dung</string>
     <string name="btn_quickbook">Quick book appointment</string>
-<!--Book appointment-->
+    <!--Login-->
+    <string name="label_password_promt">Nhập mật khẩu</string>
+    <string name="label_button_login">Đăng nhập</string>
+    <string name="label_suggest_register">Bạn chưa có tài khoản? Đăng kí tại đây</string>
+    <string name="label_suggest_quickbook">Đặt lịch hẹn nhanh</string>
+    <!--Book appointment-->
     <string name="label_title_quickbook">Đặt lịch khám nhanh</string>
     <string name="label_fullname_quickbook">Họ và tên</string>
     <string name="label_phone_quickbook">Số điện thoại</string>

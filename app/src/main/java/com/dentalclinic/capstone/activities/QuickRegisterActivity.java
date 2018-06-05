@@ -2,11 +2,13 @@ package com.dentalclinic.capstone.activities;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -25,21 +27,26 @@ public class QuickRegisterActivity extends AppCompatActivity {
     private View edtPassword;
     private TextView tvDate;
     private TextView tvTime;
+    private Button btnQuickBook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quick_register);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        if (actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true);}
         ImageView img = findViewById(R.id.img_logo_quick_register);
         tvFullname = findViewById(R.id.tv_fullname_quickbook);
         tvDate = findViewById(R.id.tv_date_quickbook);
         tvTime = findViewById(R.id.tv_time_quickbook);
         tvPhone = findViewById(R.id.tv_phone_quickbook);
+        btnQuickBook = findViewById(R.id.btn_quickbook);
         img.requestFocus();
         tvPhone.clearFocus();
         tvFullname.clearFocus();
+
+
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
@@ -68,9 +75,15 @@ public class QuickRegisterActivity extends AppCompatActivity {
             dialog.show();
         });
 
+        btnQuickBook.setOnClickListener((view) -> {
+            Intent intent = new Intent(QuickRegisterActivity.this, SelectDentistActivity.class);
+            startActivity(intent);
+        });
+
     }
+
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         finish();
         return true;
     }
