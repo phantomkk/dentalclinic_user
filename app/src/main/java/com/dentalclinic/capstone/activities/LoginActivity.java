@@ -42,12 +42,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity {
-
-    /**
-     * Id to identity READ_CONTACTS permission request.
-     */
-    private static final int REQUEST_READ_CONTACTS = 0;
+public class LoginActivity extends BaseActivity {
 
 
     // UI references.
@@ -57,15 +52,16 @@ public class LoginActivity extends AppCompatActivity {
     private View mLoginFormView;
     private View btnLinkAppointment;
     private View btnSingin;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
-        txtPhone =  findViewById(R.id.txt_phone_loginact);
+        txtPhone = findViewById(R.id.txt_phone_loginact);
 
-        txtPassword =   findViewById(R.id.password);
-        btnLinkAppointment =  findViewById(R.id.link_book_appointment_loginact);
+        txtPassword = findViewById(R.id.password);
+        btnLinkAppointment = findViewById(R.id.link_book_appointment_loginact);
         txtPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -77,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        TextView txtLinkAppointment =   findViewById(R.id.link_book_appointment_loginact);
+        TextView txtLinkAppointment = findViewById(R.id.link_book_appointment_loginact);
         txtLinkAppointment.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,28 +81,34 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        btnLinkAppointment.setOnClickListener((view)->{
-            Intent intent = new Intent(LoginActivity.this,QuickRegisterActivity.class);
+        btnLinkAppointment.setOnClickListener((view) -> {
+            Intent intent = new Intent(LoginActivity.this, QuickRegisterActivity.class);
             startActivity(intent);
         });
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         btnSingin = (Button) findViewById(R.id.btn_signin_loginact);
-        btnSingin.setOnClickListener((view)->
+        btnSingin.setOnClickListener((view) ->
         {
 //            attemptLogin();
-            txtPassword.setError("error roi");
-txtPassword.requestFocus();
+//            txtPassword.setError("error roi");
+//            txtPassword.requestFocus();
+            showLoading();
+//            try {
+////                Thread.sleep(5000);
+//                hideLoading();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }A
         });
 
 
-        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.dummy_focus_loginact);
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.dummy_focus_loginact);
         linearLayout.requestFocus();
         txtPassword.clearFocus();
         txtPhone.clearFocus();
     }
-
 
 
     /**
@@ -153,7 +155,6 @@ txtPassword.requestFocus();
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-
 
 
         }
@@ -204,7 +205,6 @@ txtPassword.requestFocus();
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
-
 
 
 }

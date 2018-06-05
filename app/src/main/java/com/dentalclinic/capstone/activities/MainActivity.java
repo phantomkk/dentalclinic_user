@@ -20,6 +20,7 @@ import com.dentalclinic.capstone.fragment.HistoryAppointmentFragment;
 import com.dentalclinic.capstone.fragment.HistoryTreatmentFragment;
 import com.dentalclinic.capstone.fragment.MyAccoutFragment;
 import com.dentalclinic.capstone.fragment.NewFragment;
+import com.dentalclinic.capstone.fragment.NewsFragment;
 import com.dentalclinic.capstone.fragment.PromotionFragment;
 import com.rupins.drawercardbehaviour.CardDrawerLayout;
 
@@ -114,7 +115,7 @@ public class MainActivity extends BaseActivity
 //        }
         if (id == R.id.nav_new) {
             setTitle(getResources().getString(R.string.new_fragment_title));
-            NewFragment newFragment = new NewFragment();
+            NewsFragment newFragment = new NewsFragment();
             fragmentManager.beginTransaction().replace(R.id.main_fragment, newFragment).commit();
         } else if (id == R.id.nav_dental) {
             setTitle(getResources().getString(R.string.dental_fragment_title));

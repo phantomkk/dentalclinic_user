@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.dentalclinic.capstone.utils.AppConst;
+
 public abstract class BaseActivity extends AppCompatActivity{
     private ProgressDialog progressDialog;
 
@@ -24,6 +26,9 @@ public abstract class BaseActivity extends AppCompatActivity{
                 @Override
                 public void onCancel(DialogInterface dialog) {
                     showMessage("Cancel dialog");
+////                    dialog.dismiss();
+////                    dialog = null;
+                    hideLoading();
                 }
             });
             progressDialog.show();
@@ -37,7 +42,7 @@ public abstract class BaseActivity extends AppCompatActivity{
     }
 
     public void logError(String activity, String method, String message) {
-        Log.e("LOG_ERROR", activity + "." + method + "(): " + message);
+        Log.e(AppConst.DEBUG_TAG, activity + "." + method + "(): " + message);
     }
 
 
