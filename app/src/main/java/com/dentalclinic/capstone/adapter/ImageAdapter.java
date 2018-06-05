@@ -34,14 +34,12 @@ public class ImageAdapter extends ArrayAdapter<TreatmentImage> {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.item_image, parent, false);
-//            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_image, parent, false);
             viewHolder.imageView = convertView.findViewById(R.id.img_image_treatment);
             convertView.setTag(viewHolder);
 
         }else{
             viewHolder = (ViewHolder) convertView.getTag();
         }
-
         TreatmentImage image = treatmentImages.get(position);
         if (image != null) {
 //            ImageView iv = (ImageView) convertView.findViewById(R.id.img_image_treatment);

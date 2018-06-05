@@ -4,17 +4,17 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class TreatmentStep implements Serializable {
+public class Medicine implements Serializable {
     @SerializedName("id")
     private int id;
     @SerializedName("name")
     private String name;
-    @SerializedName("treatment")
-    private Treatment treatment;
+    @SerializedName("use")
+    private String use;
     @SerializedName("description")
     private String description;
 
-    public TreatmentStep(String name) {
+    public Medicine(String name) {
         this.name = name;
     }
 
@@ -34,12 +34,12 @@ public class TreatmentStep implements Serializable {
         this.name = name;
     }
 
-    public Treatment getTreatment() {
-        return treatment;
+    public String getUse() {
+        return use;
     }
 
-    public void setTreatment(Treatment treatment) {
-        this.treatment = treatment;
+    public void setUse(String use) {
+        this.use = use;
     }
 
     public String getDescription() {

@@ -19,12 +19,36 @@ public class TreatmentDetail implements Serializable {
     private Date createdDate;
     @SerializedName("payment")
     private Payment payment;
-    @SerializedName("treatment_step")
-    private TreatmentStep treatmentStep;
+    @SerializedName("treatment_detail_steps")
+    private List<TreatmentDetailStep> treatmentDetailSteps;
     @SerializedName("treatment_images")
     private List<TreatmentImage> treatmentImages;
     @SerializedName("treatment")
     private Treatment treatment;
+    @SerializedName("prescription")
+    private List<Prescription> prescriptions;
+
+    public TreatmentDetail() {
+    }
+
+    public TreatmentDetail(TreatmentHistory treatmentHistory, String note, Staff dentist, Date createdDate, List<TreatmentDetailStep> treatmentDetailSteps, List<TreatmentImage> treatmentImages, List<Prescription> prescriptions) {
+        this.treatmentHistory = treatmentHistory;
+        this.note = note;
+        this.dentist = dentist;
+        this.createdDate = createdDate;
+        this.treatmentDetailSteps = treatmentDetailSteps;
+        this.treatmentImages = treatmentImages;
+        this.prescriptions = prescriptions;
+    }
+
+    public List<Prescription> getPrescriptions() {
+        return prescriptions;
+    }
+
+    public void setPrescriptions(List<Prescription> prescriptions) {
+        this.prescriptions = prescriptions;
+    }
+
     public int getId() {
         return id;
     }
@@ -77,12 +101,12 @@ public class TreatmentDetail implements Serializable {
         this.payment = payment;
     }
 
-    public TreatmentStep getTreatmentStep() {
-        return treatmentStep;
+    public List<TreatmentDetailStep> getTreatmentDetailSteps() {
+        return treatmentDetailSteps;
     }
 
-    public void setTreatmentStep(TreatmentStep treatmentStep) {
-        this.treatmentStep = treatmentStep;
+    public void setTreatmentDetailSteps(List<TreatmentDetailStep> treatmentDetailSteps) {
+        this.treatmentDetailSteps = treatmentDetailSteps;
     }
 
     public List<TreatmentImage> getTreatmentImages() {

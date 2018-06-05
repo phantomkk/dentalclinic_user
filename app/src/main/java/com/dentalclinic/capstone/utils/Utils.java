@@ -77,11 +77,11 @@ public class Utils {
     }
 
     /// Tên thuốc: hello .......... 30 viên
-    public static String getMedicineLine(String medicineName, String quantity, int numDot) {
+    public static String getMedicineLine(String medicineName, int quantity, int numDot) {
         String dots = "";
-        for (int i = 0; i < numDot; i++) {
-            dots.concat(".");
+        for (int i = 0; i < numDot-medicineName.length()- Integer.toString(quantity).length() ; i++) {
+           dots+=".";
         }
-        return "Tên thuốc: " + medicineName + " " + dots + " " + quantity + " viên";
+        return medicineName + " " + dots +" " + quantity + " viên";
     }
 }

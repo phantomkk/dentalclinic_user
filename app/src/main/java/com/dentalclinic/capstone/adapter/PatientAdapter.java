@@ -9,14 +9,17 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.animation.AnimatedExpandableListView;
+import com.dentalclinic.capstone.animation.MyGridView;
 import com.dentalclinic.capstone.models.City;
 import com.dentalclinic.capstone.models.Patient;
 import com.dentalclinic.capstone.models.TreatmentDetail;
@@ -26,6 +29,8 @@ import com.dentalclinic.capstone.models.User;
 import com.dentalclinic.capstone.utils.Utils;
 import com.squareup.picasso.Picasso;
 
+
+import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,7 +47,7 @@ public class PatientAdapter extends AnimatedExpandableListView.AnimatedExpandabl
     private Context context;
     private List<Patient> _listDataHeader; // header titles
     // child data in format of header title, child title
-    private HashMap<Patient, List<TreatmentDetail>> _listDataChild;
+    private HashMap<Patient, List<TreatmentHistory>> _listDataChild;
 //
 //    private int resourceID;
 //    private int lastPosition = -1;
@@ -52,7 +57,7 @@ public class PatientAdapter extends AnimatedExpandableListView.AnimatedExpandabl
 //    }
 
     public PatientAdapter(Context context, List<Patient> listDataHeader,
-                                 HashMap<Patient, List<TreatmentDetail>> listChildData) {
+                                 HashMap<Patient, List<TreatmentHistory>> listChildData) {
         this.context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
@@ -105,38 +110,37 @@ public class PatientAdapter extends AnimatedExpandableListView.AnimatedExpandabl
 
     @Override
     public View getRealChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        TreatmentDetail treatmentDetail = (TreatmentDetail) getChild(groupPosition, childPosition);
+        TreatmentHistory treatmentHistory = (TreatmentHistory) getChild(groupPosition, childPosition);
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.item_treatment, null);
         }
+        TextView mTreatmentName = convertView.findViewById(R.id.txt_treatment_name);
+        mTreatmentName.setText(treatmentHistory.getTreatment().getName());
+        TextView mPrice = convertView.findViewById(R.id.txt_price);
+        mPrice.setText(treatmentHistory.getTreatment().getPrice().toString()+"đ");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        TextView mStartDate = (TextView) convertView.findViewById(R.id.txt_start_date);
+        mStartDate.setText(dateFormat.format(treatmentHistory.getCreateDate()));
+        TextView mFinishDate = (TextView) convertView.findViewById(R.id.txt_finish_date);
+        mFinishDate.setText(dateFormat.format(treatmentHistory.getFinishDate()));
 
-        TextView txtTreatment = (TextView) convertView.findViewById(R.id.txt_treatment_name);
-        txtTreatment.setText(treatmentDetail.getNote());
-        GridView gridView = convertView.findViewById(R.id.gv_list_image);
-        List<TreatmentImage> treatmentImages = new ArrayList<>();
-        treatmentImages.add(new TreatmentImage("http://nhakhoalouis.com.vn/wp-content/uploads/2016/10/chup-xquang-rang-1.jpg"));
-        treatmentImages.add(new TreatmentImage("http://nhakhoalouis.com.vn/wp-content/uploads/2016/10/chup-xquang-rang-1.jpg"));
-        treatmentImages.add(new TreatmentImage("http://nhakhoalouis.com.vn/wp-content/uploads/2016/10/chup-xquang-rang-1.jpg"));
-        treatmentImages.add(new TreatmentImage("http://nhakhoalouis.com.vn/wp-content/uploads/2016/10/chup-xquang-rang-1.jpg"));
-        treatmentImages.add(new TreatmentImage("http://nhakhoalouis.com.vn/wp-content/uploads/2016/10/chup-xquang-rang-1.jpg"));
-        treatmentImages.add(new TreatmentImage("http://nhakhoalouis.com.vn/wp-content/uploads/2016/10/chup-xquang-rang-1.jpg"));
-        treatmentDetail.setTreatmentImages(treatmentImages);
-        ImageAdapter imageAdapter = new ImageAdapter(context,treatmentDetail.getTreatmentImages());
 
-        gridView.setAdapter(imageAdapter);
-        gridView.setOnTouchListener(new View.OnTouchListener(){
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_MOVE){
-                    return true;
-                }
-                return false;
-            }
-
-        });
+//        TextView txtTreatment = (TextView) convertView.findViewById(R.id.txt_treatment_name);
+//        txtTreatment.setText(treatmentDetail.getNote());
+//        MyGridView gridView = convertView.findViewById(R.id.gv_list_image);
+//        List<TreatmentImage> treatmentImages = new ArrayList<>();
+//        treatmentImages.add(new TreatmentImage("http://nhakhoalouis.com.vn/wp-content/uploads/2016/10/chup-xquang-rang-1.jpg"));
+//        treatmentImages.add(new TreatmentImage("http://nhakhoalouis.com.vn/wp-content/uploads/2016/10/chup-xquang-rang-1.jpg"));
+//        treatmentImages.add(new TreatmentImage("http://nhakhoalouis.com.vn/wp-content/uploads/2016/10/chup-xquang-rang-1.jpg"));
+//        treatmentImages.add(new TreatmentImage("http://nhakhoalouis.com.vn/wp-content/uploads/2016/10/chup-xquang-rang-1.jpg"));
+//        treatmentImages.add(new TreatmentImage("http://nhakhoalouis.com.vn/wp-content/uploads/2016/10/chup-xquang-rang-1.jpg"));
+//        treatmentImages.add(new TreatmentImage("http://nhakhoalouis.com.vn/wp-content/uploads/2016/10/chup-xquang-rang-1.jpg"));
+//        treatmentDetail.setTreatmentImages(treatmentImages);
+//        ImageAdapter imageAdapter = new ImageAdapter(context,treatmentDetail.getTreatmentImages());
+//        gridView.setAdapter(imageAdapter);
         return convertView;
     }
 
