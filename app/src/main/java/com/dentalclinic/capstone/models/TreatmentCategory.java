@@ -11,11 +11,17 @@ public class TreatmentCategory implements Serializable {
     private String name;
     @SerializedName("description")
     private String description;
-
+    @SerializedName("icon_link")
+    private String iconLink;
     public TreatmentCategory(int id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
+    }
+
+    public TreatmentCategory(String name, String iconLink) {
+        this.name = name;
+        this.iconLink = iconLink;
     }
 
     public int getId() {
@@ -40,5 +46,13 @@ public class TreatmentCategory implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getIconLink() {
+        return iconLink;
+    }
+
+    public void setIconLink(String iconLink) {
+        this.iconLink = iconLink;
     }
 }

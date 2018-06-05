@@ -59,7 +59,6 @@ public class HistoryTreatmentFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.fragment_history_treatment, container, false);
         View v = inflater.inflate(R.layout.fragment_history_treatment, container, false);
 
 //        patientList.add(patient1);
@@ -88,7 +87,7 @@ public class HistoryTreatmentFragment extends BaseFragment {
                 return false;
             }
         });
-
+//        listView.expandGroup(0);
 
         return v;
     }

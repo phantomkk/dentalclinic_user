@@ -67,7 +67,7 @@ public class TreatmentDetailAdapter extends ArrayAdapter<TreatmentDetail> {
             viewHolder.mDate.setText(dateFormat.format(treatmentDetail.getCreatedDate()));
             String step = "";
             for (TreatmentDetailStep stepObj : treatmentDetail.getTreatmentDetailSteps()) {
-                step += stepObj.getTreatmentStep().getName() + "\n";
+                step += "- "+stepObj.getTreatmentStep().getName() + "\n";
             }
             viewHolder.mTreatmentStep.setText(step);
             viewHolder.mNote.setText(treatmentDetail.getNote());

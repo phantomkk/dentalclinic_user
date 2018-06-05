@@ -28,7 +28,7 @@
     <string name="new_fragment_title">New Fagment</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="dental_fragment_title">Dental Fragment</string>
+    <string name="dental_fragment_title">Service Fragment</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="appointment_fragment_title">Appointment Fragment</string>
