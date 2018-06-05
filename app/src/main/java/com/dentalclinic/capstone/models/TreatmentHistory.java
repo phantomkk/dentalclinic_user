@@ -4,31 +4,31 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class TreatmentHistory implements Serializable {
     @SerializedName("id")
     private int id;
-    @SerializedName("patient_id")
-    private String patientId;
+    @SerializedName("patient")
+    private Patient patient;
     @SerializedName("created_date")
     private Date createDate;
     @SerializedName("finish_date")
     private Date finishDate;
     @SerializedName("description")
     private String description;
-    @SerializedName("treatment_id")
-    private int treatmentId;
     @SerializedName("treatment")
     private Treatment treatment;
+    @SerializedName("treatment_details")
+    private List<TreatmentDetail> treatmentDetails;
 
-    public TreatmentHistory(int id, String patientId, Date createDate, Date finishDate, String description, int treatmentId, Treatment treatment) {
-        this.id = id;
-        this.patientId = patientId;
+    public TreatmentHistory(Date createDate, Date finishDate, Treatment treatment) {
         this.createDate = createDate;
         this.finishDate = finishDate;
-        this.description = description;
-        this.treatmentId = treatmentId;
         this.treatment = treatment;
+    }
+
+    public TreatmentHistory() {
     }
 
     public int getId() {
@@ -39,13 +39,6 @@ public class TreatmentHistory implements Serializable {
         this.id = id;
     }
 
-    public String getPatientId() {
-        return patientId;
-    }
-
-    public void setPatientId(String patientId) {
-        this.patientId = patientId;
-    }
 
     public Date getCreateDate() {
         return createDate;
@@ -71,13 +64,6 @@ public class TreatmentHistory implements Serializable {
         this.description = description;
     }
 
-    public int getTreatmentId() {
-        return treatmentId;
-    }
-
-    public void setTreatmentId(int treatmentId) {
-        this.treatmentId = treatmentId;
-    }
 
     public Treatment getTreatment() {
         return treatment;
@@ -85,5 +71,21 @@ public class TreatmentHistory implements Serializable {
 
     public void setTreatment(Treatment treatment) {
         this.treatment = treatment;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public List<TreatmentDetail> getTreatmentDetails() {
+        return treatmentDetails;
+    }
+
+    public void setTreatmentDetails(List<TreatmentDetail> treatmentDetails) {
+        this.treatmentDetails = treatmentDetails;
     }
 }

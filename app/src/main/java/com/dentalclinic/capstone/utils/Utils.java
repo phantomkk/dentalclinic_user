@@ -76,14 +76,12 @@ public class Utils {
         return new String(array);
     }
 
-    /// Tên thuốc: 1 .......... 300 viên
-    /// Tên thuốc: 2 ............ 6 viên
-    public static String getMedicineLine(String medicineName, String quantity, int charLenght) {
+    /// Tên thuốc: hello .......... 30 viên
+    public static String getMedicineLine(String medicineName, int quantity, int numDot) {
         String dots = "";
-        int numDot = charLenght - quantity.length();
-        for (int i = 0; i < numDot; i++) {
-            dots = dots.concat(".");
+        for (int i = 0; i < numDot-medicineName.length()- Integer.toString(quantity).length() ; i++) {
+           dots+=".";
         }
-        return "Tên thuốc: " + medicineName + " " + dots + " " + quantity + " viên";
+        return medicineName + " " + dots +" " + quantity + " viên";
     }
 }

@@ -14,20 +14,17 @@ public class Treatment implements Serializable {
     private String description;
     @SerializedName("price")
     private Double price;
-    @SerializedName("category_id")
-    private int categoryId;
     @SerializedName("category")
     private TreatmentCategory category;
     @SerializedName("treatment_steps")
     private List<TreatmentStep> treatmentSteps;
 
-    public Treatment(int id, String name, String description, Double price, int categoryId, TreatmentCategory category) {
-        this.id = id;
+    public Treatment(String name, Double price) {
         this.name = name;
-        this.description = description;
         this.price = price;
-        this.categoryId = categoryId;
-        this.category = category;
+    }
+
+    public Treatment() {
     }
 
     public int getId() {
@@ -62,19 +59,19 @@ public class Treatment implements Serializable {
         this.price = price;
     }
 
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
     public TreatmentCategory getCategory() {
         return category;
     }
 
     public void setCategory(TreatmentCategory category) {
         this.category = category;
+    }
+
+    public List<TreatmentStep> getTreatmentSteps() {
+        return treatmentSteps;
+    }
+
+    public void setTreatmentSteps(List<TreatmentStep> treatmentSteps) {
+        this.treatmentSteps = treatmentSteps;
     }
 }
