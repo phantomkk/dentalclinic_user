@@ -62,6 +62,16 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
+    public String getMainTitle() {
+        return null;
+    }
+
+    @Override
+    public void onCancelLoading() {
+
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {

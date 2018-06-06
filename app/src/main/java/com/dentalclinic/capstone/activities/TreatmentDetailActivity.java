@@ -30,11 +30,20 @@ public class TreatmentDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_treatment_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("history");
         prepareData();
         listView = findViewById(R.id.lv_treatment_detail);
         TreatmentDetailAdapter adapter = new TreatmentDetailAdapter(this, treatmentHistory.getTreatmentDetails());
         listView.setAdapter(adapter);
+
+    }
+
+    @Override
+    public String getMainTitle() {
+        return "Main";
+    }
+
+    @Override
+    public void onCancelLoading() {
 
     }
 

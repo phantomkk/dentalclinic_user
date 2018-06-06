@@ -12,6 +12,9 @@ import com.dentalclinic.capstone.models.User;
 public class CoreManager {
     private static User mUser = null;
 
+    private CoreManager(){
+
+    }
     public static User getUser(Context context) {
         mUser = Utils.getUserInSharePref(context);
         return mUser;

@@ -1,6 +1,10 @@
 package com.dentalclinic.capstone.api.services;
 
+import com.dentalclinic.capstone.models.User;
+
+import io.reactivex.Single;
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -14,7 +18,7 @@ import retrofit2.http.Path;
  */
 
 public interface UserService {
-//    @GET("/api/users/{id}")
+    //    @GET("/api/users/{id}")
 //    Call<User> getByID(@Path("id") int id);
 //    @POST("/api/users/login")
 //    Call<User> login(@Body User user);
@@ -22,8 +26,17 @@ public interface UserService {
 //    Call<User> register(@Body User user);
 //    @PUT("/api/users/{id}")
 //    Call<User> update(@Path("id") int id, @Body User user);
-//    @FormUrlEncoded
+
+    //    @FormUrlEncoded
 //     @POST("/api/users/updatepwd")
 //    Call<User> updatePassword(@Field("id") int id, @Field("password") String password);
+    @FormUrlEncoded
+    @POST("/api/user/login")
+    Single<Response<User>> login(@Field("phone") String phone, @Field("password") String password);
+
+    @POST("/api/user/register")
+    Single<Response<User>> register(@Body User user);
+//@POST("/api/user/bookAppointment")
+//    Single<User> bookAppointment(); ///////
 
 }

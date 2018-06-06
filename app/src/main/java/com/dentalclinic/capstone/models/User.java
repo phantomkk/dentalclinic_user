@@ -11,18 +11,10 @@ import java.util.List;
 
 public class User implements Serializable {
     @SerializedName("phone")
-    private int phone;
-
+    private String phone;
     @SerializedName("patients")
     private List<Patient> patients;
 
-    public int getPhone() {
-        return phone;
-    }
-
-    public void setPhone(int phone) {
-        this.phone = phone;
-    }
 
     public List<Patient> getPatients() {
         return patients;
@@ -31,4 +23,15 @@ public class User implements Serializable {
     public void setPatients(List<Patient> patients) {
         this.patients = patients;
     }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+
+
 }

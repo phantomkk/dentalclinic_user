@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,6 +37,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dentalclinic.capstone.R;
+import com.dentalclinic.capstone.api.APIServiceManager;
+import com.dentalclinic.capstone.api.services.UserService;
+import com.dentalclinic.capstone.models.User;
+import com.dentalclinic.capstone.utils.CoreManager;
+import com.dentalclinic.capstone.utils.Utils;
+
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Response;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -52,6 +64,22 @@ public class LoginActivity extends BaseActivity {
     private View mLoginFormView;
     private View btnLinkAppointment;
     private View btnSingin;
+    private TextView txtErrorServer;
+
+
+    private Disposable disposable;
+
+    @Override
+    public String getMainTitle() {
+        return "Đăng nhập";
+    }
+
+    @Override
+    public void onCancelLoading() {
+        if (disposable != null) {
+            disposable.dispose();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +87,7 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
         // Set up the login form.
         txtPhone = findViewById(R.id.txt_phone_loginact);
-
+        txtErrorServer = findViewById(R.id.txt_error_server_loginact);
         txtPassword = findViewById(R.id.password);
         btnLinkAppointment = findViewById(R.id.link_book_appointment_loginact);
         txtPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -74,33 +102,23 @@ public class LoginActivity extends BaseActivity {
         });
 
         TextView txtLinkAppointment = findViewById(R.id.link_book_appointment_loginact);
-        txtLinkAppointment.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
+        txtLinkAppointment.setOnClickListener((view) -> {
+//            attemptLogin();
         });
 
-        btnLinkAppointment.setOnClickListener((view) -> {
+        btnLinkAppointment.setOnClickListener((view) ->
+        {
             Intent intent = new Intent(LoginActivity.this, QuickRegisterActivity.class);
             startActivity(intent);
         });
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-        btnSingin = (Button) findViewById(R.id.btn_signin_loginact);
+        btnSingin = findViewById(R.id.btn_signin_loginact);
         btnSingin.setOnClickListener((view) ->
         {
-//            attemptLogin();
-//            txtPassword.setError("error roi");
-//            txtPassword.requestFocus();
-            showLoading();
-//            try {
-////                Thread.sleep(5000);
-//                hideLoading();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }A
+            attemptLogin();
+//            showLoading();
         });
 
 
@@ -117,95 +135,93 @@ public class LoginActivity extends BaseActivity {
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        txtPassword.setError(getString(R.string.error_invalid_password));
         // Reset errors.
+        txtErrorServer.setText("");
         txtPhone.setError(null);
         txtPassword.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = txtPhone.getText().toString();
+        String phone = txtPhone.getText().toString();
         String password = txtPassword.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+
+        if (TextUtils.isEmpty(phone) && !isPhoneValid(phone)) {
+            txtPhone.setError(getString(R.string.error_invalid_phone));
+            focusView = txtPhone;
+            cancel = true;
+        } else if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             txtPassword.setError(getString(R.string.error_invalid_password));
             focusView = txtPassword;
             cancel = true;
         }
 
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            txtPhone.setError(getString(R.string.error_field_required));
-            focusView = txtPhone;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            txtPhone.setError(getString(R.string.error_invalid_email));
-            focusView = txtPhone;
-            cancel = true;
-        }
-
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
-
-
+            callApiLogin(phone, password);
         }
     }
 
-    private boolean isEmailValid(String email) {
+    private boolean isPhoneValid(String phone) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        return phone.matches("^\\d{9,}$");
     }
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() > 8;
     }
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+    public void callApiLogin(String phone, String password) {
+        showLoading();
+        UserService userService = APIServiceManager.getService(UserService.class);
+        userService.login(phone, password)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<Response<User>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable = d;
+                        hideLoading();
+                    }
 
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
+                    @Override
+                    public void onSuccess(Response<User> userResponse) {
+                        if (userResponse.isSuccessful()) {
+//                            Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                            //////donothing
+                            CoreManager.setUser(LoginActivity.this, userResponse.body());
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        } else {
+                            String errorMsg = Utils.getErrorMsg(userResponse.errorBody());
+                            Toast.makeText(LoginActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
+                            logError(LoginActivity.class, "onSuccess", "OnSuccess but on failed");
+                            txtErrorServer.setText(errorMsg);
+                        }
+                        hideLoading();
+                    }
 
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        logError(LoginActivity.class, "attemptLogin", e.getMessage());
+                        hideLoading();
+
+                    }
+                });
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (disposable != null) {
+            disposable.dispose();
         }
     }
-
-
 }
 
