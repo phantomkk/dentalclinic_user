@@ -14,25 +14,25 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
+public class SmallNewsAdapter extends RecyclerView.Adapter<SmallNewsAdapter.ViewHolder>{
     List<News> list;
 
-    public NewsAdapter(List<News> list) {
+    public SmallNewsAdapter(List<News> list) {
         this.list = list;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SmallNewsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_news, parent, false);
-        return new ViewHolder(view);
+                .inflate(R.layout.item_small_news, parent, false);
+        return new SmallNewsAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SmallNewsAdapter.ViewHolder holder, int position) {
         News news = list.get(position);
-        Picasso.get().load(news.getImgUrl()).resize(1200, 600).centerCrop().into(holder.imgNews);
+//        Picasso.get().load(news.getImgUrl()).resize(1200, 600).centerCrop().into(holder.imgNews);
         holder.txtTitle.setText(news.getTitle());
     }
 
@@ -42,13 +42,13 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView imgNews;
+//        ImageView imgNews;
         TextView txtTitle;
 
         public ViewHolder(View itemView) {
             super(itemView);
             txtTitle = itemView.findViewById(R.id.txt_title_news);
-            imgNews = itemView.findViewById(R.id.img_news);
+//            imgNews = itemView.findViewById(R.id.img_news);
         }
     }
 }

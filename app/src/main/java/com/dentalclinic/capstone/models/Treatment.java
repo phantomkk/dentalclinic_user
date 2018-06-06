@@ -12,16 +12,26 @@ public class Treatment implements Serializable {
     private String name;
     @SerializedName("description")
     private String description;
-    @SerializedName("price")
-    private Double price;
+    @SerializedName("max_price")
+    private Long maxPrice;
+    @SerializedName("min_price")
+    private Long minPrice;
     @SerializedName("category")
     private TreatmentCategory category;
     @SerializedName("treatment_steps")
     private List<TreatmentStep> treatmentSteps;
 
-    public Treatment(String name, Double price) {
+    public Treatment(String name, Long maxPrice, Long minPrice) {
         this.name = name;
-        this.price = price;
+        this.maxPrice = maxPrice;
+        this.minPrice = minPrice;
+    }
+
+    public Treatment(String name, String description, Long maxPrice, Long minPrice) {
+        this.name = name;
+        this.description = description;
+        this.maxPrice = maxPrice;
+        this.minPrice = minPrice;
     }
 
     public Treatment() {
@@ -51,12 +61,20 @@ public class Treatment implements Serializable {
         this.description = description;
     }
 
-    public Double getPrice() {
-        return price;
+    public Long getMaxPrice() {
+        return maxPrice;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setMaxPrice(Long maxPrice) {
+        this.maxPrice = maxPrice;
+    }
+
+    public Long getMinPrice() {
+        return minPrice;
+    }
+
+    public void setMinPrice(Long minPrice) {
+        this.minPrice = minPrice;
     }
 
     public TreatmentCategory getCategory() {

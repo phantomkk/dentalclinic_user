@@ -4,101 +4,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:cardUseCompatPadding="true">
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="10dp">
-
+        android:layout_height="wrap_content"
+        android:background="@color/color_blue_grey_50"
+        android:padding="10dp"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:weightSum="10">
 
             <TextView
-                android:id="@+id/txt_treatment_name"
-                style="@style/value_style"
+                android:id="@+id/txt_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="Trám răng sứ thẩm mỹ"
-                android:layout_weight="6"
-                android:textSize="18dp"
-                android:textStyle="bold" />
+                android:layout_weight="5"
+                android:textStyle="bold"
+                android:text="NHỔ RĂNG CỐI LỚN HOẶC RĂNG KHÔN HÀM TRÊN" />
 
             <TextView
                 android:id="@+id/txt_price"
-                style="@style/value_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_weight="4"
-                android:text="200.000.000đ"
+                android:layout_weight="5"
+                android:textAllCaps="true"
+                android:text="30.000.000 - 35.000.000 VNĐ"
                 android:textAlignment="textEnd"
-                android:textColor="@color/color_red_400"
-                android:textSize="20dp" />
-            <ImageView
-                android:layout_marginLeft="10dp"
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_search_black_24dp"/>
+                android:textColor="@color/color_red_500" />
         </LinearLayout>
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/txt_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
-            <TextView
-                style="@style/value_style"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_weight="3"
-                android:text="Ngày bắt đầu:"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/txt_start_date"
-                style="@style/value_style"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_weight="6"
-                android:text="30-06-1996" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
-            <TextView
-                style="@style/value_style"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_weight="3"
-                android:text="Ngày kết thúc:"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/txt_finish_date"
-                style="@style/value_style"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_weight="6"
-                android:text="10-02-1996" />
-        </LinearLayout>
-
-
-
-
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="" />
     </LinearLayout>
 </android.support.v7.widget.CardView>

@@ -36,7 +36,7 @@ public class MainActivity extends BaseActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(getResources().getString(R.string.new_fragment_title));
-        NewFragment newFragment = new NewFragment();
+        NewsFragment newFragment = new NewsFragment();
         fragmentManager.beginTransaction().replace(R.id.main_fragment, newFragment).commit();
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

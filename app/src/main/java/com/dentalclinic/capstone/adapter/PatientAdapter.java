@@ -2,38 +2,21 @@ package com.dentalclinic.capstone.adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.animation.AnimatedExpandableListView;
-import com.dentalclinic.capstone.animation.MyGridView;
-import com.dentalclinic.capstone.models.City;
 import com.dentalclinic.capstone.models.Patient;
-import com.dentalclinic.capstone.models.TreatmentDetail;
 import com.dentalclinic.capstone.models.TreatmentHistory;
-import com.dentalclinic.capstone.models.TreatmentImage;
-import com.dentalclinic.capstone.models.User;
 import com.dentalclinic.capstone.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -114,12 +97,12 @@ public class PatientAdapter extends AnimatedExpandableListView.AnimatedExpandabl
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.item_treatment, null);
+            convertView = infalInflater.inflate(R.layout.item_treatment_history, null);
         }
         TextView mTreatmentName = convertView.findViewById(R.id.txt_treatment_name);
         mTreatmentName.setText(treatmentHistory.getTreatment().getName());
         TextView mPrice = convertView.findViewById(R.id.txt_price);
-        mPrice.setText(treatmentHistory.getTreatment().getPrice().toString()+"đ");
+//        mPrice.setText(treatmentHistory.getTreatment().getPrice().toString()+"đ");
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         TextView mStartDate = (TextView) convertView.findViewById(R.id.txt_start_date);
         mStartDate.setText(dateFormat.format(treatmentHistory.getCreateDate()));

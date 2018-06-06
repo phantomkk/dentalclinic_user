@@ -129,7 +129,7 @@ public class HistoryTreatmentFragment extends BaseFragment {
         // Adding child data
         List<TreatmentHistory> details = new ArrayList<TreatmentHistory>();
         TreatmentHistory history = new TreatmentHistory();
-        history.setTreatment(new Treatment("Trám Răng",123456.34));
+        history.setTreatment(new Treatment("Trám Răng",Long.parseLong("40000"),Long.parseLong("40000")));
         String dtStart3 = "01-01-1996";
         try {
             history.setCreateDate(format.parse(dtStart3));

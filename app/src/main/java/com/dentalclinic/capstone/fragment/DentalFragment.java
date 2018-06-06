@@ -10,10 +10,14 @@ import android.widget.GridView;
 
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.adapter.ServiceAdapter;
+import com.dentalclinic.capstone.animation.AnimatedExpandableListView;
+import com.dentalclinic.capstone.models.Patient;
 import com.dentalclinic.capstone.models.Treatment;
 import com.dentalclinic.capstone.models.TreatmentCategory;
+import com.dentalclinic.capstone.models.TreatmentHistory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -27,16 +31,18 @@ public class DentalFragment extends BaseFragment {
     }
 
     List<TreatmentCategory> treatmentCategories;
-    GridView gridView;
+    HashMap<TreatmentCategory, List<Treatment>> listDataChild;
+
+    AnimatedExpandableListView expandableListView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_dental, container, false);
         prepareData();
-        gridView = v.findViewById(R.id.gv_list_image);
-        ServiceAdapter adapter = new ServiceAdapter(getContext(), treatmentCategories);
-        gridView.setAdapter(adapter);
+        expandableListView = v.findViewById(R.id.eplv_list_categories);
+        ServiceAdapter adapter = new ServiceAdapter(getContext(), treatmentCategories,listDataChild);
+        expandableListView.setAdapter(adapter);
 
         return v;
     }
@@ -44,23 +50,24 @@ public class DentalFragment extends BaseFragment {
 
     public void prepareData(){
         treatmentCategories = new ArrayList<>();
-        TreatmentCategory category = new TreatmentCategory("Trồng răng implant","https://nhakhoakim.com/wp-content/themes/Themesnhakhoaandong/assets/img/igray/11.png");
-        TreatmentCategory category1 = new TreatmentCategory("Niềng răng thẩm mỹ","https://nhakhoakim.com/wp-content/themes/Themesnhakhoaandong/assets/img/igray/12.png");
-        TreatmentCategory category2 = new TreatmentCategory("Bọc răng sứ","https://nhakhoakim.com/wp-content/themes/Themesnhakhoaandong/assets/img/igray/13.png");
-        TreatmentCategory category3 = new TreatmentCategory("Tẩy răng trắng","https://nhakhoakim.com/wp-content/themes/Themesnhakhoaandong/assets/img/igray/21.png");
-        TreatmentCategory category4 = new TreatmentCategory("Trám răng thẩm mỹ","https://nhakhoakim.com/wp-content/themes/Themesnhakhoaandong/assets/img/igray/22.png");
-        TreatmentCategory category5 = new TreatmentCategory("Nhổ răng","https://nhakhoakim.com/wp-content/themes/Themesnhakhoaandong/assets/img/igray/23.png");
-        TreatmentCategory category6 = new TreatmentCategory("Cạo vôi răng","https://nhakhoakim.com/wp-content/themes/Themesnhakhoaandong/assets/img/igray/31.png");
-        TreatmentCategory category7 = new TreatmentCategory("Răng giả tháo lắp","https://nhakhoakim.com/wp-content/themes/Themesnhakhoaandong/assets/img/igray/32.png");
-        TreatmentCategory category8 = new TreatmentCategory("Dán mặt sứ VENEER","https://nhakhoakim.com/wp-content/themes/Themesnhakhoaandong/assets/img/igray/33.png");
-        treatmentCategories.add(category);
-        treatmentCategories.add(category1);
-        treatmentCategories.add(category2);
-        treatmentCategories.add(category3);
-        treatmentCategories.add(category4);
-        treatmentCategories.add(category5);
-        treatmentCategories.add(category6);
-        treatmentCategories.add(category7);
-        treatmentCategories.add(category8);
+        listDataChild = new HashMap<>();
+        TreatmentCategory treatmentCategory = new TreatmentCategory("NHA CHU","https://nhakhoakim.com/wp-content/themes/Themesnhakhoaandong/assets/img/igray/11.png");
+        Treatment treatment = new Treatment("TRÁM RĂNG COMPOSITE","tại nhà",Long.parseLong("40000"),Long.parseLong("40000"));
+        Treatment treatment2 = new Treatment("TẨY TRẮNG",Long.parseLong("40000"),Long.parseLong("40000"));
+        Treatment treatment3 = new Treatment("NHỔ RĂNG CỐI LỚN HOẶC RĂNG KHÔN HÀM TRÊN\n",Long.parseLong("40000"),Long.parseLong("40000"));
+        treatmentCategory.getTreatments().add(treatment);
+        treatmentCategory.getTreatments().add(treatment2);
+        treatmentCategory.getTreatments().add(treatment3);
+        TreatmentCategory treatmentCategory2 = new TreatmentCategory("PHỤC HÌNH CỐ ĐỊNH","https://nhakhoakim.com/wp-content/themes/Themesnhakhoaandong/assets/img/igray/12.png");
+        Treatment treatment4 = new Treatment("TRÁM RĂNG COMPOSITE","tại nhà",Long.parseLong("40000"),Long.parseLong("40000"));
+        Treatment treatment5 = new Treatment("TẨY TRẮNG\n",Long.parseLong("40000"),Long.parseLong("40000"));
+        Treatment treatment6 = new Treatment("NHỔ RĂNG CỐI LỚN HOẶC RĂNG KHÔN HÀM TRÊN",Long.parseLong("40000"),Long.parseLong("40000"));
+        treatmentCategory.getTreatments().add(treatment4);
+        treatmentCategory.getTreatments().add(treatment5);
+        treatmentCategory.getTreatments().add(treatment6);
+        treatmentCategories.add(treatmentCategory);
+        treatmentCategories.add(treatmentCategory2);
+        listDataChild.put(treatmentCategories.get(0), treatmentCategory.getTreatments()); // Header, Child data
+        listDataChild.put(treatmentCategories.get(1), treatmentCategory.getTreatments());
     }
 }
