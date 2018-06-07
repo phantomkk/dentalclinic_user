@@ -38,7 +38,9 @@ import java.util.List;
 
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.api.APIServiceManager;
+import com.dentalclinic.capstone.api.services.PatientService;
 import com.dentalclinic.capstone.api.services.UserService;
+import com.dentalclinic.capstone.models.Patient;
 import com.dentalclinic.capstone.models.User;
 import com.dentalclinic.capstone.utils.CoreManager;
 import com.dentalclinic.capstone.utils.Utils;
@@ -55,8 +57,6 @@ import static android.Manifest.permission.READ_CONTACTS;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends BaseActivity {
-
-
     // UI references.
     private AutoCompleteTextView txtPhone;
     private EditText txtPassword;
@@ -178,8 +178,8 @@ public class LoginActivity extends BaseActivity {
 
     public void callApiLogin(String phone, String password) {
         showLoading();
-        UserService userService = APIServiceManager.getService(UserService.class);
-        userService.login(phone, password)
+        PatientService patientService = APIServiceManager.getService(PatientService.class);
+        patientService.login(phone, password)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Response<User>>() {

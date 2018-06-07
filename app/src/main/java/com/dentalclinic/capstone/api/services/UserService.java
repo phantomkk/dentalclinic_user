@@ -1,5 +1,6 @@
 package com.dentalclinic.capstone.api.services;
 
+import com.dentalclinic.capstone.api.requestobject.RegisterRequest;
 import com.dentalclinic.capstone.models.User;
 
 import io.reactivex.Single;
@@ -27,15 +28,10 @@ public interface UserService {
 //    @PUT("/api/users/{id}")
 //    Call<User> update(@Path("id") int id, @Body User user);
 
-    //    @FormUrlEncoded
+//    @FormUrlEncoded
 //     @POST("/api/users/updatepwd")
 //    Call<User> updatePassword(@Field("id") int id, @Field("password") String password);
-    @FormUrlEncoded
-    @POST("/api/user/login")
-    Single<Response<User>> login(@Field("phone") String phone, @Field("password") String password);
 
-    @POST("/api/user/register")
-    Single<Response<User>> register(@Body User user);
 //@POST("/api/user/bookAppointment")
 //    Single<User> bookAppointment(); ///////
 

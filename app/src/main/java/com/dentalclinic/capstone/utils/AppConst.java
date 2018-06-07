@@ -13,6 +13,9 @@ public class AppConst {
 
     public final static String DEBUG_TAG = "DEBUG_TAG";
 
+    public final static int GENDER_MALE = 1;
+    public final static int GENDER_FEMALE = 0;
+    public final static int GENDER_OTHER = -1;
 
     public final static String PRODUCT_PARAM = "PRODUCT_PARAM";
     public final static String CATEGORY_PARAM = "CATEGORY_PARAM";

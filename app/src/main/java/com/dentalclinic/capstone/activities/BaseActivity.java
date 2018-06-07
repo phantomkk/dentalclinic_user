@@ -20,7 +20,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(this.getMainTitle());
+        setTitle(getMainTitle());
     }
 
     public void showMessage(String message) {
@@ -57,6 +57,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public void logError(Class t, String method, String message) {
         Log.e(AppConst.DEBUG_TAG, t.getSimpleName() + "." + method + "(): " + message);
+    }
+
+    public void logError(String method, String message) {
+        Log.e(AppConst.DEBUG_TAG, this.getClass().getSimpleName() + "." + method + "(): " + message);
     }
 
 

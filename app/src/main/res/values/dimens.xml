@@ -11,4 +11,6 @@
     <dimen name="text_link_small">12sp</dimen>
     <dimen name="text_link_medium">14sp</dimen>
     <dimen name="text_link_big">16sp</dimen>
+    <!--Drawable paddidng-->
+    <dimen name="drawable_padding">10dp</dimen>
 </resources>
