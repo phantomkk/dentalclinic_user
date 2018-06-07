@@ -71,6 +71,8 @@
     <string name="label_address_quickbook">Địa chỉ</string>
     <string name="label_button_register">Đăng kí</string>
     <string name="label_button_update">Cập Nhật</string>
+    <string name="label_button_change_password">Đổi mật khẩu</string>
+    <string name="label_button_change_phone">Đổi số điện thoại</string>
     <string name="error_">Đăng kí</string>
     <string name="label_error_birthday">Ngày sinh không hợp lệ</string>
 
