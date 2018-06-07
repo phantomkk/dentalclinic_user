@@ -122,31 +122,6 @@
                 android:text=""
                 android:textColor="@color/error_label" />
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="100">
-
-            <Spinner
-                android:id="@+id/spinner_city_register"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="50">
-
-            </Spinner>
-
-            <Spinner
-                android:id="@+id/spinner_district_register"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="50"
-
-                >
-
-            </Spinner>
-        </LinearLayout>
-
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -168,6 +143,24 @@
                 android:paddingStart="6dp"
                 android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="100">
+            <Spinner
+                android:id="@+id/spinner_district_register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="50">            </Spinner>
+            <Spinner
+                android:id="@+id/spinner_city_register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="50">
+            </Spinner>
+        </LinearLayout>
+
+
 
         <Button
             android:id="@+id/btn_register"

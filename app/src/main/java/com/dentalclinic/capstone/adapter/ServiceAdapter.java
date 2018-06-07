@@ -1,6 +1,7 @@
 package com.dentalclinic.capstone.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,29 +16,32 @@ import com.dentalclinic.capstone.models.TreatmentCategory;
 import com.dentalclinic.capstone.models.TreatmentDetail;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ServiceAdapter extends  AnimatedExpandableListView.AnimatedExpandableListAdapter{
+public class ServiceAdapter extends AnimatedExpandableListView.AnimatedExpandableListAdapter {
     private Context context;
     private List<TreatmentCategory> listDataHeader; // header titles
+    private List<TreatmentCategory> listDataHeaderOriginal = new ArrayList<>(); // header titles
     // child data in format of header title, child title
-    private HashMap<TreatmentCategory, List<Treatment>> listDataChild;
+//    private HashMap<TreatmentCategory, List<Treatment>> listDataChild;
 
-    public ServiceAdapter(Context context, List<TreatmentCategory> listDataHeader,
-                          HashMap<TreatmentCategory, List<Treatment>> listChildData) {
+    public ServiceAdapter(Context context, List<TreatmentCategory> listDataHeader) {
         this.context = context;
         this.listDataHeader = listDataHeader;
-        this.listDataChild = listChildData;
+        this.listDataHeaderOriginal.addAll(listDataHeader);
+//        this.listDataChild = listChildData;
     }
 
 
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
-        return this.listDataChild.get(this.listDataHeader.get(groupPosition))
-                .get(childPosititon);
+        return listDataHeader.get(groupPosition).getTreatments().get(childPosititon);
+//        return this.listDataChild.get(this.listDataHeader.get(groupPosition))
+//                .get(childPosititon);
     }
 
     @Override
@@ -56,9 +60,10 @@ public class ServiceAdapter extends  AnimatedExpandableListView.AnimatedExpandab
         TextView mName = convertView.findViewById(R.id.txt_name);
         mName.setText(treatment.getName());
         TextView mPrice = convertView.findViewById(R.id.txt_price);
-        mPrice.setText(treatment.getMinPrice()+"-"+treatment.getMaxPrice());
+        mPrice.setText(treatment.getMinPrice() + "-" + treatment.getMaxPrice() + "VND");
         TextView mDescription = convertView.findViewById(R.id.txt_description);
-        if (treatment.getDescription()!=null){
+        if (treatment.getDescription() != null) {
+            mDescription.setVisibility(View.VISIBLE);
             mDescription.setText(treatment.getDescription());
         }
         return convertView;
@@ -66,8 +71,9 @@ public class ServiceAdapter extends  AnimatedExpandableListView.AnimatedExpandab
 
     @Override
     public int getRealChildrenCount(int groupPosition) {
-        return this.listDataChild.get(this.listDataHeader.get(groupPosition))
-                .size();
+        return this.listDataHeader.get(groupPosition).getTreatments().size();
+//        return this.listDataChild.get(this.listDataHeader.get(groupPosition))
+//                .size();
     }
 
 //    @Override
@@ -142,5 +148,49 @@ public class ServiceAdapter extends  AnimatedExpandableListView.AnimatedExpandab
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
     }
+
+
+    public void filterData(String query) {
+
+        query = query.toLowerCase();
+        Log.v("ServiceAdapter", String.valueOf(listDataHeader.size()));
+        Log.v("original", String.valueOf(listDataHeaderOriginal.size()));
+        Log.v("query", query);
+        listDataHeader.clear();
+        if (query.isEmpty()) {
+            listDataHeader.addAll(listDataHeaderOriginal);
+        } else {
+            for (TreatmentCategory treatmentCategory : listDataHeaderOriginal) {
+                List<Treatment> treatments = treatmentCategory.getTreatments();
+                Log.v("treatments", String.valueOf(treatments.size()));
+                List<Treatment> newTreatments = new ArrayList<Treatment>();
+                for (Treatment treatment : treatments) {
+                    if (treatment.getName().toLowerCase().contains(query.toLowerCase())) {
+                        newTreatments.add(treatment);
+                    }
+                }
+                if (newTreatments.size() > 0) {
+                    Log.v("newTreatments", String.valueOf(newTreatments.size()));
+                    TreatmentCategory category = new TreatmentCategory();
+                    if (treatmentCategory.getId() != -1) {
+                        category.setId(treatmentCategory.getId());
+                    }
+                    if (treatmentCategory.getDescription() != null) {
+                        category.setDescription(category.getDescription());
+                    }
+                    if(treatmentCategory.getIconLink()!=null){
+                        category.setIconLink(treatmentCategory.getIconLink());
+                    }
+                    category.setName(category.getName());
+                    category.setTreatments(newTreatments);
+                    listDataHeader.add(category);
+                }
+            }
+        }
+
+        Log.v("ServiceAdapter", String.valueOf(listDataHeader.size()));
+        notifyDataSetChanged();
+    }
+
 
 }

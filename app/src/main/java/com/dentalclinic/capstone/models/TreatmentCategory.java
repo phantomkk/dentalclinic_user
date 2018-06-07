@@ -8,7 +8,7 @@ import java.util.List;
 
 public class TreatmentCategory implements Serializable {
     @SerializedName("id")
-    private int id;
+    private int id=-1;
     @SerializedName("name")
     private String name;
     @SerializedName("description")
@@ -18,6 +18,8 @@ public class TreatmentCategory implements Serializable {
     @SerializedName("treatments")
     private List<Treatment> treatments;
 
+    public TreatmentCategory() {
+    }
 
     public TreatmentCategory(int id, String name, String description) {
         this.id = id;

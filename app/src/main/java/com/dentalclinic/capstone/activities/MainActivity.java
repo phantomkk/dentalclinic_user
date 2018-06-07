@@ -59,6 +59,7 @@ public class MainActivity extends BaseActivity
         drawer.setViewScale(Gravity.START, 0.9f);
         drawer.setRadius(Gravity.START, 35);
         drawer.setViewElevation(Gravity.START, 20);
+        navigationView.getMenu().getItem(0).setChecked(true);
     }
 
     @Override
@@ -84,7 +85,7 @@ public class MainActivity extends BaseActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+//        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -137,10 +138,10 @@ public class MainActivity extends BaseActivity
 ////            fragmentManager.beginTransaction().replace(R.id.main_fragment, dentalFragment).commit();
             Intent intent = new Intent(MainActivity.this, QuickRegisterActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_promotion) {
-            setTitle(getResources().getString(R.string.promotion_fragment_title));
-            PromotionFragment dentalFragment = new PromotionFragment();
-            fragmentManager.beginTransaction().replace(R.id.main_fragment, dentalFragment).commit();
+//        } else if (id == R.id.nav_promotion) {
+//            setTitle(getResources().getString(R.string.promotion_fragment_title));
+//            PromotionFragment dentalFragment = new PromotionFragment();
+//            fragmentManager.beginTransaction().replace(R.id.main_fragment, dentalFragment).commit();
         } else if (id == R.id.nav_history_treatment) {
             setTitle(getResources().getString(R.string.history_treatment_fragment_title));
             HistoryTreatmentFragment dentalFragment = new HistoryTreatmentFragment();

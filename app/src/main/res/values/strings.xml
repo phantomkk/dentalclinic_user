@@ -69,6 +69,7 @@
     <string name="label_birthday_register">Ngày sinh</string>
     <string name="label_address_quickbook">Địa chỉ</string>
     <string name="label_button_register">Đăng kí</string>
+    <string name="label_button_update">Cập Nhật</string>
     <string name="error_">Đăng kí</string>
     <string name="label_error_birthday">Ngày sinh không hợp lệ</string>
 
