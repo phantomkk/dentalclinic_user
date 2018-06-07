@@ -52,6 +52,7 @@
     <string name="btn_quickbook">Quick book appointment</string>
     <!--Login-->
     <string name="label_password_promt">Nhập mật khẩu</string>
+    <string name="label_confirm_password_promt">Nhập lại mật khẩu</string>
     <string name="label_button_login">Đăng nhập</string>
     <string name="label_suggest_register">Bạn chưa có tài khoản? Đăng kí tại đây</string>
     <string name="label_suggest_quickbook">Đặt lịch hẹn nhanh</string>
@@ -76,6 +77,7 @@
     <!--Invalid -->
     <string name="error_invalid_phone">Số điện thoại không hợp lệ, bạn vui lòng thử lại</string>
     <string name="error_invalid_password">Mật khẩu không hợp lệ, bạn vui lòng thử lại</string>
+    <string name="error_invalid_confirm_password">Mật khẩu nhập lại không hợp lệ</string>
     <string name="error_invalid_name">Tên không hợp lệ, bạn vui lòng thử lại</string>
     <string name="error_invalid_address">Địa chỉ không hợp lệ, bạn vui lòng thử lại</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>

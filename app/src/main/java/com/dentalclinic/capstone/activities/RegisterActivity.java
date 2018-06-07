@@ -1,6 +1,9 @@
 package com.dentalclinic.capstone.activities;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +35,7 @@ import com.dentalclinic.capstone.models.City;
 import com.dentalclinic.capstone.models.District;
 import com.dentalclinic.capstone.models.User;
 import com.dentalclinic.capstone.utils.AppConst;
+import com.dentalclinic.capstone.utils.Utils;
 import com.dentalclinic.capstone.utils.Validation;
 
 
@@ -57,6 +61,7 @@ public class RegisterActivity extends BaseActivity {
     private EditText edtFullname;
     private EditText edtPhone;
     private EditText edtPassword;
+    private EditText edtConfirmPassword;
     private RadioGroup radioGroup;
     private EditText edtAddress;
     private Button btnRegister;
@@ -65,7 +70,6 @@ public class RegisterActivity extends BaseActivity {
     private Spinner spnCity;
     private Spinner spnDistrict;
 
-    private int selectDistrictID = -1;
 
     AddressService addressService = APIServiceManager.getService(AddressService.class);
 
@@ -77,6 +81,7 @@ public class RegisterActivity extends BaseActivity {
         edtFullname = findViewById(R.id.edt_fullname_register);
         edtPhone = findViewById(R.id.edt_phone_register);
         edtPassword = findViewById(R.id.edt_password_register);
+        edtConfirmPassword = findViewById(R.id.edt_confirm_password_register);
         edtAddress = findViewById(R.id.edt_address_register);
         radioGroup = findViewById(R.id.rg_gender_register);
         tvBirthday = findViewById(R.id.tv_birthday_register);
@@ -104,10 +109,10 @@ public class RegisterActivity extends BaseActivity {
             DatePickerDialog dialog = new DatePickerDialog(RegisterActivity.this,
                     (DatePicker datePicker, int iYear, int iMonth, int iDay) -> {
                         tvBirthday
-                                .setText(iYear + "/" + iMonth + "/" + iDay);
+                                .setText(iYear + "-" + iMonth + "-" + iDay);
                         calendar.set(iYear, iMonth, iDay);
                         Calendar currentDay = Calendar.getInstance();
-                        if (currentDay.after(calendar)) {
+                        if (currentDay.before(calendar)) {
                             tvErrorBirthday.setText(getString(R.string.label_error_birthday));
                         } else {
                             tvErrorBirthday.setText("");
@@ -221,6 +226,7 @@ public class RegisterActivity extends BaseActivity {
         String phone = edtPhone.getText().toString().trim();
         String address = edtAddress.getText().toString().trim();
         String password = edtPassword.getText().toString().trim();
+        String confirmPassword = edtConfirmPassword.getText().toString().trim();
         String birthdayStr = tvBirthday.getText().toString().trim();
         District district = (District) spnDistrict.getSelectedItem();
         int districtID = -1;
@@ -228,20 +234,24 @@ public class RegisterActivity extends BaseActivity {
             districtID = district.getId();
         }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.US);
-        Date birthday = null;
-        try {
-            if (birthdayStr != null && birthdayStr.length() > 0) {
-                birthday = simpleDateFormat.parse(birthdayStr);
-                tvErrorBirthday.setText("");
-            }
-        } catch (ParseException e) {
-            tvErrorBirthday.setText(getString(R.string.label_error_birthday));
-            e.printStackTrace();
-        }
+//        Date birthday = null;
+//        try {
+//            if (birthdayStr != null && birthdayStr.length() > 0) {
+//                birthday = simpleDateFormat.parse(birthdayStr);
+//                tvErrorBirthday.setText("");
+//            }
+//        } catch (ParseException e) {
+//            tvErrorBirthday.setText(getString(R.string.label_error_birthday));
+//            e.printStackTrace();
+//        }
         if (!Validation.isNameValid(name)) {
             cancel = true;
             edtFullname.setError(getString(R.string.error_invalid_name));
             focusView = edtFullname;
+        } else if (!confirmPassword.equals(password)) {
+            edtConfirmPassword.setError(getString(R.string.error_invalid_confirm_password));
+            cancel = true;
+            focusView = edtConfirmPassword;
         } else if (!Validation.isPhoneValid(phone)) {
             cancel = true;
             edtPhone.setError(getString(R.string.error_invalid_phone));
@@ -257,7 +267,12 @@ public class RegisterActivity extends BaseActivity {
             focusView = edtAddress;
         } else if (Validation.isNullOrEmpty(birthdayStr)) {
             cancel = true;
-            tvBirthday.setText(getString(R.string.label_error_birthday));
+            tvErrorBirthday.setText(getString(R.string.label_error_birthday));
+            focusView = tvBirthday;
+        }else if(birthdayStr!=null && birthdayStr.equals(getString(R.string.label_birthday_register))){
+            cancel = true;
+            tvErrorBirthday.setText(getString(R.string.label_error_birthday));
+            focusView = tvBirthday;
         }
         int gender = getGenderValue(radioGroup.getCheckedRadioButtonId());
         if (cancel) {
@@ -270,7 +285,7 @@ public class RegisterActivity extends BaseActivity {
             registerRequest.setDistrictId(districtID);
             registerRequest.setFullname(name);
             registerRequest.setGender(gender);
-            registerRequest.setBirthday(birthday);
+            registerRequest.setBirthday(birthdayStr);
             callApiRegister(registerRequest);
 
         }
@@ -309,9 +324,26 @@ public class RegisterActivity extends BaseActivity {
                     public void onSuccess(Response<User> userResponse) {
                         if (userResponse.isSuccessful()) {
                             Toast.makeText(RegisterActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(RegisterActivity.this)
+                                    .setMessage("Đăng kí tài khoản thành công")
+                                    .setPositiveButton("Đăng nhập", (DialogInterface dialogInterface, int i) -> {
+                                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                        startActivity(intent);
+                                    }) ;
+                            alertDialog.show();
                         } else {
+                            String erroMsg = Utils.getErrorMsg(userResponse.errorBody());
+//                            edtPhone.setError(erroMsg);
+//                            edtPhone.requestFocus();
+                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(RegisterActivity.this)
+                                    .setMessage(erroMsg)
+                                    .setPositiveButton("Thử lại", (DialogInterface dialogInterface, int i) -> {
+                                    }) ;
+                            alertDialog.show();
+
                             logError("CallApiRegister", "SuccessBut on Failed");
                         }
+
                         hideLoading();
                     }
 

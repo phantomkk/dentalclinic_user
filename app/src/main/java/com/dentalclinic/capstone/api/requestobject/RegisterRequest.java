@@ -10,7 +10,7 @@ public class RegisterRequest implements Serializable{
     private String password;
     private int gender;
     private int districtId;
-    private Date birthday;
+    private String birthday;
 
    public String getPhone() {
         return phone;
@@ -52,19 +52,19 @@ public class RegisterRequest implements Serializable{
         this.gender = gender;
     }
 
-    public Date getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
-
     public int getDistrictId() {
         return districtId;
     }
 
     public void setDistrictId(int districtId) {
         this.districtId = districtId;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
     }
 }
