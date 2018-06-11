@@ -1,6 +1,8 @@
 package com.dentalclinic.capstone.fragment;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,18 +16,29 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.dentalclinic.capstone.R;
+import com.dentalclinic.capstone.activities.RegisterActivity;
 import com.dentalclinic.capstone.adapter.ServiceAdapter;
 import com.dentalclinic.capstone.animation.AnimatedExpandableListView;
+import com.dentalclinic.capstone.api.APIServiceManager;
+import com.dentalclinic.capstone.api.services.TreatmentCategoryService;
 import com.dentalclinic.capstone.models.Patient;
 import com.dentalclinic.capstone.models.Treatment;
 import com.dentalclinic.capstone.models.TreatmentCategory;
 import com.dentalclinic.capstone.models.TreatmentHistory;
+import com.dentalclinic.capstone.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,7 +52,7 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
         // Required empty public constructor
     }
 
-    List<TreatmentCategory> treatmentCategories;
+    List<TreatmentCategory> treatmentCategories = new ArrayList<>();
 //    HashMap<TreatmentCategory, List<Treatment>> listDataChild;
 
     AnimatedExpandableListView expandableListView;
@@ -54,8 +67,12 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_dental, container, false);
-        prepareData();
+//        prepareData();
+        callApiGetAllTreatmentCategories();
         expandableListView = v.findViewById(R.id.eplv_list_categories);
+        if(treatmentCategories==null){
+//            prepareData();
+        }
         adapter = new ServiceAdapter(getContext(), treatmentCategories);
         expandableListView.setAdapter(adapter);
         return v;
@@ -91,21 +108,6 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
         adapter.filterData("");
         colpanlAll();
         return false;
-    }
-
-
-
-//    @Override
-//    public void onListItemClick(ListView listView, View v, int position, long id) {
-//        String item = (String) listView.getAdapter().getItem(position);
-//        if (getActivity() instanceof OnItem1SelectedListener) {
-//            ((OnItem1SelectedListener) getActivity()).OnItem1SelectedListener(item);
-//        }
-//        getFragmentManager().popBackStack();
-//    }
-
-    public interface OnItem1SelectedListener {
-        void OnItem1SelectedListener(String item);
     }
 
     @Override
@@ -148,6 +150,44 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
     @Override
     public boolean onMenuItemActionCollapse(MenuItem menuItem) {
         return true;
+    }
+    private TreatmentCategoryService treatmentCategory = APIServiceManager.getService(TreatmentCategoryService.class);
+    private Disposable treatmentCategoriesServiceDisposable;
+
+    public void callApiGetAllTreatmentCategories() {
+        showLoading();
+        treatmentCategory.getAll().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<Response<List<TreatmentCategory>>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        hideLoading();
+                        treatmentCategoriesServiceDisposable = d;
+                    }
+                    @Override
+                    public void onSuccess(Response<List<TreatmentCategory>> listResponse) {
+                        hideLoading();
+                        if (listResponse.isSuccessful()) {
+                            treatmentCategories.addAll(listResponse.body());
+                            adapter.notifyDataSetChanged();
+                            logError("treatmentCategories", String.valueOf(treatmentCategories.size()));
+                        } else {
+//                            String erroMsg = Utils.getErrorMsg(listResponse.errorBody());
+//                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
+//                                    .setMessage(erroMsg)
+//                                    .setPositiveButton("Thử lại", (DialogInterface dialogInterface, int i) -> {
+//                                    }) ;
+//                            alertDialog.show();
+                        }
+
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        hideLoading();
+                        e.printStackTrace();
+                        Toast.makeText(getActivity(), getResources().getString(R.string.error_on_error_when_call_api), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
 }

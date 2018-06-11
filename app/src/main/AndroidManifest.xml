@@ -27,20 +27,15 @@
         </activity>
         <activity
             android:name=".activities.LoginActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:label="@string/title_activity_login">
-
-        </activity>
-        <activity android:name=".activities.QuickRegisterActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize">
-
-        </activity>
-        <activity android:name=".activities.Appointment"></activity>
-        <activity android:name=".activities.SelectDentistActivity">
-
-        </activity>
-        <activity android:name=".activities.TreatmentDetailActivity"></activity>
-
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="stateHidden|adjustResize"></activity>
+        <activity
+            android:name=".activities.QuickRegisterActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"></activity>
+        <activity android:name=".activities.Appointment" />
+        <activity android:name=".activities.SelectDentistActivity"></activity>
+        <activity android:name=".activities.TreatmentDetailActivity" />
+        <activity android:name=".activities.NewsActivity"></activity>
     </application>
 
 </manifest>

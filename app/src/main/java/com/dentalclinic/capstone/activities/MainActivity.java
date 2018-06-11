@@ -109,21 +109,6 @@ public class MainActivity extends BaseActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-//        switch (id){
-//            case R.id.nav_new:
-//                break;
-//            case R.id.nav_dental:
-//                break;
-//            case R.id.nav_appointment:
-//                break;
-//            case R.id.nav_promotion:
-//            case R.id.nav_history_treatment:
-//            case R.id.nav_history_appointment:
-//            case R.id.nav_log_out:
-//                default:
-//
-//
-//        }
         if (id == R.id.nav_new) {
             setTitle(getResources().getString(R.string.new_fragment_title));
             NewsFragment newFragment = new NewsFragment();

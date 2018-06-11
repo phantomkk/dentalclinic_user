@@ -12,6 +12,11 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.dentalclinic.capstone.R;
+import com.dentalclinic.capstone.adapter.PatientProfileAdapter;
+import com.dentalclinic.capstone.models.Patient;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,8 +36,12 @@ public class MyAccoutFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_my_accout, container, false);
-
-
+        lvPatient = v.findViewById(R.id.lv_patient);
+        List<Patient> patients = new ArrayList<>();
+        patients.add(new Patient());
+        patients.add(new Patient());
+        PatientProfileAdapter adapter = new PatientProfileAdapter(getContext(),patients);
+        lvPatient.setAdapter(adapter);
 
         return v;
     }

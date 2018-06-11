@@ -2,7 +2,10 @@ package com.dentalclinic.capstone.fragment;
 
 import android.app.ProgressDialog;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.widget.Toast;
+
+import com.dentalclinic.capstone.utils.AppConst;
 
 public class BaseFragment extends Fragment {
     private ProgressDialog mProgressDialog;
@@ -15,11 +18,19 @@ public class BaseFragment extends Fragment {
         mProgressDialog.show();
     }
 
-    protected void showToast(String message) {
+    protected void showMessage(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
     }
 
-    protected void closeLoading() {
+    protected void hideLoading() {
         mProgressDialog.dismiss();
+    }
+
+    public void logError(Class t, String method, String message) {
+        Log.e(AppConst.DEBUG_TAG, t.getSimpleName() + "." + method + "(): " + message);
+    }
+
+    public void logError(String method, String message) {
+        Log.e(AppConst.DEBUG_TAG, this.getClass().getSimpleName() + "." + method + "(): " + message);
     }
 }
