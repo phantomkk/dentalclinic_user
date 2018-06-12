@@ -13,4 +13,5 @@
     <dimen name="text_link_big">16sp</dimen>
     <!--Drawable paddidng-->
     <dimen name="drawable_padding">10dp</dimen>
+    <dimen name="input_margin_top">5dp</dimen>
 </resources>

@@ -5,8 +5,7 @@
     tools:targetApi="LOLLIPOP">
     <item android:id="@android:id/background">
         <shape android:shape="rectangle">
-            <corners android:radius="40dp" />
-            <solid android:color="@color/color_green_600"/>
+            <solid android:color="@color/color_blue_500"/>
             <!--<gradient  android:startColor="#ff2d9a59"-->
                 <!--android:centerColor="#ff42959a"-->
                 <!--android:endColor="#ff23729a"-->

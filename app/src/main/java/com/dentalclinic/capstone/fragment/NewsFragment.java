@@ -112,7 +112,7 @@ public class NewsFragment extends BaseFragment {
     public void preparedData(){
         News news;
         for(int i =0; i < 3; i++) {
-            preparedData();
+//            preparedData();
             news = new News();
             news.setContent("<div class=\"content\"><p style=\"text-align: justify;\"><em>Xin chào BS.Nguyễn Văn Chung! Tôi xin bắt đầu bằng câu hỏi: có đúng là Hà Nội và TP.HCM dẫn đầu cả nước về con số trường hợp lây nhiễm ký sinh trùng?</em></p>\n" +
                     "<p style=\"text-align: justify;\"><strong>BS.Trả lời</strong> «Đúng là như thế. Hà Nội và TP.HCM dẫn đầu bảng các trường hợp lây nhiễm do kí sinh trùng gây ra. Nguyên nhân ở đây phải kể đến ô nhiễm môi trường, sự bàng quan của nhà nước và ý thức của dân.»</p>\n" +
