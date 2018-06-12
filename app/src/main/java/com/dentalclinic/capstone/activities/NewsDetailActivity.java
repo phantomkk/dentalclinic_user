@@ -1,58 +1,54 @@
 package com.dentalclinic.capstone.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.models.News;
 import com.dentalclinic.capstone.utils.PicassoImageGetter;
 import com.squareup.picasso.Picasso;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
-import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
-import android.widget.TextView;
+import com.squareup.picasso.Target;
 
-import com.squareup.picasso.Picasso;
-
-import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 
-public class NewsActivity extends BaseActivity {
-    TextView txtContent, txtTitile, txtAuthor, txtCreateDate;
-//    ImageView imgHeader;
-    News news;
+public class NewsDetailActivity extends BaseActivity {
+    TextView txtContent, txtAuthor, txtCreateDate;
+    ImageView imageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_news);
+        setContentView(R.layout.activity_news_detail);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         Intent intent = getIntent();
         News news = (News) intent.getSerializableExtra("news");
-
+        imageView = findViewById(R.id.img_header_news);
         txtContent = findViewById(R.id.txt_news_content);
-        txtTitile = findViewById(R.id.txt_title);
         txtCreateDate = findViewById(R.id.txt_date_create);
         txtAuthor = findViewById(R.id.txt_author);
         if(news!=null){
-            setTitle(news.getTitle());
+            if(news.getNewsImage()!=null){
+                Picasso.get().load(news.getNewsImage()).into(imageView);
+            }
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 txtContent.setMovementMethod(new LinkMovementMethod());
                 txtContent.setText(Html.fromHtml(news.getContent(),
@@ -61,8 +57,7 @@ public class NewsActivity extends BaseActivity {
                 txtContent.setText(Html.fromHtml(news.getContent()));
             }
             if(news.getTitle()!=null){
-                txtTitile.setVisibility(View.VISIBLE);
-                txtTitile.setText(news.getTitle());
+                setTitle(news.getTitle());
             }
             if(news.getCreateDate()!=null){
                 txtCreateDate.setVisibility(View.VISIBLE);
@@ -77,6 +72,14 @@ public class NewsActivity extends BaseActivity {
 //            txtContent.setText(news.getContent());
 //            Picasso.get().load(news.getImgUrl()).into(imgHeader);
         }
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
     }
 
     @Override
@@ -94,6 +97,5 @@ public class NewsActivity extends BaseActivity {
         onBackPressed();
         return true;
     }
-
 
 }

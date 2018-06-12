@@ -5,7 +5,7 @@
     android:background="@color/color_grey_100"
     tools:context="com.dentalclinic.capstone.fragment.HistoryTreatmentFragment">
 
-    <com.dentalclinic.capstone.animation.AnimatedExpandableListView
+    <ExpandableListView
         android:id="@+id/list_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

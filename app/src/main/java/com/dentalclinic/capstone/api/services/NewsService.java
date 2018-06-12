@@ -5,6 +5,7 @@ import com.dentalclinic.capstone.models.News;
 import java.util.List;
 
 import io.reactivex.Single;
+import retrofit2.Response;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -15,11 +16,11 @@ public interface NewsService {
     Single<List<News>> getAllNews();
 
     @GET("api/news/{id}")
-    Single<News> getNewById(@Path("id") int newId);
+    Single<Response<News>> getNewById(@Path("id") int newId);
 
     @GET("api/news/loadmore")
-    Single<List<News>> loadMore(@Query("currentIndex") int currentIndex,
-                                @Query("numItem") int numItem
+    Single<Response<List<News>>> loadMore(@Query("currentIndex") int currentIndex,
+                                         @Query("numItem") int numItem
     );
 
 

@@ -17,10 +17,17 @@ public class TreatmentHistory implements Serializable {
     private Date finishDate;
     @SerializedName("description")
     private String description;
+    @SerializedName("price")
+    private Long price;
+    @SerializedName("total_price")
+    private Long totalPrice;
     @SerializedName("treatment")
     private Treatment treatment;
     @SerializedName("treatment_details")
     private List<TreatmentDetail> treatmentDetails;
+    @SerializedName("tooth")
+    private Tooth tooth;
+
 
     public TreatmentHistory(Date createDate, Date finishDate, Treatment treatment) {
         this.createDate = createDate;
@@ -87,5 +94,29 @@ public class TreatmentHistory implements Serializable {
 
     public void setTreatmentDetails(List<TreatmentDetail> treatmentDetails) {
         this.treatmentDetails = treatmentDetails;
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
+    }
+
+    public Tooth getTooth() {
+        return tooth;
+    }
+
+    public void setTooth(Tooth tooth) {
+        this.tooth = tooth;
+    }
+
+    public Long getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Long totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }

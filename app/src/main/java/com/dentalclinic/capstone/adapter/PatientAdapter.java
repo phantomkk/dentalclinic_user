@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,11 +27,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by lucky on 07-Oct-17.
  */
 
-public class PatientAdapter extends AnimatedExpandableListView.AnimatedExpandableListAdapter{
+public class PatientAdapter extends BaseExpandableListAdapter{
     private Context context;
-    private List<Patient> _listDataHeader; // header titles
+    private List<Patient> listDataHeader; // header titles
     // child data in format of header title, child title
-    private HashMap<Patient, List<TreatmentHistory>> _listDataChild;
 //
 //    private int resourceID;
 //    private int lastPosition = -1;
@@ -39,16 +39,13 @@ public class PatientAdapter extends AnimatedExpandableListView.AnimatedExpandabl
 //        this.resourceID = resourceID;
 //    }
 
-    public PatientAdapter(Context context, List<Patient> listDataHeader,
-                                 HashMap<Patient, List<TreatmentHistory>> listChildData) {
+
+
+    public PatientAdapter(Context context, List<Patient> listDataHeader) {
         this.context = context;
-        this._listDataHeader = listDataHeader;
-        this._listDataChild = listChildData;
+        this.listDataHeader = listDataHeader;
     }
-
-
-
-//    @NonNull
+    //    @NonNull
 //    @Override
 //    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 ////        return super.getView(position, convertView, parent);
@@ -82,17 +79,50 @@ public class PatientAdapter extends AnimatedExpandableListView.AnimatedExpandabl
 
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
-                .get(childPosititon);
+        return this.listDataHeader.get(groupPosition).getTreatmentHistories().get(childPosititon);
     }
 
     @Override
     public long getChildId(int groupPosition, int childPosition) {
         return childPosition;
     }
+//
+//    @Override
+//    public View getRealChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+//        TreatmentHistory treatmentHistory = (TreatmentHistory) getChild(groupPosition, childPosition);
+//        if (convertView == null) {
+//            LayoutInflater infalInflater = (LayoutInflater) this.context
+//                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//            convertView = infalInflater.inflate(R.layout.item_treatment_history, null);
+//        }
+//        TextView mTreatmentName = convertView.findViewById(R.id.txt_treatment_name);
+//        mTreatmentName.setText(treatmentHistory.getTreatment().getName());
+//        TextView mPrice = convertView.findViewById(R.id.txt_price);
+//        mPrice.setText(treatmentHistory.getPrice()+"đ");
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+//        TextView mStartDate = (TextView) convertView.findViewById(R.id.txt_start_date);
+//        mStartDate.setText(dateFormat.format(treatmentHistory.getCreateDate()));
+//        TextView mFinishDate = (TextView) convertView.findViewById(R.id.txt_finish_date);
+//        mFinishDate.setText(dateFormat.format(treatmentHistory.getFinishDate()));
+//        TextView mToothName = (TextView) convertView.findViewById(R.id.txt_tooth_name);
+//        mToothName.setText(treatmentHistory.getTooth().getToothName());
+//        TextView mDiscount = (TextView) convertView.findViewById(R.id.txt_discount);
+//        mDiscount.setText(treatmentHistory.getTreatment().getEvent().getDiscount()+"%");
+//        TextView mTotal = (TextView) convertView.findViewById(R.id.txt_total);
+//        mTotal.setText(treatmentHistory.getTotalPrice()+"đ");
+//
+//        return convertView;
+//    }
+//
+//    @Override
+//    public int getRealChildrenCount(int groupPosition) {
+//        return this.listDataHeader.get(groupPosition).getTreatmentHistories().size();
+//    }
 
     @Override
-    public View getRealChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(int groupPosition, final int childPosition,
+                             boolean isLastChild, View convertView, ViewGroup parent) {
+
         TreatmentHistory treatmentHistory = (TreatmentHistory) getChild(groupPosition, childPosition);
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.context
@@ -102,70 +132,36 @@ public class PatientAdapter extends AnimatedExpandableListView.AnimatedExpandabl
         TextView mTreatmentName = convertView.findViewById(R.id.txt_treatment_name);
         mTreatmentName.setText(treatmentHistory.getTreatment().getName());
         TextView mPrice = convertView.findViewById(R.id.txt_price);
-//        mPrice.setText(treatmentHistory.getTreatment().getPrice().toString()+"đ");
+        mPrice.setText(treatmentHistory.getPrice()+"đ");
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         TextView mStartDate = (TextView) convertView.findViewById(R.id.txt_start_date);
         mStartDate.setText(dateFormat.format(treatmentHistory.getCreateDate()));
         TextView mFinishDate = (TextView) convertView.findViewById(R.id.txt_finish_date);
         mFinishDate.setText(dateFormat.format(treatmentHistory.getFinishDate()));
+        TextView mToothName = (TextView) convertView.findViewById(R.id.txt_tooth_name);
+        mToothName.setText(treatmentHistory.getTooth().getToothName());
+        TextView mDiscount = (TextView) convertView.findViewById(R.id.txt_discount);
+        mDiscount.setText(treatmentHistory.getTreatment().getEvent().getDiscount()+"%");
+        TextView mTotal = (TextView) convertView.findViewById(R.id.txt_total);
+        mTotal.setText(treatmentHistory.getTotalPrice()+"đ");
 
-
-
-//        TextView txtTreatment = (TextView) convertView.findViewById(R.id.txt_treatment_name);
-//        txtTreatment.setText(treatmentDetail.getNote());
-//        MyGridView gridView = convertView.findViewById(R.id.gv_list_image);
-//        List<TreatmentImage> treatmentImages = new ArrayList<>();
-//        treatmentImages.add(new TreatmentImage("http://nhakhoalouis.com.vn/wp-content/uploads/2016/10/chup-xquang-rang-1.jpg"));
-//        treatmentImages.add(new TreatmentImage("http://nhakhoalouis.com.vn/wp-content/uploads/2016/10/chup-xquang-rang-1.jpg"));
-//        treatmentImages.add(new TreatmentImage("http://nhakhoalouis.com.vn/wp-content/uploads/2016/10/chup-xquang-rang-1.jpg"));
-//        treatmentImages.add(new TreatmentImage("http://nhakhoalouis.com.vn/wp-content/uploads/2016/10/chup-xquang-rang-1.jpg"));
-//        treatmentImages.add(new TreatmentImage("http://nhakhoalouis.com.vn/wp-content/uploads/2016/10/chup-xquang-rang-1.jpg"));
-//        treatmentImages.add(new TreatmentImage("http://nhakhoalouis.com.vn/wp-content/uploads/2016/10/chup-xquang-rang-1.jpg"));
-//        treatmentDetail.setTreatmentImages(treatmentImages);
-//        ImageAdapter imageAdapter = new ImageAdapter(context,treatmentDetail.getTreatmentImages());
-//        gridView.setAdapter(imageAdapter);
         return convertView;
     }
 
     @Override
-    public int getRealChildrenCount(int groupPosition) {
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
-                .size();
+    public int getChildrenCount(int groupPosition) {
+        return this.listDataHeader.get(groupPosition).getTreatmentHistories().size();
+
     }
-
-//    @Override
-//    public View getChildView(int groupPosition, final int childPosition,
-//                             boolean isLastChild, View convertView, ViewGroup parent) {
-//
-//        final City child = (City) getChild(groupPosition, childPosition);
-//
-//        if (convertView == null) {
-//            LayoutInflater infalInflater = (LayoutInflater) this.context
-//                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//            convertView = infalInflater.inflate(R.layout.item_treatment, null);
-//        }
-//
-//        TextView txtListChild = (TextView) convertView
-//                .findViewById(R.id.txt_code_item_history);
-//
-//        txtListChild.setText(child.getName());
-//        return convertView;
-//    }
-
-//    @Override
-//    public int getChildrenCount(int groupPosition) {
-//        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
-//                .size();
-//    }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return this._listDataHeader.get(groupPosition);
+        return this.listDataHeader.get(groupPosition);
     }
 
     @Override
     public int getGroupCount() {
-        return this._listDataHeader.size();
+        return this.listDataHeader.size();
     }
 
 

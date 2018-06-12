@@ -5,11 +5,10 @@
     android:background="@color/color_grey_100"
     tools:context="com.dentalclinic.capstone.fragment.DentalFragment">
 
-    <com.dentalclinic.capstone.animation.AnimatedExpandableListView
+    <ExpandableListView
         android:id="@+id/eplv_list_categories"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
         android:divider="@android:color/transparent"
         android:groupIndicator="@null" />
 </FrameLayout>

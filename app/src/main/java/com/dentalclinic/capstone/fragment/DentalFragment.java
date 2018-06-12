@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ExpandableListView;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -55,7 +56,7 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
     List<TreatmentCategory> treatmentCategories = new ArrayList<>();
 //    HashMap<TreatmentCategory, List<Treatment>> listDataChild;
 
-    AnimatedExpandableListView expandableListView;
+    ExpandableListView expandableListView;
     ServiceAdapter adapter;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,7 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_dental, container, false);
 //        prepareData();
+        showLoading();
         callApiGetAllTreatmentCategories();
         expandableListView = v.findViewById(R.id.eplv_list_categories);
         if(treatmentCategories==null){
@@ -80,7 +82,7 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
     private void expandAll() {
         int count = adapter.getGroupCount();
         for (int i = 0; i < count; i++){
-            expandableListView.expandGroupWithAnimation(i);
+            expandableListView.expandGroup(i);
         }
     }
     private void colpanlAll() {
@@ -118,8 +120,6 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
         searchView.setOnQueryTextListener(this);
         searchView.setQueryHint("Search");
         super.onCreateOptionsMenu(menu, inflater);
-
-        super.onCreateOptionsMenu(menu, inflater);
     }
     public void prepareData(){
         treatmentCategories = new ArrayList<>();
@@ -155,7 +155,6 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
     private Disposable treatmentCategoriesServiceDisposable;
 
     public void callApiGetAllTreatmentCategories() {
-        showLoading();
         treatmentCategory.getAll().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Response<List<TreatmentCategory>>>() {
@@ -169,6 +168,7 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
                         hideLoading();
                         if (listResponse.isSuccessful()) {
                             treatmentCategories.addAll(listResponse.body());
+                            adapter.getListDataHeaderOriginal().addAll(treatmentCategories);
                             adapter.notifyDataSetChanged();
                             logError("treatmentCategories", String.valueOf(treatmentCategories.size()));
                         } else {

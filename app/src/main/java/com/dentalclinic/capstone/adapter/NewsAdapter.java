@@ -73,9 +73,6 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_news, parent, false);
-//        return new ViewHolder(view);
-
         if (viewType == VIEW_TYPE_ITEM) {
             View view = LayoutInflater.from(activity).inflate(R.layout.item_news, parent, false);
             return new ListViewHolder(view);
@@ -119,7 +116,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public void bind(final News item, final OnItemClickListener listener) {
             txtTitle.setText(item.getTitle());
-            Picasso.get().load(item.getImgUrl()).resize(1200, 600).centerCrop().into(imgNews);
+            Picasso.get().load(item.getNewsImage()).into(imgNews);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

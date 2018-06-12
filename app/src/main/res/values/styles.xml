@@ -24,6 +24,7 @@
         <item name="android:textColor">@color/color_blue_grey_900</item>
         <item name="android:textStyle">normal</item>
     </style>
+
     <style name="custom_button_green" parent="@android:style/Widget.Button">
         <item name="android:gravity">center_vertical|center_horizontal</item>
         <item name="android:textColor">#FFFFFFFF</item>
@@ -40,7 +41,14 @@
 
     <style name="custom_button_red" parent="custom_button_green">
         <item name="android:background">@drawable/ripple_effect_2</item>
-    </style> <style name="custom_button_orange" parent="custom_button_green">
+    </style>
+
+    <style name="custom_button_orange" parent="custom_button_green">
         <item name="android:background">@drawable/ripple_effect_3</item>
+    </style>
+    <style name="CollapsedAppBar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">15dp</item>
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:textStyle">normal</item>
     </style>
 </resources>

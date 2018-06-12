@@ -1,5 +1,6 @@
 package com.dentalclinic.capstone.activities;
 
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
@@ -30,6 +31,7 @@ public class TreatmentDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_treatment_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setBackgroundDrawable(getDrawable(R.drawable.side_nav_bar));
         prepareData();
         listView = findViewById(R.id.lv_treatment_detail);
         TreatmentDetailAdapter adapter = new TreatmentDetailAdapter(this, treatmentHistory.getTreatmentDetails());
@@ -39,7 +41,7 @@ public class TreatmentDetailActivity extends BaseActivity {
 
     @Override
     public String getMainTitle() {
-        return "Main";
+        return getResources().getString(R.string.treatment_detail_title_activity);
     }
 
     @Override

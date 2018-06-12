@@ -20,6 +20,14 @@ public class Treatment implements Serializable {
     private TreatmentCategory category;
     @SerializedName("treatment_steps")
     private List<TreatmentStep> treatmentSteps;
+    @SerializedName("event")
+    private Event event;
+
+
+    public Treatment(String name, Event event) {
+        this.name = name;
+        this.event = event;
+    }
 
     public Treatment(String name, Long maxPrice, Long minPrice) {
         this.name = name;
@@ -91,5 +99,13 @@ public class Treatment implements Serializable {
 
     public void setTreatmentSteps(List<TreatmentStep> treatmentSteps) {
         this.treatmentSteps = treatmentSteps;
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
     }
 }

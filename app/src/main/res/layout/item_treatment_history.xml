@@ -4,46 +4,140 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:cardUseCompatPadding="true">
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="10dp">
-
-
+        <TextView
+            android:id="@+id/txt_treatment_name"
+            style="@style/value_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="Trám răng sứ thẩm mỹ"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:textStyle="bold" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            android:weightSum="1">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:weightSum="10">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="5dp"
+                    android:weightSum="10">
+                    <TextView
+                        style="@style/value_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Giá:"
+                        android:textStyle="bold"
+                        android:layout_weight="5"/>
+                    <TextView
+                        android:id="@+id/txt_price"
+                        style="@style/value_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:text="200.000.000đ"
+                        android:textAlignment="textEnd"
+                        android:textStyle="bold"
+                        android:textColor="@color/color_red_400" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="5dp"
+                    android:weightSum="10">
+                    <TextView
+                        style="@style/value_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Khuyến Mãi:"
+                        android:textStyle="bold"
+                        android:layout_weight="5" />
+                    <TextView
+                        android:id="@+id/txt_discount"
+                        style="@style/value_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="-10%"
+                        android:layout_weight="5"
+                        android:textAlignment="textEnd"
+                        android:textStyle="bold"
+                        android:textColor="@color/color_red_400" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="5dp"
+                    android:weightSum="10">
+                    <TextView
+                        style="@style/value_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Còn lại:"
+                        android:textStyle="bold"
+                        android:layout_weight="5"/>
+                    <TextView
+                        android:id="@+id/txt_total"
+                        style="@style/value_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:text="100.000.000đ"
+                        android:textAlignment="textEnd"
+                        android:textStyle="bold"
+                        android:textColor="@color/color_red_400" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/ic_search_black_24dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
             android:weightSum="10">
 
             <TextView
-                android:id="@+id/txt_treatment_name"
                 style="@style/value_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:text="Trám răng sứ thẩm mỹ"
-                android:layout_weight="6"
-                android:textSize="18dp"
+                android:layout_weight="3"
+                android:text="Răng"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/txt_price"
+                android:id="@+id/txt_tooth_name"
                 style="@style/value_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:layout_weight="4"
-                android:text="200.000.000đ"
-                android:textAlignment="textEnd"
-                android:textColor="@color/color_red_400"
-                android:textSize="20dp" />
-            <ImageView
-                android:layout_marginLeft="10dp"
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_search_black_24dp"/>
+                android:layout_weight="6"
+                android:text="" />
         </LinearLayout>
 
         <LinearLayout
@@ -71,6 +165,7 @@
                 android:layout_weight="6"
                 android:text="30-06-1996" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -96,8 +191,6 @@
                 android:layout_weight="6"
                 android:text="10-02-1996" />
         </LinearLayout>
-
-
 
 
     </LinearLayout>

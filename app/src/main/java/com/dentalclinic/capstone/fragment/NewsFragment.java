@@ -1,6 +1,8 @@
 package com.dentalclinic.capstone.fragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,20 +24,34 @@ import android.widget.Toast;
 
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.activities.NewsActivity;
+import com.dentalclinic.capstone.activities.NewsDetailActivity;
 import com.dentalclinic.capstone.adapter.NewsAdapter;
 import com.dentalclinic.capstone.adapter.SmallNewsAdapter;
 import com.dentalclinic.capstone.animation.EndlessRecyclerOnScrollListener;
+import com.dentalclinic.capstone.api.APIServiceManager;
+import com.dentalclinic.capstone.api.services.NewsService;
+import com.dentalclinic.capstone.api.services.TreatmentCategoryService;
 import com.dentalclinic.capstone.models.News;
 import com.dentalclinic.capstone.utils.AppConst;
 import com.dentalclinic.capstone.utils.OnLoadMoreListener;
+import com.dentalclinic.capstone.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Response;
 
 public class NewsFragment extends BaseFragment {
     private OnFragmentInteractionListener mListener;
     List<News> listNews = new ArrayList<>();
     private NewsAdapter adapter;
+    private NewsService newsService = APIServiceManager.getService(NewsService.class);
+    private Disposable newsServiceDisposable ;
+    private final int NUMBER_PAGE_LOAD = 10;
 //    private SmallNewsAdapter smallNewsAdapter;
     private RecyclerView rcvNews;
 //    private RecyclerView lvNews;
@@ -55,6 +71,7 @@ public class NewsFragment extends BaseFragment {
 
         return inflater.inflate(R.layout.fragment_news, container, false);
     }
+    protected Handler handler;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -65,14 +82,14 @@ public class NewsFragment extends BaseFragment {
 //
 //            }
 //        });
-
+        handler = new Handler();
         rcvNews = view.findViewById(R.id.rcv_news);
         rcvNews.setLayoutManager(new LinearLayoutManager(getActivity()));
         rcvNews.setItemAnimator(new DefaultItemAnimator());
         adapter = new NewsAdapter(rcvNews, listNews, getActivity(), new NewsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(News item) {
-                Intent myIntent = new Intent(getActivity(), NewsActivity.class);
+                Intent myIntent = new Intent(getActivity(), NewsDetailActivity.class);
                 myIntent.putExtra("news", item); //Optional parameters
                 startActivity(myIntent);
             }
@@ -85,7 +102,13 @@ public class NewsFragment extends BaseFragment {
                 if (listNews.size() <= 200) {
                     listNews.add(null);
                     adapter.notifyItemInserted(listNews.size() - 1);
-                    new Handler().postDelayed(new Runnable() {
+
+
+                    //Generating more data
+//                    int index = listNews.size();
+//                    callApiGetNews(index,NUMBER_PAGE_LOAD);
+//                    adapter.setLoaded();
+                    handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             listNews.remove(listNews.size() - 1);
@@ -93,14 +116,15 @@ public class NewsFragment extends BaseFragment {
 
                             //Generating more data
                             int index = listNews.size();
+
                             int end = index + 10;
                             for (int i = index; i < end; i++) {
-                               preparedData();
+                                preparedData();
                             }
                             adapter.notifyDataSetChanged();
                             adapter.setLoaded();
                         }
-                    }, 5000);
+                    }, 2000);
                 } else {
                     Toast.makeText(getActivity(), "Loading data completed", Toast.LENGTH_SHORT).show();
                 }
@@ -109,10 +133,50 @@ public class NewsFragment extends BaseFragment {
         Log.d(AppConst.DEBUG_TAG, "onViewCreated");
     }
 
+    public void callApiGetNews(int currentIndex, int numItem) {
+
+        showLoading();
+        newsService.loadMore(currentIndex, numItem).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<Response<List<News>>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        hideLoading();
+                        newsServiceDisposable = d;
+                    }
+                    @Override
+                    public void onSuccess(Response<List<News>> listResponse) {
+                        hideLoading();
+                        if (listResponse.isSuccessful()) {
+                            listNews.addAll(listResponse.body());
+                            adapter.notifyDataSetChanged();
+                            logError("news", String.valueOf(listResponse.body().size()));
+                        } else {
+                            String erroMsg = Utils.getErrorMsg(listResponse.errorBody());
+                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
+                                    .setMessage(erroMsg)
+                                    .setPositiveButton("Thử lại", (DialogInterface dialogInterface, int i) -> {
+                                    }) ;
+                            alertDialog.show();
+                        }
+
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        hideLoading();
+                        e.printStackTrace();
+                        Toast.makeText(getActivity(), getResources().getString(R.string.error_on_error_when_call_api), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+
     public void preparedData(){
+//        showLoading();
+//        callApiGetNews(0, NUMBER_PAGE_LOAD);
+
         News news;
         for(int i =0; i < 3; i++) {
-//            preparedData();
             news = new News();
             news.setContent("<div class=\"content\"><p style=\"text-align: justify;\"><em>Xin chào BS.Nguyễn Văn Chung! Tôi xin bắt đầu bằng câu hỏi: có đúng là Hà Nội và TP.HCM dẫn đầu cả nước về con số trường hợp lây nhiễm ký sinh trùng?</em></p>\n" +
                     "<p style=\"text-align: justify;\"><strong>BS.Trả lời</strong> «Đúng là như thế. Hà Nội và TP.HCM dẫn đầu bảng các trường hợp lây nhiễm do kí sinh trùng gây ra. Nguyên nhân ở đây phải kể đến ô nhiễm môi trường, sự bàng quan của nhà nước và ý thức của dân.»</p>\n" +
@@ -206,11 +270,12 @@ public class NewsFragment extends BaseFragment {
                     "<p style=\"text-align: justify;\"><a href=\"http://adszx.pro/?target=-6AAIXWQLJIgAAAAAAAAAAAAQcfzIZAAAA&amp;al=20507&amp;ap=-1\"><img class=\"size-medium wp-image-38547 aligncenter\" src=\"https://24htinmoi.com/wp-content/uploads/2018/03/dathang-1-300x150.png\" alt=\"\" width=\"300\" height=\"150\" srcset=\"https://24htinmoi.com/wp-content/uploads/2018/03/dathang-1-300x150.png 300w, https://24htinmoi.com/wp-content/uploads/2018/03/dathang-1.png 490w\" sizes=\"(max-width: 300px) 100vw, 300px\"></a></p>\n" +
                     "</div>");
             news.setId(i);
-            news.setImgUrl("https://baomoi-photo-1-td.zadn.vn/w700_r1/17/12/18/25/24336735/1_586031.png");
-            news.setTitle("A powerful image downloading and caching library for Android");
+            news.setNewsImage("https://baomoi-photo-1-td.zadn.vn/w700_r1/17/12/18/25/24336735/1_586031.png");
+            news.setTitle("Trả hồ sơ vụ ngư dân bắt cá đen 'khủng' 71kg không bao giờ trả lại crimea cho ukraine");
             listNews.add(news);
         }
         adapter.notifyDataSetChanged();
+//
     }
 
     public interface OnFragmentInteractionListener {

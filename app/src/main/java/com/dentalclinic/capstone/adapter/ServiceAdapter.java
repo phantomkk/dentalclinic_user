@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,35 +23,65 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ServiceAdapter extends AnimatedExpandableListView.AnimatedExpandableListAdapter {
+public class ServiceAdapter extends BaseExpandableListAdapter {
     private Context context;
     private List<TreatmentCategory> listDataHeader; // header titles
-    private List<TreatmentCategory> listDataHeaderOriginal = new ArrayList<>(); // header titles
-    // child data in format of header title, child title
-//    private HashMap<TreatmentCategory, List<Treatment>> listDataChild;
+    private List<TreatmentCategory> listDataHeaderOriginal = new ArrayList<>();
 
     public ServiceAdapter(Context context, List<TreatmentCategory> listDataHeader) {
         this.context = context;
         this.listDataHeader = listDataHeader;
         this.listDataHeaderOriginal.addAll(listDataHeader);
-//        this.listDataChild = listChildData;
     }
 
+    public List<TreatmentCategory> getListDataHeaderOriginal() {
+        return listDataHeaderOriginal;
+    }
+
+    public void setListDataHeaderOriginal(List<TreatmentCategory> listDataHeaderOriginal) {
+        this.listDataHeaderOriginal = listDataHeaderOriginal;
+    }
 
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
         return listDataHeader.get(groupPosition).getTreatments().get(childPosititon);
-//        return this.listDataChild.get(this.listDataHeader.get(groupPosition))
-//                .get(childPosititon);
     }
-
     @Override
     public long getChildId(int groupPosition, int childPosition) {
         return childPosition;
     }
+//
+//    @Override
+//    public View getRealChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+//        Treatment treatment = (Treatment) getChild(groupPosition, childPosition);
+//        if (convertView == null) {
+//            LayoutInflater infalInflater = (LayoutInflater) this.context
+//                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//            convertView = infalInflater.inflate(R.layout.item_treatment, null);
+//        }
+//        TextView mName = convertView.findViewById(R.id.txt_name);
+//        mName.setText(treatment.getName());
+//        TextView mPrice = convertView.findViewById(R.id.txt_price);
+//        mPrice.setText(treatment.getMinPrice() + "-" + treatment.getMaxPrice() + "VND");
+//        TextView mDescription = convertView.findViewById(R.id.txt_description);
+//        if (treatment.getDescription() != null) {
+//            mDescription.setVisibility(View.VISIBLE);
+//            mDescription.setText(treatment.getDescription());
+//        }
+//        return convertView;
+//    }
+//
+//    @Override
+//    public int getRealChildrenCount(int groupPosition) {
+//        return this.listDataHeader.get(groupPosition).getTreatments().size();
+////        return this.listDataChild.get(this.listDataHeader.get(groupPosition))
+////                .size();
+//    }
 
     @Override
-    public View getRealChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(int groupPosition, final int childPosition,
+                             boolean isLastChild, View convertView, ViewGroup parent) {
+
         Treatment treatment = (Treatment) getChild(groupPosition, childPosition);
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.context
@@ -70,36 +101,10 @@ public class ServiceAdapter extends AnimatedExpandableListView.AnimatedExpandabl
     }
 
     @Override
-    public int getRealChildrenCount(int groupPosition) {
+    public int getChildrenCount(int groupPosition) {
         return this.listDataHeader.get(groupPosition).getTreatments().size();
-//        return this.listDataChild.get(this.listDataHeader.get(groupPosition))
-//                .size();
+
     }
-
-//    @Override
-//    public View getChildView(int groupPosition, final int childPosition,
-//                             boolean isLastChild, View convertView, ViewGroup parent) {
-//
-//        final City child = (City) getChild(groupPosition, childPosition);
-//
-//        if (convertView == null) {
-//            LayoutInflater infalInflater = (LayoutInflater) this.context
-//                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//            convertView = infalInflater.inflate(R.layout.item_treatment, null);
-//        }
-//
-//        TextView txtListChild = (TextView) convertView
-//                .findViewById(R.id.txt_code_item_history);
-//
-//        txtListChild.setText(child.getName());
-//        return convertView;
-//    }
-
-//    @Override
-//    public int getChildrenCount(int groupPosition) {
-//        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
-//                .size();
-//    }
 
     @Override
     public Object getGroup(int groupPosition) {
@@ -181,7 +186,7 @@ public class ServiceAdapter extends AnimatedExpandableListView.AnimatedExpandabl
                     if(treatmentCategory.getIconLink()!=null){
                         category.setIconLink(treatmentCategory.getIconLink());
                     }
-                    category.setName(category.getName());
+                    category.setName(treatmentCategory.getName());
                     category.setTreatments(newTreatments);
                     listDataHeader.add(category);
                 }
