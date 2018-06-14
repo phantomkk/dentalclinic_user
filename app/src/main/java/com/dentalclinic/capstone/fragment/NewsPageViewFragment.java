@@ -126,7 +126,7 @@ public class NewsPageViewFragment extends BaseFragment {
                 }
             }
         });
-        showMessage("TYPE"+ type);
+//        showMessage("TYPE"+ type);
         Log.d(AppConst.DEBUG_TAG, "onViewCreated");
     }
 

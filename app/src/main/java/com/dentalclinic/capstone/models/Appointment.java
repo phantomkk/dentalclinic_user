@@ -3,6 +3,7 @@ package com.dentalclinic.capstone.models;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.sql.Time;
 import java.util.Date;
 
 
@@ -19,7 +20,8 @@ public class Appointment implements Serializable {
     private int numericalOrder;
     @SerializedName("estimated_time")
     private Date estimatedTime;
-
+    @SerializedName("start_time")
+    private Date startTime;
 
     public int getId() {
         return id;
@@ -67,5 +69,13 @@ public class Appointment implements Serializable {
 
     public void setEstimatedTime(Date estimatedTime) {
         this.estimatedTime = estimatedTime;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 }

@@ -185,7 +185,7 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
                     public void onError(Throwable e) {
                         hideLoading();
                         e.printStackTrace();
-                        Toast.makeText(getActivity(), getResources().getString(R.string.error_on_error_when_call_api), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.error_on_error_when_call_api), Toast.LENGTH_SHORT).show();
                     }
                 });
     }

@@ -3,17 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.dentalclinic.capstone.fragment.HistoryAppointmentFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <com.xenione.digit.TabDigit
-        xmlns:digit="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/tabDigit1"
+    <ListView
+        android:id="@+id/lv_history_appointment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        digit:backgroundColor="#000000"
-        digit:padding="10dp"
-        digit:textColor="#ffffff"
-        digit:textSize="60dp" />
+        android:layout_margin="10dp"/>
 </FrameLayout>

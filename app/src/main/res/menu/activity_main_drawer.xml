@@ -12,11 +12,6 @@
             android:id="@+id/nav_dental"
             android:icon="@drawable/ic_airline_seat_flat_angled_black_24dp"
             android:title="@string/dental_fragment_title" />
-
-        <!--<item-->
-            <!--android:id="@+id/nav_promotion"-->
-            <!--android:icon="@drawable/ic_whatshot_black_24dp"-->
-            <!--android:title="@string/promotion_fragment_title" />-->
     </group>
     <item
         android:id="@+id/nav_appointment"

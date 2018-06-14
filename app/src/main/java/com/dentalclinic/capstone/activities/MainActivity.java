@@ -56,10 +56,32 @@ public class MainActivity extends BaseActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        drawer.setViewScale(Gravity.START, 0.9f);
-        drawer.setRadius(Gravity.START, 35);
-        drawer.setViewElevation(Gravity.START, 20);
+//        drawer.setViewScale(Gravity.START, 0.9f);
+//        drawer.setRadius(Gravity.START, 35);
+//        drawer.setViewElevation(Gravity.START, 20);
         navigationView.getMenu().getItem(0).setChecked(true);
+
+        NavigationView rightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
+        rightNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                // Handle Right navigation view item clicks here.
+                int id = item.getItemId();
+//
+//                if (id == R.id.nav_settings) {
+//                    Toast.makeText(MainActivity.this, "Right Drawer - Settings", Toast.LENGTH_SHORT).show();
+//                } else if (id == R.id.nav_logout) {
+//                    Toast.makeText(MainActivity.this, "Right Drawer - Logout", Toast.LENGTH_SHORT).show();
+//                } else if (id == R.id.nav_help) {
+//                    Toast.makeText(MainActivity.this, "Right Drawer - Help", Toast.LENGTH_SHORT).show();
+//                } else if (id == R.id.nav_about) {
+//                    Toast.makeText(MainActivity.this, "Right Drawer - About", Toast.LENGTH_SHORT).show();
+//                }
+
+                drawer.closeDrawer(GravityCompat.END); /*Important Line*/
+                return true;
+            }
+        });
     }
 
     @Override
@@ -85,7 +107,7 @@ public class MainActivity extends BaseActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -94,13 +116,19 @@ public class MainActivity extends BaseActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_openRight) {
+            drawer.openDrawer(GravityCompat.END);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -146,8 +174,6 @@ public class MainActivity extends BaseActivity
         }else if (id == R.id.nav_log_out) {
             showMessage("Đăng xuất");
         }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

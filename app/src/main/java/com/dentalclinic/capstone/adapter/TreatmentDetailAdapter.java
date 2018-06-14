@@ -63,7 +63,7 @@ public class TreatmentDetailAdapter extends ArrayAdapter<TreatmentDetail> {
 //            ImageView iv = (ImageView) convertView.findViewById(R.id.img_image_treatment);
 //            Picasso.get().load(image.getImageLink()).into(viewHolder.imageView);
             viewHolder.mDentistName.setText(treatmentDetail.getDentist().getName());
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat dateFormat = new SimpleDateFormat(Utils.PATTERN_DATE);
             viewHolder.mDate.setText(dateFormat.format(treatmentDetail.getCreatedDate()));
             String step = "";
             for (TreatmentDetailStep stepObj : treatmentDetail.getTreatmentDetailSteps()) {
