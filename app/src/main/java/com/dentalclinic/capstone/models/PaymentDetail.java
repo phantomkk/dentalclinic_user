@@ -17,6 +17,17 @@ public class PaymentDetail implements Serializable{
     @SerializedName("received_money")
     private Long receivedMoney;
 
+    public PaymentDetail(Staff receptionist, Long receivedMoney) {
+        this.receptionist = receptionist;
+        this.receivedMoney = receivedMoney;
+    }
+
+    public PaymentDetail(Staff receptionist, Date dateCreate, Long receivedMoney) {
+        this.receptionist = receptionist;
+        this.dateCreate = dateCreate;
+        this.receivedMoney = receivedMoney;
+    }
+
     public int getId() {
         return id;
     }

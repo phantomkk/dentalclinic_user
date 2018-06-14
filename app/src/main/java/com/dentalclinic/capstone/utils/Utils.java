@@ -12,6 +12,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -26,6 +28,9 @@ public class Utils {
 
     private static final String PREF_NAME = "ACCOUNT";
     private static final String USER_KEY = "USER_KEY";
+    public static final String CURRENT_UNIT = "đ";
+    public static final String STATUS_DONE = "Hoàn Thành";
+    public static final String STATUS_NOT_DONE = "Hoàn Thành";
 
     public static boolean isEmulator() {
         return Build.FINGERPRINT.startsWith("generic")
@@ -85,5 +90,12 @@ public class Utils {
            dots+=".";
         }
         return medicineName + " " + dots +" " + quantity + " viên";
+    }
+
+    public static String formatMoney(Long money){
+//        NumberFormat formatter = new DecimalFormat("#,###");
+//        double myNumber = 1000000;
+//        String formattedNumber = formatter.format(myNumber);
+        return (String.format("%,d", money)).replace(',', ' ');
     }
 }

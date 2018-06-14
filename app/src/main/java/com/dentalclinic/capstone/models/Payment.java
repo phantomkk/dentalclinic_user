@@ -88,4 +88,9 @@ public class Payment implements Serializable {
     public void setPaymentDetails(List<PaymentDetail> paymentDetails) {
         this.paymentDetails = paymentDetails;
     }
+
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
 }

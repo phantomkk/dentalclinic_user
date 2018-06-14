@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_grey_100"
     tools:context="com.dentalclinic.capstone.activities.TreatmentDetailActivity">
 
     <ListView
         android:id="@+id/lv_treatment_detail"
         android:layout_width="match_parent"
+        android:layout_margin="10dp"
         android:layout_height="match_parent" />
 </android.support.constraint.ConstraintLayout>

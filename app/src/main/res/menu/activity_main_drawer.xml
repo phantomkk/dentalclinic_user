@@ -30,13 +30,17 @@
                     android:icon="@drawable/ic_account_circle_black_24dp"
                     android:title="@string/my_accout_fragment_title" />
                 <item
+                    android:id="@+id/nav_history_appointment"
+                    android:icon="@drawable/ic_add_to_photos_black_24dp"
+                    android:title="@string/history_appointment_title" />
+                <item
                     android:id="@+id/nav_history_treatment"
                     android:icon="@drawable/ic_history_black_24dp"
                     android:title="@string/history_treatment_fragment_title" />
                 <item
-                    android:id="@+id/nav_history_appointment"
-                    android:icon="@drawable/ic_add_to_photos_black_24dp"
-                    android:title="@string/history_appointment_title" />
+                    android:id="@+id/nav_history_payment"
+                    android:icon="@drawable/ic_payment_black_24dp"
+                    android:title="@string/history_treatment_fragment_title" />
             </group>
             <item
                 android:id="@+id/nav_log_out"

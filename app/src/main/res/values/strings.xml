@@ -39,8 +39,11 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="history_treatment_fragment_title">History Treatment Fragment</string>
+    <string name="history_payment_fragment_title">History Payment Fragment</string>
     <string name="my_accout_fragment_title">My Accout Fragment</string>
     <string name="treatment_detail_title_activity">Lộ Trình Chi Tiết</string>
+    <string name="news_tab_title">Tin Tức</string>
+    <string name="promotion_tab_titile">Khuyến Mãi</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -77,6 +80,12 @@
     <string name="label_button_change_phone">Đổi số điện thoại</string>
     <string name="error_">Đăng kí</string>
     <string name="label_error_birthday">Ngày sinh không hợp lệ</string>
+
+
+    <string name="current_unit">đ</string>
+    <string name="status_not_done">Chưa Hoàn Thành</string>
+    <string name="status_done">Hoàn Thành</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <!--Invalid -->

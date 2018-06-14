@@ -23,6 +23,11 @@ public class Staff implements Serializable {
     @SerializedName("user")
     private User user;
 
+    public Staff(String name, String avatar) {
+        this.name = name;
+        this.avatar = avatar;
+    }
+
     public Staff(String name) {
         this.name = name;
     }

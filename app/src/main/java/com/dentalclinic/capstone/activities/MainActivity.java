@@ -17,9 +17,9 @@ import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.fragment.AppointmentFragment;
 import com.dentalclinic.capstone.fragment.DentalFragment;
 import com.dentalclinic.capstone.fragment.HistoryAppointmentFragment;
+import com.dentalclinic.capstone.fragment.HistoryPaymentFragment;
 import com.dentalclinic.capstone.fragment.HistoryTreatmentFragment;
 import com.dentalclinic.capstone.fragment.MyAccoutFragment;
-import com.dentalclinic.capstone.fragment.NewFragment;
 import com.dentalclinic.capstone.fragment.NewsFragment;
 import com.dentalclinic.capstone.fragment.PromotionFragment;
 import com.rupins.drawercardbehaviour.CardDrawerLayout;
@@ -139,6 +139,10 @@ public class MainActivity extends BaseActivity
             setTitle(getResources().getString(R.string.my_accout_fragment_title));
             MyAccoutFragment myAccoutFragment = new MyAccoutFragment();
             fragmentManager.beginTransaction().replace(R.id.main_fragment, myAccoutFragment).commit();
+        } else if (id == R.id.nav_history_payment) {
+            setTitle(getResources().getString(R.string.history_payment_fragment_title));
+            HistoryPaymentFragment historyPaymentFragment = new HistoryPaymentFragment();
+            fragmentManager.beginTransaction().replace(R.id.main_fragment, historyPaymentFragment).commit();
         }else if (id == R.id.nav_log_out) {
             showMessage("Đăng xuất");
         }
