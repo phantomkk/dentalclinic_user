@@ -66,6 +66,9 @@ public class TreatmentCategory implements Serializable {
     }
 
     public String getIconLink() {
+        if(iconLink==null ||iconLink.length()==0){
+            iconLink = "https://www.impactnyc.org/wp-content/uploads/2018/02/missing-image-avatar.png";
+        }
         return iconLink;
     }
 

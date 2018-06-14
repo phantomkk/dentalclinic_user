@@ -97,8 +97,9 @@ public class NewsPageViewFragment extends BaseFragment {
             public void onLoadMore() {
                 if (listNews.size() <= 200) {
                     listNews.add(null);
-                    adapter.notifyItemInserted(listNews.size() - 1);
-
+                    if(listNews.size()>=1) {
+                        adapter.notifyItemInserted(listNews.size() - 1);
+                    }
 
                     //Generating more data
 //                    int index = listNews.size();
@@ -130,9 +131,9 @@ public class NewsPageViewFragment extends BaseFragment {
         Log.d(AppConst.DEBUG_TAG, "onViewCreated");
     }
 
-    public void callApiGetNews(int currentIndex, int numItem, int type) {
+    public void callApiGetNews(int currentIndex, int numItem, int typeId) {
         showLoading();
-        newsService.loadMore(currentIndex, numItem).subscribeOn(Schedulers.io())
+        newsService.loadMoreByType(currentIndex, numItem,typeId).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Response<List<News>>>() {
                     @Override
@@ -161,7 +162,7 @@ public class NewsPageViewFragment extends BaseFragment {
                     public void onError(Throwable e) {
                         hideLoading();
                         e.printStackTrace();
-                        Toast.makeText(getActivity(), getResources().getString(R.string.error_on_error_when_call_api), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.error_on_error_when_call_api), Toast.LENGTH_SHORT).show();
                     }
                 });
     }

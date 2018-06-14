@@ -1,5 +1,8 @@
 package com.dentalclinic.capstone.api;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -13,6 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
     private static Retrofit retrofit = null;
+//    private static String baseUrl = "http://150.95.104.237";
     private static String baseUrl = "http://10.0.2.2:8000";
     public static Retrofit getClient(){
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();//.addInterceptor(interceptor).build();
@@ -30,7 +34,11 @@ public class RetrofitClient {
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         clientBuilder.addInterceptor(interceptor);
         OkHttpClient client = clientBuilder.build();
-
+        //Gson builder
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                .create();
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(baseUrl)

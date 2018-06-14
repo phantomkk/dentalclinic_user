@@ -1,13 +1,14 @@
 package com.dentalclinic.capstone.activities;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,11 +17,13 @@ import com.dentalclinic.capstone.api.APIServiceManager;
 import com.dentalclinic.capstone.api.requestobject.AppointmentRequest;
 import com.dentalclinic.capstone.api.services.AppointmentService;
 import com.dentalclinic.capstone.models.Appointment;
-import com.dentalclinic.capstone.models.User;
-import com.dentalclinic.capstone.utils.CoreManager;
 import com.dentalclinic.capstone.utils.Validation;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -28,11 +31,12 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
-public class QuickRegisterActivity extends BaseActivity {
+public class QuickBookActivity extends BaseActivity {
     private AutoCompleteTextView tvPhone;
-//    private AutoCompleteTextView tvFullname;
+    private AutoCompleteTextView tvFullname;
     private View edtPassword;
     private TextView tvDate;
+    private TextView tvDateError;
     private AutoCompleteTextView comtvNote;
     //    private TextView tvTime;
     private Button btnQuickBook;
@@ -47,8 +51,9 @@ public class QuickRegisterActivity extends BaseActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 //        ImageView img = findViewById(R.id.img_logo_quick_register);
-//        tvFullname = findViewById(R.id.tv_fullname_quickbook);
+        tvFullname = findViewById(R.id.tv_fullname_quickbook);
         tvDate = findViewById(R.id.tv_date_quickbook);
+        tvDateError = findViewById(R.id.tv_date_error_quickbook);
 //        tvTime = findViewById(R.id.tv_time_quickbook);
         tvPhone = findViewById(R.id.tv_phone_quickbook);
         btnQuickBook = findViewById(R.id.btn_quickbook);
@@ -71,16 +76,16 @@ public class QuickRegisterActivity extends BaseActivity {
                         c.set(iYear, iMonth, iDay);
                         Calendar currentDay = Calendar.getInstance();
                         if (currentDay.after(c)) {
-                            tvDate.setError(getString(R.string.label_error_birthday));
+                            tvDateError.setText(getString(R.string.label_error_birthday));
                         } else {
-                            tvDate.setError("");
+                            tvDateError.setText("");
                         }
                         tvDate.setText(date);
                     }, year, month, day);
             dialog.show();
         });
-        int hour = c.get(Calendar.HOUR_OF_DAY);
-        int minute = c.get(Calendar.MINUTE);
+//        int hour = c.get(Calendar.HOUR_OF_DAY);
+//        int minute = c.get(Calendar.MINUTE);
 //        tvTime.setOnClickListener((view) ->
 //        {
 //            TimePickerDialog dialog = new TimePickerDialog(this,
@@ -100,7 +105,7 @@ public class QuickRegisterActivity extends BaseActivity {
                 }
             }
 
-//            Intent intent = new Intent(QuickRegisterActivity.this, SelectDentistActivity.class);
+//            Intent intent = new Intent(QuickBookActivity.this, SelectDentistActivity.class);
 //            startActivity(intent);
         });
 
@@ -125,9 +130,18 @@ public class QuickRegisterActivity extends BaseActivity {
         String phone = "01678589696";
         String dateBooking = tvDate.getText().toString().trim();
         String note = comtvNote.getText().toString().trim();
+        String name = tvFullname.getText().toString().trim();SimpleDateFormat smp = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        SimpleDateFormat smp2 = new SimpleDateFormat("yyyy-MM-dd", Locale.US);Date d1 = new Date();
+        try {
+            d1= smp.parse(dateBooking);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        String bookingDate = smp2.format(d1);
         AppointmentRequest request = new AppointmentRequest();
-        request.setDate(dateBooking);
+        request.setDate(bookingDate);
         request.setNote(note);
+        request.setFullname(name);
         request.setPhone(phone);
         return request;
 //        }
@@ -135,11 +149,19 @@ public class QuickRegisterActivity extends BaseActivity {
     }
 
     public boolean isValidateForm() {
-        boolean isAllFieldValid = false;
+        boolean isAllFieldValid = true;
         String phone = tvPhone.getText().toString().trim();
         String note = comtvNote.getText().toString().trim();
-        String birthday = tvDate.getText().toString().trim();
+        String tmpBirthday = tvDate.getText().toString().trim();
         View viewFocus = null;
+        SimpleDateFormat smp = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat smp2 = new SimpleDateFormat("yyyy-MM-dd");Date d1 = new Date();
+        try {
+              d1= smp.parse(tmpBirthday);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        String birthday = smp2.format(d1);
         if (!Validation.isPhoneValid(phone)) {
 
         }
@@ -147,20 +169,25 @@ public class QuickRegisterActivity extends BaseActivity {
             viewFocus = tvPhone;
 //            tvPhone.requestFocus();
             tvPhone.setError(getString(R.string.error_invalid_phone));
-        } else if (!Validation.isNullOrEmpty(note)) {
-
+            isAllFieldValid= false;
+//        } else if (!Validation.isNullOrEmpty(note)) {
+//            comtvNote.setError("Vui lòng nhập ghi chu");
+//            isAllFieldValid= false;
         } else if (Validation.isNullOrEmpty(birthday))
         {
-            viewFocus = tvDate;
+            viewFocus = tvDateError;
+            tvDateError.setText("Vui lòng chọn ngày");
 //            tvDate.setError();
+            isAllFieldValid= false;
         }
-            if (isAllFieldValid) {
+            if (!isAllFieldValid) {
                 viewFocus.requestFocus();
             }
         return isAllFieldValid;
     }
 
     public void callApi(AppointmentRequest requestObj) {
+        showLoading();
         AppointmentService appointmentService =
                 APIServiceManager.getService(AppointmentService.class);
         appointmentService.bookAppointment(requestObj)
@@ -175,16 +202,20 @@ public class QuickRegisterActivity extends BaseActivity {
                     @Override
                     public void onSuccess(Response<Appointment> appointmentResponse) {
                         if (appointmentResponse.isSuccessful()) {
-                            Toast.makeText(QuickRegisterActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(QuickBookActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(QuickBookActivity.this)
+                                    .setTitle("Đặt lịch thành công")
+                                    .setPositiveButton("Xác nhận",(DialogInterface var1, int var2)->{finish();});
+                            builder.create().show();
                         } else {
-                            Toast.makeText(QuickRegisterActivity.this, "Failed", Toast.LENGTH_SHORT).show();
-                        }
+                            Toast.makeText(QuickBookActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                        }hideLoading();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        e.printStackTrace();
-                        logError(QuickRegisterActivity.class, "callApi", e.getMessage());
+//                        e.printStackTrace();
+                        logError(QuickBookActivity.class, "callApi", e.getMessage());hideLoading();
                     }
                 });
     }

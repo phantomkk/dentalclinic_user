@@ -5,17 +5,19 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.utils.AppConst;
 
 public class BaseFragment extends Fragment {
     private ProgressDialog mProgressDialog;
 
     protected void showLoading() {
+        if(mProgressDialog==null) {
+            mProgressDialog = new ProgressDialog(getContext());
 
-        mProgressDialog = new ProgressDialog(getContext());
-
-        mProgressDialog.setMessage("Working ...");
-        mProgressDialog.show();
+            mProgressDialog.setMessage(getString(R.string.waiting_msg));
+            mProgressDialog.show();
+        }
     }
 
     protected void showMessage(String message) {
@@ -23,7 +25,10 @@ public class BaseFragment extends Fragment {
     }
 
     protected void hideLoading() {
-        mProgressDialog.dismiss();
+        if(mProgressDialog!=null) {
+            mProgressDialog.dismiss();
+            mProgressDialog = null;
+        }
     }
 
     public void logError(Class t, String method, String message) {

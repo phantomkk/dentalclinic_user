@@ -1,12 +1,30 @@
 package com.dentalclinic.capstone.api.requestobject;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.Date;
 
 public class AppointmentRequest implements Serializable {
-    private String phone;
+
+    @SerializedName("date_booking")
     private String date;
+    @SerializedName("phone")
+    private String phone;
+    @SerializedName("note")
     private String note;
+    @SerializedName("name")
+    private String fullname;
+
+    public AppointmentRequest() {
+    }
+
+    public AppointmentRequest(String date, String phone, String note, String fullname) {
+        this.date = date;
+        this.phone = phone;
+        this.note = note;
+        this.fullname = fullname;
+    }
 
 
     public String getPhone() {
@@ -31,5 +49,13 @@ public class AppointmentRequest implements Serializable {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 }

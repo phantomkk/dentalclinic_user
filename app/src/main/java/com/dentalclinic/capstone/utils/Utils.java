@@ -14,8 +14,10 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import okhttp3.ResponseBody;
 
@@ -61,9 +63,14 @@ public class Utils {
         try {
             if (responseBody != null) {
                 JSONObject errorObject = new JSONObject(responseBody.string());
-                return errorObject.getString("error");
+                if(errorObject!=null) {
+                    return errorObject.getString("error");
+                }else{
+                    Log.d(AppConst.DEBUG_TAG, "ResponseBody or ResponseBody.getErrorMsg() null");
+                    return "";
+                }
             } else {
-                Log.d("MYTAG", "ResponseBody or ResponseBody.string() null");
+                Log.d(AppConst.DEBUG_TAG, "ResponseBody or ResponseBody.string() null");
                 return "";
             }
         } catch (JSONException e) {
@@ -99,4 +106,7 @@ public class Utils {
 //        String formattedNumber = formatter.format(myNumber);
         return (String.format("%,d", money)).replace(',', ' ');
     }
+
+
+
 }

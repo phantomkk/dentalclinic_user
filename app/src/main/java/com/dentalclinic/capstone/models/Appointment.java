@@ -19,9 +19,9 @@ public class Appointment implements Serializable {
     @SerializedName("numerical_order")
     private int numericalOrder;
     @SerializedName("estimated_time")
-    private Date estimatedTime;
+    private String estimatedTime;
     @SerializedName("start_time")
-    private Date startTime;
+    private String startTime;
 
     public int getId() {
         return id;
@@ -63,19 +63,20 @@ public class Appointment implements Serializable {
         this.numericalOrder = numericalOrder;
     }
 
-    public Date getEstimatedTime() {
-        return estimatedTime;
-    }
 
-    public void setEstimatedTime(Date estimatedTime) {
-        this.estimatedTime = estimatedTime;
-    }
-
-    public Date getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
+    }
+
+    public String getEstimatedTime() {
+        return estimatedTime;
+    }
+
+    public void setEstimatedTime(String estimatedTime) {
+        this.estimatedTime = estimatedTime;
     }
 }

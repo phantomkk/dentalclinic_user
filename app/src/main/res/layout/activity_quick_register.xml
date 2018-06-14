@@ -38,24 +38,24 @@
                 android:layout_marginTop="20dp"
                 />
 
-            <!--<android.support.design.widget.TextInputLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="@dimen/input_margin_top"-->
-                <!--&gt;-->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/input_margin_top"
+                >
 
-                <!--<AutoCompleteTextView-->
-                    <!--android:id="@+id/tv_fullname_quickbook"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:drawablePadding="10dp"-->
-                    <!--android:drawableStart="@drawable/ic_account_circle_black_24dp"-->
-                    <!--android:hint="@string/label_fullname_quickbook"-->
-                    <!--android:inputType="text"-->
-                    <!--android:maxLines="1"-->
-                    <!--android:singleLine="true" />-->
+                <AutoCompleteTextView
+                    android:id="@+id/tv_fullname_quickbook"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="10dp"
+                    android:drawableStart="@drawable/ic_account_circle_black_24dp"
+                    android:hint="@string/label_fullname_quickbook"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:singleLine="true" />
 
-            <!--</android.support.design.widget.TextInputLayout>-->
+            </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -87,7 +87,7 @@
                         android:id="@+id/tv_date_quickbook"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="50"
+                        android:layout_weight="30"
                         android:drawableStart="@drawable/ic_date_range_black_24dp"
                         android:paddingStart="5dp"
                         android:drawablePadding="9dp"
@@ -97,18 +97,16 @@
                         android:text="@string/label_date_quickbook"
                         android:textSize="18sp" />
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/tv_time_quickbook"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_weight="50"-->
-                        <!--android:textColor="@color/color_blue_grey_300"-->
-                        <!--android:clickable="true"-->
-                        <!--android:focusable="true"-->
-                        <!--android:drawableStart="@drawable/ic_access_time_black_24dp"-->
-                        <!--android:drawablePadding="9dp"-->
-                        <!--android:text="@string/label_time_quickbook"-->
-                        <!--android:textSize="18sp" />-->
+                    <TextView
+                        android:id="@+id/tv_date_error_quickbook"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="70"
+                        android:textColor="@color/color_red_500"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:drawablePadding="9dp"
+                        android:textSize="18sp" />
 
             </LinearLayout>
             <android.support.design.widget.TextInputLayout
