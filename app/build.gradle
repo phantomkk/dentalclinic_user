@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.dentalclinic.capstone.dentalclinicuser"
+        applicationId "com.dentalclinic.capstone"
         minSdkVersion 24
         targetSdkVersion 27
         versionCode 1
@@ -35,9 +35,13 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.1.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
-//    implementation 'com.github.QuadFlask:colorpicker:0.0.12'
+    //    implementation 'com.github.QuadFlask:colorpicker:0.0.12'
     implementation 'com.xenione.libs:tab-digit:1.0.2'
 
+    implementation project(':library')
+    implementation 'com.mikepenz:crossfader:1.5.2'
+    implementation "com.mikepenz:itemanimators:1.0.2@aar"
+    implementation 'com.mikepenz:google-material-typeface:3.0.1.1.original@aar'
 
     // RxJava
     // RxAndroid

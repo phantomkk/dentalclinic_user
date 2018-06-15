@@ -155,7 +155,7 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
     private Disposable treatmentCategoriesServiceDisposable;
 
     public void callApiGetAllTreatmentCategories() {
-        treatmentCategory.getAll().subscribeOn(Schedulers.io())
+        treatmentCategory.getAll().subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Response<List<TreatmentCategory>>>() {
                     @Override
@@ -185,7 +185,8 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
                     public void onError(Throwable e) {
                         hideLoading();
                         e.printStackTrace();
-                        Toast.makeText(getContext(), getResources().getString(R.string.error_on_error_when_call_api), Toast.LENGTH_SHORT).show();
+                        showMessage(getResources().getString(R.string.error_on_error_when_call_api));
+//                        Toast.makeText(getContext(), getResources().getString(R.string.error_on_error_when_call_api), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
