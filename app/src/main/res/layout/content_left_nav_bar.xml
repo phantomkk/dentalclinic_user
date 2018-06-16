@@ -44,11 +44,12 @@
 
                 <com.dentalclinic.capstone.view.DigitalView
                     android:id="@+id/digital"
-                    animate_duration="100"
-                    bit="5"
+                    animate_duration="200"
+                    bit="3"
                     decimal_bit="2"
+                    android:layout_marginTop="10dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="100dp"
+                    android:layout_height="60dp"
                     android:layout_gravity="center" />
             </LinearLayout>
 

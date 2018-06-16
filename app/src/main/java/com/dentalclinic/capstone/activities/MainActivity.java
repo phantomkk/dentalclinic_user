@@ -27,6 +27,7 @@ import com.dentalclinic.capstone.fragment.HistoryTreatmentFragment;
 import com.dentalclinic.capstone.fragment.MyAccoutFragment;
 import com.dentalclinic.capstone.fragment.NewsFragment;
 import com.dentalclinic.capstone.fragment.PromotionFragment;
+import com.dentalclinic.capstone.view.DigitalView;
 import com.mikepenz.crossfader.Crossfader;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -48,19 +49,18 @@ import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.rupins.drawercardbehaviour.CardDrawerLayout;
-import com.xenione.digit.TabDigit;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, Runnable {
+        implements NavigationView.OnNavigationItemSelectedListener {
     FragmentManager fragmentManager = getSupportFragmentManager();
     private CardDrawerLayout drawer;
     private AccountHeader headerResult = null;
     private Drawer result = null;
     private static final int PROFILE_SETTING = 100000;
-    private TabDigit tabDigit1, tabDigit2;
-    private long elapsedTime = 1;
+    private long elapsedTime = 0;
     private Button button;
-
+    private DigitalView digitalView;
+    private Handler handler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,14 +70,24 @@ public class MainActivity extends BaseActivity
         setTitle(getResources().getString(R.string.new_fragment_title));
         NewsFragment newFragment = new NewsFragment();
         fragmentManager.beginTransaction().replace(R.id.main_fragment, newFragment).commit();
+        digitalView = findViewById(R.id.digital);
+        button= findViewById(R.id.btn_cout);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                digitalView.setDigital(elapsedTime++);
+            }
+        });
+        handler = new Handler();
 
-//        tabDigit1 = findViewById(R.id.tabDigit1);
-//        assert tabDigit1 != null;
-//
-//        tabDigit2 = findViewById(R.id.tabDigit2);
-//        assert tabDigit2 != null;
-//        ViewCompat.postOnAnimationDelayed(tabDigit2, this, 3000);
+        final Runnable r = new Runnable() {
+            public void run() {
+                digitalView.setDigital(elapsedTime++);
+                handler.postDelayed(this, 1000);
+            }
+        };
 
+        handler.postDelayed(r, 1000);
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -355,14 +365,4 @@ public class MainActivity extends BaseActivity
         return true;
     }
 
-    @Override
-    public void run() {
-//        tabDigit2.start();
-//        if (elapsedTime % 10 == 0 && elapsedTime!=0) {
-//            tabDigit1.start();
-//        }
-//        ViewCompat.postOnAnimationDelayed(tabDigit2, this, 3000);
-//        elapsedTime++;
-//    }
-    }
 }
