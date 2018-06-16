@@ -4,9 +4,11 @@ package com.dentalclinic.capstone.activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +16,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.fragment.AppointmentFragment;
@@ -45,15 +48,18 @@ import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.rupins.drawercardbehaviour.CardDrawerLayout;
+import com.xenione.digit.TabDigit;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-   FragmentManager fragmentManager = getSupportFragmentManager();
+        implements NavigationView.OnNavigationItemSelectedListener, Runnable {
+    FragmentManager fragmentManager = getSupportFragmentManager();
     private CardDrawerLayout drawer;
     private AccountHeader headerResult = null;
     private Drawer result = null;
     private static final int PROFILE_SETTING = 100000;
-
+    private TabDigit tabDigit1, tabDigit2;
+    private long elapsedTime = 1;
+    private Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +70,13 @@ public class MainActivity extends BaseActivity
         setTitle(getResources().getString(R.string.new_fragment_title));
         NewsFragment newFragment = new NewsFragment();
         fragmentManager.beginTransaction().replace(R.id.main_fragment, newFragment).commit();
+
+//        tabDigit1 = findViewById(R.id.tabDigit1);
+//        assert tabDigit1 != null;
+//
+//        tabDigit2 = findViewById(R.id.tabDigit2);
+//        assert tabDigit2 != null;
+//        ViewCompat.postOnAnimationDelayed(tabDigit2, this, 3000);
 
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -79,37 +92,17 @@ public class MainActivity extends BaseActivity
 //        navigationView.getMenu().getItem(0).setChecked(true);
 
         NavigationView rightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
-        rightNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                // Handle Right navigation view item clicks here.
-                int id = item.getItemId();
-//
-//                if (id == R.id.nav_settings) {
-//                    Toast.makeText(MainActivity.this, "Right Drawer - Settings", Toast.LENGTH_SHORT).show();
-//                } else if (id == R.id.nav_logout) {
-//                    Toast.makeText(MainActivity.this, "Right Drawer - Logout", Toast.LENGTH_SHORT).show();
-//                } else if (id == R.id.nav_help) {
-//                    Toast.makeText(MainActivity.this, "Right Drawer - Help", Toast.LENGTH_SHORT).show();
-//                } else if (id == R.id.nav_about) {
-//                    Toast.makeText(MainActivity.this, "Right Drawer - About", Toast.LENGTH_SHORT).show();
-//                }
-
-                drawer.closeDrawer(GravityCompat.END); /*Important Line*/
-                return true;
-            }
-        });
 
         //new code
         final IProfile profile = new ProfileDrawerItem().withName("Võ Quốc Trịnh").withSelectedBackgroundAnimated(true).withEmail("mikepenz@gmail.com").withIcon("https://scontent.fsgn5-6.fna.fbcdn.net/v/t1.0-9/27545086_1520633358052034_8513856773051240273_n.jpg?_nc_cat=0&oh=9cd2e4ad765a3b677096bea9ad62d244&oe=5BB3A0B1").withIdentifier(100);
         final IProfile profile2 = new ProfileDrawerItem().withName("Nhiêu Sỹ Lực").withEmail("demo@github.com").withIcon("https://scontent.fsgn5-6.fna.fbcdn.net/v/t1.0-9/21106763_661579387371492_6919408620920338286_n.jpg?_nc_cat=0&oh=ada0ac45ae90d79ab905cbfe7f1aeda7&oe=5BB82FD4").withIdentifier(101);
         final IProfile profile3 = new ProfileDrawerItem().withName("Huỳnh Võ Thiên Phúc").withEmail("max.mustermann@gmail.com").withIcon("https://scontent.fsgn5-6.fna.fbcdn.net/v/t1.0-9/27752367_1791153030897160_7482680200088521712_n.jpg?_nc_cat=0&oh=91154d5cbdb6809e136ce7ea4e1c30ad&oe=5BA9E4B0").withIdentifier(102);
         final IProfile profile4 = new ProfileDrawerItem().withName("Nguyễn Huy Tài").withEmail("felix.house@gmail.com").withIcon("https://scontent.fsgn5-6.fna.fbcdn.net/v/t1.0-9/32185482_1602280319898197_7014623141393596416_n.jpg?_nc_cat=0&oh=69755cdefe806b2f2f8d2e2005e930fd&oe=5BC2CDAA").withIdentifier(103);
-          // Create the AccountHeader
+        // Create the AccountHeader
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withTranslucentStatusBar(true)
-                .withHeaderBackground(R.drawable.side_nav_bar)
+                .withHeaderBackground(R.drawable.header2)
                 .addProfiles(
                         profile,
                         profile2,
@@ -189,6 +182,9 @@ public class MainActivity extends BaseActivity
                         //those items don't contain a drawerItem
 
                         if (drawerItem != null) {
+                            if (drawer.isDrawerOpen(GravityCompat.END)) {
+                                drawer.closeDrawer(GravityCompat.END);
+                            }
                             Intent intent = null;
                             if (drawerItem.getIdentifier() == 1) {
                                 setTitle(getResources().getString(R.string.new_fragment_title));
@@ -206,6 +202,7 @@ public class MainActivity extends BaseActivity
                                 MyAccoutFragment myAccoutFragment = new MyAccoutFragment();
                                 fragmentManager.beginTransaction().replace(R.id.main_fragment, myAccoutFragment).commit();
                             } else if (drawerItem.getIdentifier() == 5) {
+
                                 setTitle(getResources().getString(R.string.history_appointment_title));
                                 HistoryAppointmentFragment dentalFragment = new HistoryAppointmentFragment();
                                 fragmentManager.beginTransaction().replace(R.id.main_fragment, dentalFragment).commit();
@@ -217,7 +214,7 @@ public class MainActivity extends BaseActivity
                                 setTitle(getResources().getString(R.string.history_payment_fragment_title));
                                 HistoryPaymentFragment historyPaymentFragment = new HistoryPaymentFragment();
                                 fragmentManager.beginTransaction().replace(R.id.main_fragment, historyPaymentFragment).commit();
-                            }else{
+                            } else {
                                 showMessage("Đăng xuất");
                             }
                         }
@@ -267,7 +264,7 @@ public class MainActivity extends BaseActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.END)) {
             drawer.closeDrawer(GravityCompat.END);
-        }else if (result != null && result.isDrawerOpen()) {
+        } else if (result != null && result.isDrawerOpen()) {
             result.closeDrawer();
         } else {
             super.onBackPressed();
@@ -351,11 +348,21 @@ public class MainActivity extends BaseActivity
             setTitle(getResources().getString(R.string.history_payment_fragment_title));
             HistoryPaymentFragment historyPaymentFragment = new HistoryPaymentFragment();
             fragmentManager.beginTransaction().replace(R.id.main_fragment, historyPaymentFragment).commit();
-        }else if (id == R.id.nav_log_out) {
+        } else if (id == R.id.nav_log_out) {
             showMessage("Đăng xuất");
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    @Override
+    public void run() {
+//        tabDigit2.start();
+//        if (elapsedTime % 10 == 0 && elapsedTime!=0) {
+//            tabDigit1.start();
+//        }
+//        ViewCompat.postOnAnimationDelayed(tabDigit2, this, 3000);
+//        elapsedTime++;
+//    }
+    }
 }

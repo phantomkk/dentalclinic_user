@@ -30,7 +30,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:text="Người Nhận"
-                    android:textStyle="bold" />
+                    android:textColor="@color/color_black" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -63,7 +63,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:text="Ngày nhận"
-                    android:textStyle="bold" />
+                    android:textColor="@color/color_black" />
 
                 <TextView
                     android:id="@+id/txt_date"
@@ -94,7 +94,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
                 android:text="Trả Trước"
-                android:textStyle="bold" />
+                android:textColor="@color/color_black" />
 
             <TextView
                 android:id="@+id/txt_prepaid_money"

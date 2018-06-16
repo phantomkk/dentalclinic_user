@@ -47,8 +47,7 @@
                 android:layout_weight="7"
                 android:textSize="18dp"
                 android:text="Trả hồ sơ vụ ngư dân bắt cá đen 'khủng' 71kg không bao giờ trả lại crimea cho ukraine"
-                android:textColor="@color/color_black"
-                android:textStyle="bold" />
+                android:textColor="@color/color_black" />
             <ImageView
                 android:id="@+id/img_news"
                 android:layout_width="0dp"

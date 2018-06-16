@@ -137,7 +137,7 @@
             android:linksClickable="true"
             android:gravity="center_horizontal"
             android:text="@string/label_suggest_register"
-            android:textStyle="bold" />
+            android:textColor="@color/color_light_blue_a400" />
     </LinearLayout>
 
 </ScrollView>

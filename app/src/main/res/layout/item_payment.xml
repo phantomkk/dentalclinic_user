@@ -26,7 +26,7 @@
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textSize="20dp"
-                android:textStyle="bold" />
+                android:textColor="@color/color_black" />
 
             <TextView
                 android:id="@+id/txt_treatment_name"
@@ -55,7 +55,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="4"
                     android:text="Tổng Tiền"
-                    android:textStyle="bold" />
+                    android:textColor="@color/color_black"/>
 
                 <TextView
                     android:id="@+id/txt_total"
@@ -79,7 +79,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="4"
                     android:text="Đã Trả"
-                    android:textStyle="bold" />
+                    android:textColor="@color/color_black" />
 
                 <TextView
                     android:id="@+id/txt_prepaid"
@@ -103,7 +103,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="4"
                     android:text="Còn Lại"
-                    android:textStyle="bold" />
+                    android:textColor="@color/color_black" />
 
                 <TextView
                     android:id="@+id/txt_not_payable"
@@ -132,7 +132,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="4"
                     android:text="Trạng Thái"
-                    android:textStyle="bold" />
+                    android:textColor="@color/color_black" />
 
                 <TextView
                     android:id="@+id/txt_status"
@@ -141,8 +141,7 @@
                     android:layout_weight="6"
                     android:text="Hoàn Thành"
                     android:textAlignment="textEnd"
-                    android:textColor="@color/color_green_500"
-                    android:textStyle="bold" />
+                    android:textColor="@color/color_green_500" />
             </LinearLayout>
         </LinearLayout>
 

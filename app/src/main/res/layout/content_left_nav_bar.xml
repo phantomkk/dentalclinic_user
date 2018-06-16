@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="10">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:background="@drawable/header2" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="7"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Số tại phòng khám"
+                android:textColor="@color/color_black"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/txt_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Thứ 6 ngày 15 tháng 6 năm 2018"
+                android:textAlignment="center" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <com.dentalclinic.capstone.view.DigitalView
+                    android:id="@+id/digital"
+                    animate_duration="100"
+                    bit="5"
+                    decimal_bit="2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_cout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="cout test" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

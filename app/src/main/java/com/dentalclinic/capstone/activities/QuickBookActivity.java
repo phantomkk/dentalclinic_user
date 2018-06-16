@@ -3,6 +3,7 @@ package com.dentalclinic.capstone.activities;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.View;
@@ -49,6 +50,7 @@ public class QuickBookActivity extends BaseActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.side_nav_bar));
         }
 //        ImageView img = findViewById(R.id.img_logo_quick_register);
         tvFullname = findViewById(R.id.tv_fullname_quickbook);

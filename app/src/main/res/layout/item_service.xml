@@ -16,7 +16,7 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/img_icon_service"
-            civ_border_color="@color/color_blue_grey_300"
+            civ_border_color="@color/color_grey_300"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/ic_search_black_24dp"
@@ -33,7 +33,7 @@
             android:textAlignment="center"
             android:textAllCaps="true"
             android:textSize="20dp"
-            android:textStyle="bold" />
+            android:textColor="@color/color_black"/>
 
         <ImageView
             android:id="@+id/img_expand_icon"
