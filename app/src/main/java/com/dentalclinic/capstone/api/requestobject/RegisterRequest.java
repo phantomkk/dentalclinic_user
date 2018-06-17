@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class RegisterRequest implements Serializable{
     private String phone;
-    private String fullname;
+    private String name;
     private String address;
     private String password;
     private int gender;
@@ -18,14 +18,6 @@ public class RegisterRequest implements Serializable{
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public String getFullname() {
-        return fullname;
-    }
-
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
     }
 
     public String getAddress() {
@@ -66,5 +58,13 @@ public class RegisterRequest implements Serializable{
 
     public void setBirthday(String birthday) {
         this.birthday = birthday;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

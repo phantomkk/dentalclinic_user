@@ -16,6 +16,8 @@ import com.dentalclinic.capstone.adapter.AppointmentAdapter;
 import com.dentalclinic.capstone.api.APIServiceManager;
 import com.dentalclinic.capstone.api.services.AppointmentService;
 import com.dentalclinic.capstone.models.Appointment;
+import com.dentalclinic.capstone.models.Patient;
+import com.dentalclinic.capstone.utils.CoreManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,9 +62,10 @@ public class HistoryAppointmentFragment extends BaseFragment {
     }
 
     public void prepareData() {
+        Patient patient = CoreManager.getCurrentPatient();
         showLoading();
         AppointmentService appointmentService = APIServiceManager.getService(AppointmentService.class);
-        appointmentService.getAll()
+        appointmentService.getByPhone(patient.getPhone())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Response<List<Appointment>>>() {
@@ -78,7 +81,6 @@ public class HistoryAppointmentFragment extends BaseFragment {
                             adapter.notifyDataSetChanged();
                         } else {
                             Toast.makeText(getContext(), "SUCCESS but else", Toast.LENGTH_SHORT).show();
-
                         }
                         hideLoading();
                     }

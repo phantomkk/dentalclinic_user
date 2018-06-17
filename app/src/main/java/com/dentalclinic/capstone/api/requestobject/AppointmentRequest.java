@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class AppointmentRequest implements Serializable {
 
-    @SerializedName("date_booking")
+    @SerializedName("booking_date")
     private String date;
     @SerializedName("phone")
     private String phone;

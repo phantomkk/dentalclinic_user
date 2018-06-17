@@ -28,7 +28,16 @@ import com.dentalclinic.capstone.fragment.HistoryTreatmentFragment;
 import com.dentalclinic.capstone.fragment.MyAccoutFragment;
 import com.dentalclinic.capstone.fragment.NewsFragment;
 import com.dentalclinic.capstone.fragment.PromotionFragment;
+import com.dentalclinic.capstone.models.Patient;
+import com.dentalclinic.capstone.models.User;
+import com.dentalclinic.capstone.utils.CoreManager;
+import com.dentalclinic.capstone.utils.DateTimeFormat;
+import com.dentalclinic.capstone.utils.DateUtils;
 import com.dentalclinic.capstone.view.DigitalView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mikepenz.crossfader.Crossfader;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -51,6 +60,10 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.rupins.drawercardbehaviour.CardDrawerLayout;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     FragmentManager fragmentManager = getSupportFragmentManager();
@@ -62,6 +75,8 @@ public class MainActivity extends BaseActivity
     private Button button;
     private DigitalView digitalView;
     private Handler handler;
+    private FirebaseDatabase firebaseDbInstance;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,23 +87,23 @@ public class MainActivity extends BaseActivity
         NewsFragment newFragment = new NewsFragment();
         fragmentManager.beginTransaction().replace(R.id.main_fragment, newFragment).commit();
         digitalView = findViewById(R.id.digital);
-        button= findViewById(R.id.btn_cout);
+        button = findViewById(R.id.btn_cout);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 digitalView.setDigital(elapsedTime++);
             }
         });
-        handler = new Handler();
+//        handler = new Handler();
 
-        final Runnable r = new Runnable() {
-            public void run() {
-                digitalView.setDigital(elapsedTime++);
-                handler.postDelayed(this, 1000);
-            }
-        };
+//        final Runnable r = new Runnable() {
+//            public void run() {
+//                digitalView.setDigital(elapsedTime++);
+//                handler.postDelayed(this, 1000);
+//            }
+//        };
 
-        handler.postDelayed(r, 1000);
+//        handler.postDelayed(r, 1000);
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -105,24 +120,35 @@ public class MainActivity extends BaseActivity
         NavigationView rightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
 
         //new code
-        final IProfile profile = new ProfileDrawerItem().withName("Võ Quốc Trịnh").withSelectedBackgroundAnimated(true).withEmail("mikepenz@gmail.com").withIcon("https://scontent.fsgn5-6.fna.fbcdn.net/v/t1.0-9/27545086_1520633358052034_8513856773051240273_n.jpg?_nc_cat=0&oh=9cd2e4ad765a3b677096bea9ad62d244&oe=5BB3A0B1").withIdentifier(100);
-        final IProfile profile2 = new ProfileDrawerItem().withName("Nhiêu Sỹ Lực").withEmail("demo@github.com").withIcon("https://scontent.fsgn5-6.fna.fbcdn.net/v/t1.0-9/21106763_661579387371492_6919408620920338286_n.jpg?_nc_cat=0&oh=ada0ac45ae90d79ab905cbfe7f1aeda7&oe=5BB82FD4").withIdentifier(101);
-        final IProfile profile3 = new ProfileDrawerItem().withName("Huỳnh Võ Thiên Phúc").withEmail("max.mustermann@gmail.com").withIcon("https://scontent.fsgn5-6.fna.fbcdn.net/v/t1.0-9/27752367_1791153030897160_7482680200088521712_n.jpg?_nc_cat=0&oh=91154d5cbdb6809e136ce7ea4e1c30ad&oe=5BA9E4B0").withIdentifier(102);
-        final IProfile profile4 = new ProfileDrawerItem().withName("Nguyễn Huy Tài").withEmail("felix.house@gmail.com").withIcon("https://scontent.fsgn5-6.fna.fbcdn.net/v/t1.0-9/32185482_1602280319898197_7014623141393596416_n.jpg?_nc_cat=0&oh=69755cdefe806b2f2f8d2e2005e930fd&oe=5BC2CDAA").withIdentifier(103);
+        User user = CoreManager.getUser(this);
+        List<IProfile> listIprofile = new ArrayList<>();
+        if (user != null) {
+            List<Patient> patients = user.getPatients();
+            if (patients != null && patients.size() > 0) {
+                IProfile profile = null;
+                for (Patient p : patients) {
+                    profile = new ProfileDrawerItem()
+                            .withName(p.getName())
+                            .withSelectedBackgroundAnimated(true)
+                            .withEmail(p.getPhone())
+                            .withIcon(p.getAvatar())
+                            .withIdentifier(p.getId());
+                    listIprofile.add(profile);
+                }
+            }
+        }
+        listIprofile.add(new ProfileSettingDrawerItem().withName("Thêm Bệnh Nhân").withDescription("Tạo Mới Một Bệnh Nhân").withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_add).actionBar().paddingDp(5).colorRes(R.color.material_drawer_primary_text)).withIdentifier(PROFILE_SETTING));
+
+        listIprofile.add(new ProfileSettingDrawerItem().withName("Quản Lý Bệnh Nhân").withIcon(GoogleMaterial.Icon.gmd_settings).withIdentifier(100001));
+        IProfile[] arrayIProfile = new IProfile[listIprofile.size()];
+        listIprofile.toArray(arrayIProfile);
         // Create the AccountHeader
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withTranslucentStatusBar(true)
                 .withHeaderBackground(R.drawable.header2)
-                .addProfiles(
-                        profile,
-                        profile2,
-                        profile3,
-                        profile4,
-                        //don't ask but google uses 14dp for the add account icon in gmail but 20dp for the normal icons (like manage account)
-                        new ProfileSettingDrawerItem().withName("Thêm Bệnh Nhân").withDescription("Tạo Mới Một Bệnh Nhân").withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_add).actionBar().paddingDp(5).colorRes(R.color.material_drawer_primary_text)).withIdentifier(PROFILE_SETTING),
-                        new ProfileSettingDrawerItem().withName("Quản Lý Bệnh Nhân").withIcon(GoogleMaterial.Icon.gmd_settings).withIdentifier(100001)
-                )
+//                .addProfiles((IProfile) (listIprofile.toArray()))
+                .addProfiles(arrayIProfile)
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean current) {
@@ -227,6 +253,7 @@ public class MainActivity extends BaseActivity
                                 fragmentManager.beginTransaction().replace(R.id.main_fragment, historyPaymentFragment).commit();
                             } else {
                                 showMessage("Đăng xuất");
+                                CoreManager.clearUser(MainActivity.this);
                             }
                         }
 //
@@ -244,7 +271,7 @@ public class MainActivity extends BaseActivity
             result.setSelection(21, false);
 
             //set the active profile
-            headerResult.setActiveProfile(profile3);
+            headerResult.setActiveProfile(arrayIProfile[0]);
         }
 
         result.setOnDrawerNavigationListener(new Drawer.OnDrawerNavigationListener() {
@@ -258,7 +285,11 @@ public class MainActivity extends BaseActivity
         });
         result.updateBadge(5, new StringHolder(10 + ""));
         result.setSelectionAtPosition(1);
+
+        listenOrderNumber();
+
     }
+    ///End oncreated
 
     @Override
     public String getMainTitle() {
@@ -365,5 +396,31 @@ public class MainActivity extends BaseActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private void listenOrderNumber() {
+        Calendar c = Calendar.getInstance();
+        String crrDate = DateUtils.getDate(c.getTime(), DateTimeFormat.DATE_APP);
+        firebaseDbInstance = FirebaseDatabase.getInstance();
+        firebaseDbInstance.getReference(crrDate).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Long val = dataSnapshot.getValue(Long.class);
+                if(val ==null){
+                    val = (long)1;
+                    digitalView.setDigital(val);
+                }else{
+                    if(digitalView!=null){
+                        digitalView.setDigital(val);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 
 }

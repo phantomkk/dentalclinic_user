@@ -82,11 +82,13 @@ public class AppointmentAdapter extends ArrayAdapter<Appointment> {
                         startTimeOfCrrDay.get(Calendar.YEAR),
                         startTimeOfCrrDay.get(Calendar.MONTH),
                         startTimeOfCrrDay.get(Calendar.DAY_OF_MONTH),
-                        7,
+                        6,
                         0
                 );
                 String status = "Đến giờ";
-                if (startTime.after(startTimeOfCrrDay.getTime())&& startTime.before(currentDate.getTime()) && currentDate.before(endDate)) {
+                if (startTime.after(startTimeOfCrrDay.getTime())
+                        && startTime.before(currentDate.getTime())
+                        && currentDate.before(endDate)) {
                     viewHolder.txtStatus.setTextColor(ContextCompat.getColor(getContext(), R.color.color_yellow_500));
                     status = "Đang diễn ra";
                 } else if (startTime.before(currentDate.getTime())) {
@@ -100,7 +102,10 @@ public class AppointmentAdapter extends ArrayAdapter<Appointment> {
                 viewHolder.txtStatus.setText(status);
             }
             viewHolder.txtDateTime.setText(strStartTimeAppFormat);
+            viewHolder.txtNumber.setText(appointment.getNumericalOrder()+"");
         }
+
+
 
         //        String stringDate = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM).format(date);
 

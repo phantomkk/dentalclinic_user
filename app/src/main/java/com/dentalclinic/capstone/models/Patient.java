@@ -26,6 +26,8 @@ public class Patient implements Serializable {
     @SerializedName("treatment_histories")
     private List<TreatmentHistory> treatmentHistories;
 
+    @SerializedName("subaccounts")
+    private List<Patient> subAccounts;
 
     public Patient(String name, String address, String phone, Date dateOfBirth, String avatar) {
         this.name = name;
@@ -116,4 +118,11 @@ public class Patient implements Serializable {
     }
 
 
+    public List<Patient> getSubAccounts() {
+        return subAccounts;
+    }
+
+    public void setSubAccounts(List<Patient> subAccounts) {
+        this.subAccounts = subAccounts;
+    }
 }

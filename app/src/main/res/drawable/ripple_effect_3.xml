@@ -5,7 +5,6 @@
     tools:targetApi="lollipop">
     <item android:id="@android:id/background">
         <shape android:shape="rectangle">
-            <corners android:radius="40dp" />
             <solid android:color="@color/color_deep_orange_500" />
         </shape>
     </item>

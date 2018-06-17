@@ -15,10 +15,16 @@ import android.widget.Toast;
 
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.api.APIServiceManager;
+import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
 import com.dentalclinic.capstone.api.services.PatientService;
+import com.dentalclinic.capstone.api.services.UserService;
+import com.dentalclinic.capstone.models.Patient;
 import com.dentalclinic.capstone.models.User;
 import com.dentalclinic.capstone.utils.CoreManager;
 import com.dentalclinic.capstone.utils.Utils;
+
+import java.io.IOException;
+import java.util.List;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -38,6 +44,7 @@ public class LoginActivity extends BaseActivity {
     private View btnLinkAppointment;
     private View btnSingin;
     private TextView txtErrorServer;
+    private TextView tvLinkRegister;
 
 
     private Disposable disposable;
@@ -62,21 +69,19 @@ public class LoginActivity extends BaseActivity {
         txtPhone = findViewById(R.id.txt_phone_loginact);
         txtErrorServer = findViewById(R.id.txt_error_server_loginact);
         txtPassword = findViewById(R.id.password);
-        btnLinkAppointment = findViewById(R.id.link_book_appointment_loginact);
-        txtPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
+        tvLinkRegister = findViewById(R.id.tv_link_quickregister);
+        tvLinkRegister.setOnClickListener((v) -> {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
         });
+        btnLinkAppointment = findViewById(R.id.link_book_appointment_loginact);
+        txtPassword.setOnEditorActionListener((TextView textView, int id, KeyEvent keyEvent) -> {
+            if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
+                attemptLogin();
+                return true;
+            }
+            return false;
 
-        TextView txtLinkAppointment = findViewById(R.id.link_book_appointment_loginact);
-        txtLinkAppointment.setOnClickListener((view) -> {
-//            attemptLogin();
         });
 
         btnLinkAppointment.setOnClickListener((view) ->
@@ -151,15 +156,14 @@ public class LoginActivity extends BaseActivity {
 
     public void callApiLogin(String phone, String password) {
         showLoading();
-        PatientService patientService = APIServiceManager.getService(PatientService.class);
-        patientService.login(phone, password)
+        UserService userService = APIServiceManager.getService(UserService.class);
+        userService.login(phone, password)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Response<User>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         disposable = d;
-                        hideLoading();
                     }
 
                     @Override
@@ -170,17 +174,25 @@ public class LoginActivity extends BaseActivity {
                             CoreManager.setUser(LoginActivity.this, userResponse.body());
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         } else {
-                            String errorMsg = Utils.getErrorMsg(userResponse.errorBody());
-                            Toast.makeText(LoginActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
-                            logError(LoginActivity.class, "onSuccess", "OnSuccess but on failed");
-                            txtErrorServer.setText(errorMsg);
-                        }
-                        hideLoading();
-                    }
+                            if (userResponse.errorBody() != null) {
+                                try {
+                                    String errorMsgJson = userResponse.errorBody().string();
+                                    ErrorResponse errorResponse = Utils.parseJson(errorMsgJson, ErrorResponse.class);
+                                    if(errorMsgJson!=null) {
+                                        Toast.makeText(LoginActivity.this, errorMsgJson, Toast.LENGTH_SHORT).show();
+                                        logError(LoginActivity.class, "onSuccess", errorResponse.getExceptionMessage());
+                                        txtErrorServer.setText(errorResponse.getErrorMessage());
 
+                                    }
+                                } catch (IOException e) {
+                                  logError(LoginActivity.class,"Login method", e.getMessage());
+                                }
+                            }
+                            hideLoading();
+                        }
+                    }
                     @Override
                     public void onError(Throwable e) {
-                        e.printStackTrace();
                         logError(LoginActivity.class, "attemptLogin", e.getMessage());
                         hideLoading();
 

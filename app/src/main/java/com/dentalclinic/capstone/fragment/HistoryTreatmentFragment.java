@@ -92,7 +92,10 @@ public class HistoryTreatmentFragment extends BaseFragment {
         treatmentHistory.setTotalPrice(Long.valueOf("150000"));
         treatmentHistories.add(treatmentHistory);
         treatmentHistories.add(treatmentHistory);
-        treatmentHistories.add(treatmentHistory);
-        treatmentHistories.add(treatmentHistory);
+//        patient.setTreatmentHistories(treatmentHistories);
+//        patient2.setTreatmentHistories(treatmentHistories);
+//
+//        patientList.add(patient);
+//        patientList.add(patient2);
     }
 }
