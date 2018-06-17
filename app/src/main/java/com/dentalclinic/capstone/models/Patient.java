@@ -16,7 +16,7 @@ public class Patient implements Serializable {
     @SerializedName("phone")
     private String phone;
     @SerializedName("date_of_birth")
-    private Date dateOfBirth;
+    private String dateOfBirth;
     @SerializedName("gender")
     private String gender;
     @SerializedName("avatar")
@@ -29,7 +29,7 @@ public class Patient implements Serializable {
     @SerializedName("subaccounts")
     private List<Patient> subAccounts;
 
-    public Patient(String name, String address, String phone, Date dateOfBirth, String avatar) {
+    public Patient(String name, String address, String phone, String dateOfBirth, String avatar) {
         this.name = name;
         this.address = address;
         this.phone = phone;
@@ -77,11 +77,11 @@ public class Patient implements Serializable {
         this.phone = phone;
     }
 
-    public Date getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

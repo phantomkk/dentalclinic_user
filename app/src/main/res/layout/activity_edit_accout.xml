@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/color_white"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    tools:context=".activities.EditAccoutActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/edt_fullname_register"
+                android:id="@+id/edt_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_account_circle_black_24dp"
@@ -30,60 +30,57 @@
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/input_margin_top"
+        <!--<android.support.design.widget.TextInputLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="@dimen/input_margin_top">-->
+            <!--<EditText-->
+                <!--android:id="@+id/edt_phone_register"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:drawableLeft="@drawable/ic_phone_iphone_black_24dp"-->
+                <!--android:drawablePadding="@dimen/drawable_padding"-->
+                <!--android:hint="@string/label_phone_quickbook"-->
+                <!--android:imeOptions="actionNext"-->
+                <!--android:inputType="text"-->
+                <!--android:maxLines="1" />-->
+        <!--</android.support.design.widget.TextInputLayout>-->
 
-            >
+        <!--<android.support.design.widget.TextInputLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
 
-            <EditText
-                android:id="@+id/edt_phone_register"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_phone_iphone_black_24dp"
-                android:drawablePadding="@dimen/drawable_padding"
-                android:hint="@string/label_phone_quickbook"
-                android:imeOptions="actionNext"
-                android:inputType="text"
-                android:maxLines="1" />
-        </android.support.design.widget.TextInputLayout>
+            <!--android:layout_marginTop="@dimen/input_margin_top">-->
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            <!--<EditText-->
+                <!--android:id="@+id/edt_password_register"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:drawableLeft="@drawable/ic_lock_outline_black_24dp"-->
+                <!--android:drawablePadding="@dimen/drawable_padding"-->
+                <!--android:hint="@string/label_password_promt"-->
+                <!--android:imeOptions="actionNext"-->
+                <!--android:inputType="textPassword"-->
+                <!--android:maxLines="1" />-->
+        <!--</android.support.design.widget.TextInputLayout>-->
 
-            android:layout_marginTop="@dimen/input_margin_top">
+        <!--<android.support.design.widget.TextInputLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
 
-            <EditText
-                android:id="@+id/edt_password_register"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_lock_outline_black_24dp"
-                android:drawablePadding="@dimen/drawable_padding"
-                android:hint="@string/label_password_promt"
-                android:imeOptions="actionNext"
-                android:inputType="textPassword"
-                android:maxLines="1" />
-        </android.support.design.widget.TextInputLayout>
+            <!--android:layout_marginTop="@dimen/input_margin_top">-->
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:layout_marginTop="@dimen/input_margin_top">
-
-            <EditText
-                android:id="@+id/edt_confirm_password_register"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_lock_outline_black_24dp"
-                android:drawablePadding="@dimen/drawable_padding"
-                android:hint="@string/label_confirm_password_promt"
-                android:imeOptions="actionNext"
-                android:inputType="textPassword"
-                android:maxLines="1" />
-        </android.support.design.widget.TextInputLayout>
+            <!--<EditText-->
+                <!--android:id="@+id/edt_confirm_password_register"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:drawableLeft="@drawable/ic_lock_outline_black_24dp"-->
+                <!--android:drawablePadding="@dimen/drawable_padding"-->
+                <!--android:hint="@string/label_confirm_password_promt"-->
+                <!--android:imeOptions="actionNext"-->
+                <!--android:inputType="textPassword"-->
+                <!--android:maxLines="1" />-->
+        <!--</android.support.design.widget.TextInputLayout>-->
 
         <RadioGroup
             android:id="@+id/rg_gender_register"
@@ -91,26 +88,25 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/input_margin_top"
             android:orientation="horizontal"
-
             android:weightSum="100">
 
             <RadioButton
                 android:id="@+id/rbt_male_register"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="33"
                 android:text="Nam" />
 
             <RadioButton
                 android:id="@+id/rbt_female_register"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="33"
                 android:text="Nữ" />
 
             <RadioButton
                 android:id="@+id/rbt_others_register"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="33"
                 android:text="Khác" />
@@ -119,12 +115,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal"
             android:weightSum="100">
 
             <TextView
-                android:id="@+id/tv_birthday_register"
+                android:id="@+id/txt_birthday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="40"
@@ -138,7 +134,7 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/txt_error_date_register"
+                android:id="@+id/txt_error_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="60"
@@ -149,27 +145,27 @@
         </LinearLayout>
 
         <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:weightSum="100">-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:weightSum="100">-->
 
-            <!--<Spinner-->
-                <!--android:id="@+id/spinner_city_register"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_weight="50">-->
+        <!--<Spinner-->
+        <!--android:id="@+id/spinner_city_register"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="50">-->
 
-            <!--</Spinner>-->
+        <!--</Spinner>-->
 
-            <!--<Spinner-->
-                <!--android:id="@+id/spinner_district_register"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_weight="50"-->
+        <!--<Spinner-->
+        <!--android:id="@+id/spinner_district_register"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="50"-->
 
-                <!--&gt;-->
+        <!--&gt;-->
 
-            <!--</Spinner>-->
+        <!--</Spinner>-->
         <!--</LinearLayout>-->
 
         <android.support.design.widget.TextInputLayout
@@ -178,7 +174,7 @@
             android:layout_marginTop="@dimen/input_margin_top">
 
             <AutoCompleteTextView
-                android:id="@+id/edt_address_register"
+                android:id="@+id/edt_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top|left"
@@ -189,28 +185,27 @@
                 android:inputType="textCapSentences|textMultiLine"
                 android:maxLength="2000"
                 android:maxLines="4"
-                android:minLines="3"
+                android:minLines="1"
                 android:paddingStart="6dp"
                 android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/input_margin_top"
             android:weightSum="100">
             <Spinner
-                android:id="@+id/spinner_district_register"
+                android:id="@+id/spinner_district"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="50">            </Spinner>
             <Spinner
-                android:id="@+id/spinner_city_register"
+                android:id="@+id/spinner_city"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="50">
             </Spinner>
         </LinearLayout>
-
-
 
         <Button
             android:id="@+id/btn_register"
@@ -218,8 +213,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="16dp"
             android:text="@string/label_button_register" />
     </LinearLayout>
-
 </ScrollView>

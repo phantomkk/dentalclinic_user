@@ -10,10 +10,14 @@ public class District implements Serializable {
     @SerializedName("name")
     private String name;
     @SerializedName("city_id")
-    private String cityId;
+    private int cityId;
     @SerializedName("city")
     private City city;
 
+    public District(String name, City city) {
+        this.name = name;
+        this.city = city;
+    }
 
     public int getId() {
         return id;
@@ -31,11 +35,11 @@ public class District implements Serializable {
         this.name = name;
     }
 
-    public String getCityId() {
+    public int getCityId() {
         return cityId;
     }
 
-    public void setCityId(String cityId) {
+    public void setCityId(int cityId) {
         this.cityId = cityId;
     }
 

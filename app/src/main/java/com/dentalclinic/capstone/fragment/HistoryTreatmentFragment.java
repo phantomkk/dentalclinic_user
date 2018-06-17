@@ -74,7 +74,7 @@ public class HistoryTreatmentFragment extends BaseFragment {
             }
         });
 
-
+        showMessage("treatment loading");
         return v;
     }
 

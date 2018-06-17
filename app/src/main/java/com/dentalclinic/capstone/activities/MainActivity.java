@@ -185,9 +185,9 @@ public class MainActivity extends BaseActivity
                         new PrimaryDrawerItem().withName(R.string.appointment_fragment_title).withIcon(R.drawable.ic_add_alert_black_24dp).withIdentifier(3).withSelectable(false),
                         new SectionDrawerItem().withName(R.string.account_nav_bar_title),
                         new PrimaryDrawerItem().withName(R.string.my_accout_fragment_title).withIcon(R.drawable.ic_account_circle_black_24dp).withIdentifier(4).withSelectable(true),
-                        new PrimaryDrawerItem().withName(R.string.history_appointment_title).withIcon(R.drawable.ic_add_to_photos_black_24dp).withIdentifier(5).withSelectable(true).withBadgeStyle(new BadgeStyle().withTextColor(Color.WHITE).withColorRes(R.color.md_red_700)),
-                        new PrimaryDrawerItem().withName(R.string.history_treatment_fragment_title).withIcon(R.drawable.ic_history_black_24dp).withIdentifier(6).withSelectable(true),
-                        new PrimaryDrawerItem().withName(R.string.history_payment_fragment_title).withIcon(R.drawable.ic_payment_black_24dp).withIdentifier(7).withSelectable(true),
+                        new PrimaryDrawerItem().withName(R.string.histrory_fragment_title).withIcon(R.drawable.ic_history_black_24dp).withIdentifier(5).withSelectable(true).withBadgeStyle(new BadgeStyle().withTextColor(Color.WHITE).withColorRes(R.color.md_red_700)),
+//                        new PrimaryDrawerItem().withName(R.string.history_treatment_fragment_title).withIcon(R.drawable.ic_history_black_24dp).withIdentifier(6).withSelectable(true),
+//                        new PrimaryDrawerItem().withName(R.string.history_payment_fragment_title).withIcon(R.drawable.ic_payment_black_24dp).withIdentifier(7).withSelectable(true),
                         new PrimaryDrawerItem().withName(R.string.logout_titile).withIcon(R.drawable.ic_power_settings_new_black_24dp).withIdentifier(8).withSelectable(false)
 //                        new PrimaryDrawerItem().withName(R.string.drawer_item_custom_container_drawer).withDescription(R.string.drawer_item_custom_container_drawer_desc).withIcon(R.drawable.dental_icon).withIdentifier(9).withSelectable(false),
 //                        new PrimaryDrawerItem().withName(R.string.drawer_item_menu_drawer).withDescription(R.string.drawer_item_menu_drawer_desc).withIcon(R.drawable.dental_icon).withIdentifier(10).withSelectable(false),
@@ -283,7 +283,7 @@ public class MainActivity extends BaseActivity
                 return true;
             }
         });
-        result.updateBadge(5, new StringHolder(10 + ""));
+        result.updateBadge(5, new StringHolder(1 + ""));
         result.setSelectionAtPosition(1);
 
         listenOrderNumber();

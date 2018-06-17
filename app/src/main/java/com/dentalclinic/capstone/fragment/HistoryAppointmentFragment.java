@@ -51,7 +51,6 @@ public class HistoryAppointmentFragment extends BaseFragment {
 //        prepareData();
         adapter = new AppointmentAdapter(getContext(), appointments);
         lvHistoryAppoint.setAdapter(adapter);
-
         return view;
     }
 
@@ -63,36 +62,36 @@ public class HistoryAppointmentFragment extends BaseFragment {
 
     public void prepareData() {
         Patient patient = CoreManager.getCurrentPatient();
-        showLoading();
-        AppointmentService appointmentService = APIServiceManager.getService(AppointmentService.class);
-        appointmentService.getByPhone(patient.getPhone())
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<Response<List<Appointment>>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(Response<List<Appointment>> listResponse) {
-                        if (listResponse.body() != null) {
-                            appointments.addAll(listResponse.body());
-                            adapter.notifyDataSetChanged();
-                        } else {
-                            Toast.makeText(getContext(), "SUCCESS but else", Toast.LENGTH_SHORT).show();
-                        }
-                        hideLoading();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        Toast.makeText(getContext(), "On Error", Toast.LENGTH_SHORT).show();
-
-                        hideLoading();
-                    }
-                });
+//        showLoading();
+//        AppointmentService appointmentService = APIServiceManager.getService(AppointmentService.class);
+//        appointmentService.getByPhone(patient.getPhone())
+//                .subscribeOn(Schedulers.newThread())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new SingleObserver<Response<List<Appointment>>>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(Response<List<Appointment>> listResponse) {
+//                        if (listResponse.body() != null) {
+//                            appointments.addAll(listResponse.body());
+//                            adapter.notifyDataSetChanged();
+//                        } else {
+//                            Toast.makeText(getContext(), "SUCCESS but else", Toast.LENGTH_SHORT).show();
+//                        }
+//                        hideLoading();
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        e.printStackTrace();
+//                        Toast.makeText(getContext(), "On Error", Toast.LENGTH_SHORT).show();
+//
+//                        hideLoading();
+//                    }
+//                });
 //        Appointment appointment = new Appointment();
 //    appointment.setStartTime();
 //        appointments.add(appointment);

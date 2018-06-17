@@ -61,17 +61,17 @@ public class TreatmentHistoryAdapter extends ArrayAdapter<TreatmentHistory> {
                         DateTimeFormat.DATE_FOTMAT));
             }
             if(treatmentHistory.getFinishDate()!=null){
-                viewHolder.txtStartDate.setText(DateUtils.changeDateFormat(treatmentHistory.getFinishDate(), DateTimeFormat.DATE_TIME_DB,
+                viewHolder.txtFinishDate.setText(DateUtils.changeDateFormat(treatmentHistory.getFinishDate(), DateTimeFormat.DATE_TIME_DB,
                         DateTimeFormat.DATE_FOTMAT));
             }
             if(treatmentHistory.getTooth().getToothName()!=null){
                 viewHolder.txtToothName.setText(treatmentHistory.getTooth().getToothName());
             }
             if(treatmentHistory.getTreatment().getEvent().getDiscount()!=0){
-                viewHolder.txtDiscount.setText(treatmentHistory.getTreatment().getEvent().getDiscount()+getContext().getResources().getString(R.string.current_unit));
+                viewHolder.txtDiscount.setText(treatmentHistory.getTreatment().getEvent().getDiscount()+getContext().getResources().getString(R.string.percent));
             }
             if(treatmentHistory.getTotalPrice()!=null){
-                viewHolder.txtDiscount.setText(Utils.formatMoney(treatmentHistory.getTotalPrice()));
+                viewHolder.txtTotal.setText(Utils.formatMoney(treatmentHistory.getTotalPrice()));
             }
         }
         return convertView;
