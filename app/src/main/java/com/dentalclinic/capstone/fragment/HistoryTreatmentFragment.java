@@ -101,8 +101,6 @@ public class HistoryTreatmentFragment extends BaseFragment {
                 return false;
             }
         });
-
-
         return v;
     }
 
@@ -140,7 +138,6 @@ public class HistoryTreatmentFragment extends BaseFragment {
         }
         patient2.setAvatar("https://scontent.fsgn5-5.fna.fbcdn.net/v/t1.0-9/21106763_661579387371492_6919408620920338286_n.jpg?_nc_cat=0&_nc_eui2=AeFS24o42DjWOdszwhxK3fB8ztBLi1_14lzqdUPhz2P8iesHrofix5GpCo4bNdwV1f7W3cfkRM4k0TqlcNvwqWzUPhy4yKMlJ_gOD0adW4C5-g&oh=d3b2103d7ec405372c1f7518676e00f7&oe=5BB82FD4");
 
-
         // Adding child data
         List<TreatmentHistory> treatmentHistories = new ArrayList<TreatmentHistory>();
         TreatmentHistory treatmentHistory = new TreatmentHistory();
@@ -154,6 +151,7 @@ public class HistoryTreatmentFragment extends BaseFragment {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         try {
             treatmentHistory.setFinishDate(format.parse(dtStart3));
         } catch (ParseException e) {

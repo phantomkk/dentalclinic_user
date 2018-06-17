@@ -5,8 +5,10 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
 
+import com.dentalclinic.capstone.models.Patient;
 import com.dentalclinic.capstone.models.User;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,6 +19,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import okhttp3.ResponseBody;
@@ -30,6 +33,7 @@ public class Utils {
 
     private static final String PREF_NAME = "ACCOUNT";
     private static final String USER_KEY = "USER_KEY";
+    private static final String PATIENTS_KEY = "PATIENTS_KEY";
     public static final String CURRENT_UNIT = "đ";
     public static final String STATUS_DONE = "Hoàn Thành";
     public static final String STATUS_NOT_DONE = "Hoàn Thành";
@@ -63,9 +67,9 @@ public class Utils {
         try {
             if (responseBody != null) {
                 JSONObject errorObject = new JSONObject(responseBody.string());
-                if(errorObject!=null) {
+                if (errorObject != null) {
                     return errorObject.getString("error");
-                }else{
+                } else {
                     Log.d(AppConst.DEBUG_TAG, "ResponseBody or ResponseBody.getErrorMsg() null");
                     return "";
                 }
@@ -94,19 +98,24 @@ public class Utils {
     /// Tên thuốc: hello .......... 30 viên
     public static String getMedicineLine(String medicineName, int quantity, int numDot) {
         String dots = "";
-        for (int i = 0; i < numDot-medicineName.length()- Integer.toString(quantity).length() ; i++) {
-           dots+=".";
+        for (int i = 0; i < numDot - medicineName.length() - Integer.toString(quantity).length(); i++) {
+            dots += ".";
         }
-        return medicineName + " " + dots +" " + quantity + " viên";
+        return medicineName + " " + dots + " " + quantity + " viên";
     }
 
-    public static String formatMoney(Long money){
+    public static String formatMoney(Long money) {
 //        NumberFormat formatter = new DecimalFormat("#,###");
 //        double myNumber = 1000000;
 //        String formattedNumber = formatter.format(myNumber);
         return (String.format("%,d", money)).replace(',', ' ');
     }
 
+    public static <T> T parseJson(String source, Class<T> c) {
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        return gson.fromJson(source, c);
+    }
 
 
 }

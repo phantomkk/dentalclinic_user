@@ -74,7 +74,7 @@ public class QuickBookActivity extends BaseActivity {
         {
             DatePickerDialog dialog = new DatePickerDialog(this,
                     (DatePicker datePicker, int iYear, int iMonth, int iDay) -> {
-                        String date = iDay + "/" + iMonth + "/" + iYear;
+                        String date = iDay + "/" + (iMonth+1) + "/" + iYear;
                         c.set(iYear, iMonth, iDay);
                         Calendar currentDay = Calendar.getInstance();
                         if (currentDay.after(c)) {

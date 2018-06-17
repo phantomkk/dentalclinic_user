@@ -30,8 +30,7 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_gravity="center"
-                android:src="@drawable/dental_icon" />
+                android:layout_gravity="center"  />
 
 
         <LinearLayout

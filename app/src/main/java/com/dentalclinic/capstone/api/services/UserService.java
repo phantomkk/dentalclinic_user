@@ -32,7 +32,8 @@ public interface UserService {
 //     @POST("/api/users/updatepwd")
 //    Call<User> updatePassword(@Field("id") int id, @Field("password") String password);
 
-//@POST("/api/user/bookAppointment")
-//    Single<User> bookAppointment(); ///////
+    @FormUrlEncoded
+    @POST("/api/user/login")
+    Single<Response<User>> login(@Field("phone") String phone, @Field("password") String password);
 
 }

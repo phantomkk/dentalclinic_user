@@ -12,6 +12,7 @@ public class AppConst {
     public final static String DATE_AND_TIME_SQL = "yyyy/MM/dd HH:mm";
 
     public final static String DEBUG_TAG = "DEBUG_TAG";
+    public final static String DEBUG_CORE_TAG = "DEBUG_CORE_TAG";
 
     public final static int GENDER_MALE = 1;
     public final static int GENDER_FEMALE = 0;

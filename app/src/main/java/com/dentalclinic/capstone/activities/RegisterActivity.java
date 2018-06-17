@@ -127,7 +127,7 @@ public class RegisterActivity extends BaseActivity {
     public void setEvenForCityDistrict() {
         List<String> listCityStrs = new ArrayList<>();
         final List<City> listCitites = new ArrayList<>();
-        addressService.getAllCities().subscribeOn(Schedulers.io())
+        addressService.getAllCities().subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Response<List<City>>>() {
                     @Override
@@ -182,7 +182,7 @@ public class RegisterActivity extends BaseActivity {
     public void callDistrictAPI(int id) {
 //        List<String> listDistrictStrs = new ArrayList<>();
         addressService.getDistrictByCityID(id)
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Response<List<District>>>() {
                     @Override
@@ -283,7 +283,7 @@ public class RegisterActivity extends BaseActivity {
             registerRequest.setAddress(address);
             registerRequest.setPassword(password);
             registerRequest.setDistrictId(districtID);
-            registerRequest.setFullname(name);
+            registerRequest.setName(name);
             registerRequest.setGender(gender);
             registerRequest.setBirthday(birthdayStr);
             callApiRegister(registerRequest);
@@ -311,7 +311,7 @@ public class RegisterActivity extends BaseActivity {
         showLoading();
         GuestService guestService = APIServiceManager.getService(GuestService.class);
         guestService.register(requestObj)
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Response<User>>() {
                     @Override
