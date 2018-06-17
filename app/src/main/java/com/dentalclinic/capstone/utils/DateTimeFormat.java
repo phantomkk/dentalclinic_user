@@ -10,5 +10,10 @@ public enum DateTimeFormat {
         public String toString() {
             return "h:mm a dd-MM-yyyy";
         }
+    },
+    DATE_FOTMAT{
+        public String toString() {
+            return "dd-MM-yyyy";
+        }
     };
 }

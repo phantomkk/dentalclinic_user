@@ -12,9 +12,9 @@ public class TreatmentHistory implements Serializable {
     @SerializedName("patient")
     private Patient patient;
     @SerializedName("created_date")
-    private Date createDate;
+    private String createDate;
     @SerializedName("finish_date")
-    private Date finishDate;
+    private String finishDate;
     @SerializedName("description")
     private String description;
     @SerializedName("price")
@@ -29,7 +29,16 @@ public class TreatmentHistory implements Serializable {
     private Tooth tooth;
 
 
-    public TreatmentHistory(Date createDate, Date finishDate, Treatment treatment) {
+    public TreatmentHistory(String createDate, String finishDate, Long price, Long totalPrice, Treatment treatment, Tooth tooth) {
+        this.createDate = createDate;
+        this.finishDate = finishDate;
+        this.price = price;
+        this.totalPrice = totalPrice;
+        this.treatment = treatment;
+        this.tooth = tooth;
+    }
+
+    public TreatmentHistory(String createDate, String finishDate, Treatment treatment) {
         this.createDate = createDate;
         this.finishDate = finishDate;
         this.treatment = treatment;
@@ -46,20 +55,19 @@ public class TreatmentHistory implements Serializable {
         this.id = id;
     }
 
-
-    public Date getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
 
-    public Date getFinishDate() {
+    public String getFinishDate() {
         return finishDate;
     }
 
-    public void setFinishDate(Date finishDate) {
+    public void setFinishDate(String finishDate) {
         this.finishDate = finishDate;
     }
 

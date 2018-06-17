@@ -15,7 +15,7 @@ public class Event implements Serializable {
     @SerializedName("end_date")
     private Date endDate;
     @SerializedName("discount")
-    private int discount;
+    private int discount=0;
     @SerializedName("staff")
     private Staff staff;
     @SerializedName("created_date")

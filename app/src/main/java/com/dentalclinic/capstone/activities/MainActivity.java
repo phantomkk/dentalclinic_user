@@ -22,6 +22,7 @@ import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.fragment.AppointmentFragment;
 import com.dentalclinic.capstone.fragment.DentalFragment;
 import com.dentalclinic.capstone.fragment.HistoryAppointmentFragment;
+import com.dentalclinic.capstone.fragment.HistoryFragment;
 import com.dentalclinic.capstone.fragment.HistoryPaymentFragment;
 import com.dentalclinic.capstone.fragment.HistoryTreatmentFragment;
 import com.dentalclinic.capstone.fragment.MyAccoutFragment;
@@ -214,7 +215,7 @@ public class MainActivity extends BaseActivity
                             } else if (drawerItem.getIdentifier() == 5) {
 
                                 setTitle(getResources().getString(R.string.history_appointment_title));
-                                HistoryAppointmentFragment dentalFragment = new HistoryAppointmentFragment();
+                                HistoryFragment dentalFragment = new HistoryFragment();
                                 fragmentManager.beginTransaction().replace(R.id.main_fragment, dentalFragment).commit();
                             } else if (drawerItem.getIdentifier() == 6) {
                                 setTitle(getResources().getString(R.string.history_treatment_fragment_title));

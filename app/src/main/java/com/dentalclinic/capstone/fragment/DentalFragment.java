@@ -4,6 +4,8 @@ package com.dentalclinic.capstone.fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -53,7 +55,7 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
         // Required empty public constructor
     }
 
-    List<TreatmentCategory> treatmentCategories = new ArrayList<>();
+    private List<TreatmentCategory> treatmentCategories = new ArrayList<>();
 //    HashMap<TreatmentCategory, List<Treatment>> listDataChild;
 
     ExpandableListView expandableListView;
@@ -69,7 +71,6 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_dental, container, false);
 //        prepareData();
-        showLoading();
         callApiGetAllTreatmentCategories();
         expandableListView = v.findViewById(R.id.eplv_list_categories);
         if(treatmentCategories==null){
@@ -91,6 +92,13 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
             expandableListView.collapseGroup(i);
         }
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        callApiGetAllTreatmentCategories();
+    }
+
     @Override
     public boolean onQueryTextSubmit(String s) {
         adapter.filterData(s);
@@ -122,6 +130,7 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
         super.onCreateOptionsMenu(menu, inflater);
     }
     public void prepareData(){
+        showLoading();
         treatmentCategories = new ArrayList<>();
         TreatmentCategory treatmentCategory = new TreatmentCategory("NHA CHU","https://nhakhoakim.com/wp-content/themes/Themesnhakhoaandong/assets/img/igray/11.png");
         Treatment treatment = new Treatment("TRam RaNG COMPOSITE","tại nhà",Long.parseLong("40000"),Long.parseLong("40000"));
@@ -155,12 +164,12 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
     private Disposable treatmentCategoriesServiceDisposable;
 
     public void callApiGetAllTreatmentCategories() {
+        showLoading();
         treatmentCategory.getAll().subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Response<List<TreatmentCategory>>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        hideLoading();
                         treatmentCategoriesServiceDisposable = d;
                     }
                     @Override
