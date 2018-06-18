@@ -198,7 +198,7 @@
                 android:id="@+id/spinner_district"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="50">            </Spinner>
+                android:layout_weight="50"/>
             <Spinner
                 android:id="@+id/spinner_city"
                 android:layout_width="wrap_content"
@@ -214,6 +214,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
-            android:text="@string/label_button_register" />
+            android:text="@string/edit_acc_update_button" />
     </LinearLayout>
 </ScrollView>

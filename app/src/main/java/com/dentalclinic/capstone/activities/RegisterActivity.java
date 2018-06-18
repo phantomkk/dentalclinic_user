@@ -77,7 +77,6 @@ public class RegisterActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
         edtFullname = findViewById(R.id.edt_fullname_register);
         edtPhone = findViewById(R.id.edt_phone_register);
         edtPassword = findViewById(R.id.edt_password_register);
@@ -273,7 +272,7 @@ public class RegisterActivity extends BaseActivity {
             tvErrorBirthday.setText(getString(R.string.label_error_birthday));
             focusView = tvBirthday;
         }
-        int gender = getGenderValue(radioGroup.getCheckedRadioButtonId());
+        String gender = getGenderValue(radioGroup.getCheckedRadioButtonId());
         if (cancel) {
             focusView.requestFocus();
         } else {
@@ -290,8 +289,8 @@ public class RegisterActivity extends BaseActivity {
         }
     }
 
-    public int getGenderValue(int id) {
-        int value;
+    public String getGenderValue(int id) {
+        String value;
         switch (id) {
             case R.id.rbt_male_register:
                 value = AppConst.GENDER_MALE;

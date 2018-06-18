@@ -236,6 +236,8 @@
 
     <!-- My Accout fragment -->
     <string name="my_acc_phone_label">Phone</string>
+    <string name="my_acc_password_label">Password</string>
+    <string name="my_acc_password_text_view">**********</string>
     <string name="my_acc_gender_label">Gender</string>
     <string name="my_acc_address_label">Address</string>
     <string name="my_acc_birthday_label">Birth Day</string>
@@ -244,6 +246,9 @@
     <string name="my_acc_city_text">thành phố</string>
     <!-- Edit Accout Activity -->
     <string name="edit_acc_title">Chỉnh Sửa Tài Khoản</string>
-
+    <string name="edit_acc_update_button">Cập Nhật</string>
+    <!-- Edit Password Activity -->
+    <string name="edit_pass_title">Chỉnh Sửa Mật Khẩu</string>
+    <string name="edit_pass_button">Cập Nhật</string>
 
 </resources>

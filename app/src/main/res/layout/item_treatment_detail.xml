@@ -10,93 +10,83 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:orientation="horizontal"
             android:weightSum="10">
 
             <TextView
-                style="@style/value_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
                 android:layout_weight="3"
-                android:text="Bác Sĩ:"
-                android:textAllCaps="true"
-                android:textSize="15dp"
-                android:textColor="@color/color_black" />
+                android:text="Nha Sĩ:" />
 
             <TextView
                 android:id="@+id/txt_dentist"
-                style="@style/value_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
                 android:layout_weight="7"
-                android:text="Huynh Vo Thien Phuc"
+                android:text="Vo Quoc Trinh"
+                android:textColor="@color/color_black"
                 android:textSize="15dp" />
         </LinearLayout>
-
-        <LinearLayout
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
-            <TextView
-                style="@style/value_style"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_weight="3"
-                android:text="Ngày Điều Trị:"
-                android:textColor="@color/color_black" />
-
-            <TextView
-                android:id="@+id/txt_date"
-                style="@style/value_style"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_weight="7"
-                android:text="30-06-1996" />
-        </LinearLayout>
-
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/color_grey_200"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
-                style="@style/value_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="Đã Thực Hiện:"
-                android:textColor="@color/color_black" />
+                android:text="Ngày Điều Trị:"/>
+
+            <TextView
+                android:id="@+id/txt_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_black"
+                android:textSize="15dp"
+                android:text="30-06-1996" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/color_grey_200"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đã Thực Hiện:"/>
 
             <TextView
                 android:id="@+id/txt_treatment_step"
-                style="@style/value_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="10dp"
                 android:maxLines="10"
+                android:textSize="15dp"
+                android:textColor="@color/color_black"
                 android:text="giảm đau..........30 viên\nchống sưng......30 viên" />
-            <!--<ListView-->
-            <!--android:id="@+id/txt_treatment_step"-->
-            <!--style="@style/value_style"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginBottom="5dp"-->
-            <!--android:layout_marginLeft="10dp" />-->
         </LinearLayout>
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/color_grey_200"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -104,25 +94,27 @@
             android:weightSum="10">
 
             <TextView
-                style="@style/value_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
                 android:layout_weight="2"
                 android:text="Ghi Chú:"
-                android:textColor="@color/color_black" />
+                 />
 
             <TextView
                 android:id="@+id/txt_note"
-                style="@style/value_style"
+                android:textColor="@color/color_black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="10dp"
                 android:layout_weight="7"
+                android:textSize="15dp"
                 android:text="Huyết áp cao" />
         </LinearLayout>
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/color_grey_200"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -130,38 +122,36 @@
             android:weightSum="10">
 
             <TextView
-                style="@style/value_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
                 android:layout_weight="2"
-                android:text="Toa Thuốc:"
-                android:textColor="@color/color_black" />
+                android:text="Toa Thuốc:" />
 
             <TextView
                 android:id="@+id/txt_medicine"
-                style="@style/value_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="10dp"
                 android:layout_weight="7"
                 android:maxLines="10"
+                android:textSize="15dp"
+                android:textColor="@color/color_black"
                 android:text="giảm đau..........30 viên\nchống sưng......30 viên" />
         </LinearLayout>
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/color_grey_200"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <TextView
-                style="@style/value_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="Hình Ảnh:"
-                android:textColor="@color/color_black"/>
+                android:text="Hình Ảnh:"/>
 
             <com.dentalclinic.capstone.animation.MyGridView
                 android:id="@+id/gv_list_image"

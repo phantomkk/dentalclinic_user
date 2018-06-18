@@ -42,7 +42,8 @@
             android:name=".activities.NewsDetailActivity"
             android:label="@string/title_activity_news_detail"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.EditAccoutActivity"></activity>
+        <activity android:name=".activities.EditAccoutActivity" />
+        <activity android:name=".activities.EditPasswordActivity"></activity>
     </application>
 
 </manifest>

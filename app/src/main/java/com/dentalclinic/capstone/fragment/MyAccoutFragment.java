@@ -15,10 +15,12 @@ import android.widget.TextView;
 
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.activities.EditAccoutActivity;
+import com.dentalclinic.capstone.activities.EditPasswordActivity;
 import com.dentalclinic.capstone.adapter.PatientProfileAdapter;
 import com.dentalclinic.capstone.models.City;
 import com.dentalclinic.capstone.models.District;
 import com.dentalclinic.capstone.models.Patient;
+import com.dentalclinic.capstone.utils.AppConst;
 import com.dentalclinic.capstone.utils.DateTimeFormat;
 import com.dentalclinic.capstone.utils.DateUtils;
 import com.squareup.picasso.Picasso;
@@ -31,12 +33,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyAccoutFragment extends Fragment implements View.OnClickListener {
+public class MyAccoutFragment extends BaseFragment implements View.OnClickListener {
 
-    Button btnChangeAvatar, btnEdit;
+    Button btnChangeAvatar, btnEdit, btnChangePhone, btnChangePassword;
     CircleImageView cvAvatar;
     TextView txtName, txtGender, txtPhone, txtAddress, txtDateOfBirth;
     Patient patient;
+
     public MyAccoutFragment() {
         // Required empty public constructor
     }
@@ -46,11 +49,15 @@ public class MyAccoutFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v= inflater.inflate(R.layout.fragment_my_accout, container, false);
+        View v = inflater.inflate(R.layout.fragment_my_accout, container, false);
         btnChangeAvatar = v.findViewById(R.id.btn_change_avatar);
         btnChangeAvatar.setOnClickListener(this);
         btnEdit = v.findViewById(R.id.btn_edit_accout);
         btnEdit.setOnClickListener(this);
+//        btnChangePhone = v.findViewById(R.id.btn_edit_phone);
+//        btnChangePhone.setOnClickListener(this);
+        btnChangePassword = v.findViewById(R.id.btn_edit_password);
+        btnChangePassword.setOnClickListener(this);
         cvAvatar = v.findViewById(R.id.img_avatar_user);
         txtName = v.findViewById(R.id.txt_name);
         txtDateOfBirth = v.findViewById(R.id.txt_date_of_birth);
@@ -63,29 +70,29 @@ public class MyAccoutFragment extends Fragment implements View.OnClickListener {
         return v;
     }
 
-    private void setData(Patient patient){
-        if(patient!=null){
-            if(patient.getAvatar()!=null){
+    private void setData(Patient patient) {
+        if (patient != null) {
+            if (patient.getAvatar() != null) {
                 Picasso.get().load(patient.getAvatar()).into(cvAvatar);
             }
-            if(patient.getName()!=null){
+            if (patient.getName() != null) {
                 txtName.setText(patient.getName());
             }
-            if(patient.getDateOfBirth()!=null){
-                txtDateOfBirth.setText(DateUtils.changeDateFormat(patient.getDateOfBirth(), DateTimeFormat.DATE_TIME_DB,DateTimeFormat.DATE_APP));
+            if (patient.getDateOfBirth() != null) {
+                txtDateOfBirth.setText(DateUtils.changeDateFormat(patient.getDateOfBirth(), DateTimeFormat.DATE_TIME_DB, DateTimeFormat.DATE_APP));
             }
-            if(patient.getGender()!=null){
+            if (patient.getGender() != null) {
                 txtGender.setText(patient.getGender());
             }
-            if(patient.getPhone()!=null){
+            if (patient.getPhone() != null) {
                 txtPhone.setText(patient.getPhone());
             }
-            if(patient.getAddress()!=null){
-                String address= patient.getAddress();
-                if(patient.getDistrict().getName()!=null){
-                    address+=", "+getResources().getString(R.string.my_acc_district_text)+" "+patient.getDistrict().getName();
-                    if(patient.getDistrict().getCity().getName()!=null){
-                        address+=", "+getResources().getString(R.string.my_acc_city_text)+" "+patient.getDistrict().getCity().getName();
+            if (patient.getAddress() != null) {
+                String address = patient.getAddress();
+                if (patient.getDistrict().getName() != null) {
+                    address += ", " + getResources().getString(R.string.my_acc_district_text) + " " + patient.getDistrict().getName();
+                    if (patient.getDistrict().getCity().getName() != null) {
+                        address += ", " + getResources().getString(R.string.my_acc_city_text) + " " + patient.getDistrict().getCity().getName();
                     }
                 }
                 txtAddress.setText(address);
@@ -93,10 +100,11 @@ public class MyAccoutFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void prepareData(){
-        patient = new Patient("Vo Quoc Trinh","Quang Trung p11" ,"01695149049","1996-06-30 00:00:00","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8lVVU1zu2SCLibBztyJFTTqCkOaNFg97S3RHyDpjbDbseoBOY");
+    private void prepareData() {
+        patient = new Patient("Vo Quoc Trinh", "Quang Trung p11", "01695149049", "1996-06-30 00:00:00", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8lVVU1zu2SCLibBztyJFTTqCkOaNFg97S3RHyDpjbDbseoBOY");
         patient.setDistrict(new District("Go Vap", new City("Ho Chi Minh")));
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -106,17 +114,39 @@ public class MyAccoutFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
+        Intent intent = null;
         switch (view.getId()) {
             case R.id.btn_change_avatar:
 //                CropImage.activity()
 //                        .setGuidelines(CropImageView.Guidelines.ON).setAspectRatio(1,1)
 //                        .start(getContext(), this);
 //                break;
-            case R.id.btn_edit_accout:
-                Intent myIntent = new Intent(getActivity(), EditAccoutActivity.class);
-//                myIntent.putExtra("patient", item); //Optional parameters
-                startActivity(myIntent);
+                showMessage("Edit Avatar");
                 break;
+            case R.id.btn_edit_accout:
+                intent = new Intent(getActivity(), EditAccoutActivity.class);
+                Patient patient = new Patient();
+                patient.setId(1);
+                patient.setName("vo quoc trinh");
+                patient.setGender(AppConst.GENDER_OTHER);
+                patient.setDateOfBirth("1996-30-06");
+                patient.setAddress("Go Vap");
+                patient.setDistrict(new District(2, "bảo lộc", new City(2, "Lam Dong")));
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(AppConst.PATIENT_OBJ,patient);
+                intent.putExtra("Bunder", bundle);
+//                intent.putExtra(AppConst.PATIENT_OBJ,patient); //Optional parameters
+                startActivity(intent);
+                break;
+            case R.id.btn_edit_password:
+                intent = new Intent(getActivity(), EditPasswordActivity.class);
+                intent.putExtra(AppConst.PATIENT_OBJ, new Patient()); //Optional parameters
+                startActivity(intent);
+                showMessage("Edit Password");
+                break;
+//            case R.id.btn_edit_phone:
+//                showMessage("Edit Phone");
+//                break;
         }
     }
 }

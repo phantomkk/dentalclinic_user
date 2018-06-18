@@ -30,7 +30,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:text="Loại"
-            android:textAlignment="center"
+            android:layout_marginLeft="16dp"
             android:textAllCaps="true"
             android:textSize="20dp"
             android:textColor="@color/color_black"/>

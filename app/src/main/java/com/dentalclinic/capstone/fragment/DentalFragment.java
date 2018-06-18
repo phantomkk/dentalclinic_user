@@ -174,7 +174,6 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
                 .subscribe(new SingleObserver<Response<List<TreatmentCategory>>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        hideLoading();
                         treatmentCategoriesServiceDisposable = d;
                     }
                     @Override

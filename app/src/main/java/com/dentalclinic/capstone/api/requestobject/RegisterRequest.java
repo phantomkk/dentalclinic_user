@@ -4,11 +4,12 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class RegisterRequest implements Serializable{
+    private int id;
     private String phone;
     private String name;
     private String address;
     private String password;
-    private int gender;
+    private String gender;
     private int districtId;
     private String birthday;
 
@@ -36,11 +37,11 @@ public class RegisterRequest implements Serializable{
         this.password = password;
     }
 
-    public int getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(int gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
@@ -66,5 +67,13 @@ public class RegisterRequest implements Serializable{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
