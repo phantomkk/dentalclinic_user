@@ -82,13 +82,6 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
         return v;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        callApiGetAllTreatmentCategories();
-    }
-
     private void expandAll() {
         int count = adapter.getGroupCount();
         for (int i = 0; i < count; i++){
