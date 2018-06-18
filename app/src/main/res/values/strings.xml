@@ -48,6 +48,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="history_appointment_title">History Appointment Fragment</string>
+    <string name="histrory_fragment_title">History Fragment</string>
     <string name="text_make_quickly_appointment">Make appointment</string>
     <!-- Quick register section -->
     <string name="tv_quickbook">Quick book appointment</string>
@@ -84,6 +85,7 @@
 
 
     <string name="current_unit">đ</string>
+    <string name="percent">%</string>
     <string name="status_not_done">Chưa Hoàn Thành</string>
     <string name="status_done">Hoàn Thành</string>
     <string name="account_nav_bar_title">Tài Khoàn</string>
@@ -231,5 +233,17 @@
     <string name="drawer_item_contact">Contact</string>
 
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</string>
+
+    <!-- My Accout fragment -->
+    <string name="my_acc_phone_label">Phone</string>
+    <string name="my_acc_gender_label">Gender</string>
+    <string name="my_acc_address_label">Address</string>
+    <string name="my_acc_birthday_label">Birth Day</string>
+    <string name="my_acc_edit_button">Edit Account</string>
+    <string name="my_acc_district_text">quận</string>
+    <string name="my_acc_city_text">thành phố</string>
+    <!-- Edit Accout Activity -->
+    <string name="edit_acc_title">Chỉnh Sửa Tài Khoản</string>
+
 
 </resources>

@@ -37,44 +37,38 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="5dp"
                     android:weightSum="10">
                     <TextView
-                        style="@style/value_style"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Giá:"
-                        android:textColor="@color/color_black"
                         android:layout_weight="5"/>
                     <TextView
                         android:id="@+id/txt_price"
-                        style="@style/value_style"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="5"
-                        android:text="200.000.000đ"
+                        android:text=""
                         android:textAlignment="textEnd"
                         android:textColor="@color/color_red_500" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="5dp"
                     android:weightSum="10">
                     <TextView
-                        style="@style/value_style"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Khuyến Mãi:"
-                        android:textColor="@color/color_black"
+                        android:text="Khuyến Mãi Giảm:"
+
                         android:layout_weight="5" />
                     <TextView
                         android:id="@+id/txt_discount"
-                        style="@style/value_style"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="-10%"
+                        android:text=""
                         android:layout_weight="5"
                         android:textAlignment="textEnd"
                         android:textColor="@color/color_red_500" />
@@ -83,22 +77,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
                     android:weightSum="10">
                     <TextView
-                        style="@style/value_style"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Còn lại:"
-                        android:textColor="@color/color_black"
+
                         android:layout_weight="5"/>
                     <TextView
                         android:id="@+id/txt_total"
-                        style="@style/value_style"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="5"
-                        android:text="100.000.000đ"
+                        android:text=""
                         android:textAlignment="textEnd"
                         android:textColor="@color/color_red_500" />
                 </LinearLayout>
@@ -114,79 +106,70 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal"
             android:weightSum="10">
 
             <TextView
-                style="@style/value_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
                 android:layout_weight="3"
                 android:text="Răng"
-                android:textColor="@color/color_black" />
+                 />
 
             <TextView
                 android:id="@+id/txt_tooth_name"
-                style="@style/value_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
                 android:layout_weight="6"
+                android:textColor="@color/color_black"
                 android:text="" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal"
             android:weightSum="10">
 
             <TextView
-                style="@style/value_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
                 android:layout_weight="3"
                 android:text="Ngày bắt đầu:"
-                android:textColor="@color/color_black" />
+                 />
 
             <TextView
                 android:id="@+id/txt_start_date"
-                style="@style/value_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
                 android:layout_weight="6"
-                android:text="30-06-1996" />
+                android:textColor="@color/color_black"
+                android:text="" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal"
             android:weightSum="10">
 
             <TextView
-                style="@style/value_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
                 android:layout_weight="3"
                 android:text="Ngày kết thúc:"
-                android:textColor="@color/color_black" />
+                 />
 
             <TextView
                 android:id="@+id/txt_finish_date"
-                style="@style/value_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
                 android:layout_weight="6"
-                android:text="10-02-1996" />
+                android:textColor="@color/color_black"
+                android:text="" />
         </LinearLayout>
 
 

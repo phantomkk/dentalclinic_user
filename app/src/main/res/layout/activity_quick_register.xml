@@ -70,7 +70,7 @@
                     android:drawableStart="@drawable/ic_phone_iphone_black_24dp"
                     android:drawablePadding="10dp"
                     android:hint="@string/label_phone_quickbook"
-                    android:inputType="textEmailAddress"
+                    android:inputType="textPhonetic"
                     android:maxLines="1"
                     android:singleLine="true" />
 

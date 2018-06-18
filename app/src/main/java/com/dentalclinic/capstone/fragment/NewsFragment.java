@@ -53,7 +53,6 @@ import retrofit2.Response;
 
 public class NewsFragment extends BaseFragment {
     public NewsFragment() {
-
     }
     private TabLayout tabLayout;
     private ViewPager viewPager;

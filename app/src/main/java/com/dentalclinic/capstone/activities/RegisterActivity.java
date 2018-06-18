@@ -104,7 +104,6 @@ public class RegisterActivity extends BaseActivity {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-//        tvBirthday.setText(year + "/" + month + "/" + day);
         tvBirthday.setOnClickListener((view) -> {
             DatePickerDialog dialog = new DatePickerDialog(RegisterActivity.this,
                     (DatePicker datePicker, int iYear, int iMonth, int iDay) -> {

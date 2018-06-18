@@ -41,7 +41,8 @@
         <activity
             android:name=".activities.NewsDetailActivity"
             android:label="@string/title_activity_news_detail"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.EditAccoutActivity"></activity>
     </application>
 
 </manifest>

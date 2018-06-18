@@ -128,6 +128,7 @@ public class HistoryTreatmentFragment extends BaseFragment {
 
     HashMap<Patient, List<TreatmentHistory>> listDataChild;
     List<Patient> patientList;
+//    List<Patient> patientList;
 
     private void prepareListData() {
 

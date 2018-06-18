@@ -57,7 +57,7 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
         // Required empty public constructor
     }
 
-    List<TreatmentCategory> treatmentCategories = new ArrayList<>();
+    private List<TreatmentCategory> treatmentCategories = new ArrayList<>();
 //    HashMap<TreatmentCategory, List<Treatment>> listDataChild;
 
     ExpandableListView expandableListView;
@@ -101,6 +101,13 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
             expandableListView.collapseGroup(i);
         }
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        callApiGetAllTreatmentCategories();
+    }
+
     @Override
     public boolean onQueryTextSubmit(String s) {
         adapter.filterData(s);

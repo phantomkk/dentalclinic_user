@@ -69,6 +69,7 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
         }
         adapter = new PaymentAdapter(getContext(), payments);
         expandableListView.setAdapter(adapter);
+        showMessage("paymentloading");
         return v;
     }
 
