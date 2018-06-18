@@ -1,17 +1,23 @@
 package com.dentalclinic.capstone.fragment;
 
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.activities.EditAccoutActivity;
@@ -24,7 +30,12 @@ import com.dentalclinic.capstone.utils.AppConst;
 import com.dentalclinic.capstone.utils.DateTimeFormat;
 import com.dentalclinic.capstone.utils.DateUtils;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,18 +122,29 @@ public class MyAccoutFragment extends BaseFragment implements View.OnClickListen
 
 
     }
+    public byte[] getBytes(InputStream is) throws IOException {
+        ByteArrayOutputStream byteBuff = new ByteArrayOutputStream();
+
+        int buffSize = 1024;
+        byte[] buff = new byte[buffSize];
+
+        int len = 0;
+        while ((len = is.read(buff)) != -1) {
+            byteBuff.write(buff, 0, len);
+        }
+
+        return byteBuff.toByteArray();
+    }
 
     @Override
     public void onClick(View view) {
         Intent intent = null;
         switch (view.getId()) {
             case R.id.btn_change_avatar:
-//                CropImage.activity()
-//                        .setGuidelines(CropImageView.Guidelines.ON).setAspectRatio(1,1)
-//                        .start(getContext(), this);
-//                break;
-                showMessage("Edit Avatar");
-                break;
+                    CropImage.activity()
+                            .setGuidelines(CropImageView.Guidelines.ON).setAspectRatio(1, 1)
+                            .start(getContext(), this);
+                    break;
             case R.id.btn_edit_accout:
                 intent = new Intent(getActivity(), EditAccoutActivity.class);
                 Patient patient = new Patient();
@@ -133,7 +155,7 @@ public class MyAccoutFragment extends BaseFragment implements View.OnClickListen
                 patient.setAddress("Go Vap");
                 patient.setDistrict(new District(2, "bảo lộc", new City(2, "Lam Dong")));
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(AppConst.PATIENT_OBJ,patient);
+                bundle.putSerializable(AppConst.PATIENT_OBJ, patient);
                 intent.putExtra("Bunder", bundle);
 //                intent.putExtra(AppConst.PATIENT_OBJ,patient); //Optional parameters
                 startActivity(intent);
@@ -149,4 +171,29 @@ public class MyAccoutFragment extends BaseFragment implements View.OnClickListen
 //                break;
         }
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == getActivity().RESULT_OK) {
+                Uri resultUri = result.getUri();
+                try {
+                    InputStream is = getActivity().getContentResolver().openInputStream(resultUri);
+//                    uploadImage(getBytes(is));
+                    showMessage("update success!");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                cvAvatar.setImageURI(resultUri);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+                Toast.makeText(getActivity(), error.getMessage(),
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+
 }
