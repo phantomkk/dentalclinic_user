@@ -3,6 +3,8 @@ package com.dentalclinic.capstone.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,13 +14,17 @@ import android.widget.ExpandableListView;
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.activities.TreatmentDetailActivity;
 import com.dentalclinic.capstone.adapter.PatientAdapter;
+import com.dentalclinic.capstone.api.APIServiceManager;
+import com.dentalclinic.capstone.api.services.HistoryTreatmentService;
 import com.dentalclinic.capstone.models.Event;
 import com.dentalclinic.capstone.models.Patient;
 import com.dentalclinic.capstone.models.Tooth;
 import com.dentalclinic.capstone.models.Treatment;
 import com.dentalclinic.capstone.models.TreatmentHistory;
 import com.dentalclinic.capstone.models.User;
+import com.dentalclinic.capstone.utils.CoreManager;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,12 +32,18 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Response;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class HistoryTreatmentFragment extends BaseFragment {
     ExpandableListView listView;
-    User user = new User();
+    //    User user = new User();
     PatientAdapter adapter;
 //    Patient patient1 = new Patient("trinh vo", "go vap");
 
@@ -56,9 +68,10 @@ public class HistoryTreatmentFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_history_treatment, container, false);
-        user.setPatients(patientList);
+//        user.setPatients(patientList);
+        patientList = new ArrayList<>();
         listView = (ExpandableListView) v.findViewById(R.id.list_profile);
-        prepareListData();
+//        prepareListData();
         adapter = new PatientAdapter(getContext(), patientList);
 
         listView.setAdapter(adapter);
@@ -102,6 +115,15 @@ public class HistoryTreatmentFragment extends BaseFragment {
             }
         });
         return v;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Patient p = CoreManager.getCurrentPatient();
+        if (p != null) {
+            callApi(p.getId());
+        }
     }
 
     HashMap<Patient, List<TreatmentHistory>> listDataChild;
@@ -164,5 +186,45 @@ public class HistoryTreatmentFragment extends BaseFragment {
 
         patientList.add(patient);
         patientList.add(patient2);
+    }
+
+    private void callApi(int patientID) {
+        HistoryTreatmentService service = APIServiceManager.getService(HistoryTreatmentService.class);
+        service.getHistoryTreatmentById(patientID)
+                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<Response<List<TreatmentHistory>>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(Response<List<TreatmentHistory>> listResponse) {
+                        if (listResponse.isSuccessful()) {
+                            if (listResponse.body() != null) {
+                                List<TreatmentHistory> list = listResponse.body();
+                                Patient patient = CoreManager.getCurrentPatient();
+                                if (patient != null) {
+                                    patient.setTreatmentHistories(list);
+                                    adapter.notifyDataSetChanged();
+                                }
+                            }
+                        } else {
+                            try {
+                                String error = listResponse.errorBody().string();
+                                logError("CallAPI", error);
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        logError("CallAPI", e.getMessage());
+                    }
+                });
     }
 }

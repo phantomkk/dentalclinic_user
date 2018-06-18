@@ -179,8 +179,8 @@ public class LoginActivity extends BaseActivity {
                                     String errorMsgJson = userResponse.errorBody().string();
                                     ErrorResponse errorResponse = Utils.parseJson(errorMsgJson, ErrorResponse.class);
                                     if(errorMsgJson!=null) {
-                                        Toast.makeText(LoginActivity.this, errorMsgJson, Toast.LENGTH_SHORT).show();
-                                        logError(LoginActivity.class, "onSuccess", errorResponse.getExceptionMessage());
+                                        Toast.makeText(LoginActivity.this, errorResponse.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                                        logError( "onSuccess", errorResponse.getExceptionMessage());
                                         txtErrorServer.setText(errorResponse.getErrorMessage());
 
                                     }

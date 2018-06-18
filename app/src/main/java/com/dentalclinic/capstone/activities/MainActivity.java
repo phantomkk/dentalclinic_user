@@ -403,20 +403,15 @@ public class MainActivity extends BaseActivity
         firebaseDbInstance.getReference(crrDate).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Long val = dataSnapshot.getValue(Long.class);
-                if(val ==null){
-                    val = (long)1;
+                Long val = (dataSnapshot.getValue() instanceof Long) ? (Long) dataSnapshot.getValue() : 1;
+                if (digitalView != null) {
                     digitalView.setDigital(val);
-                }else{
-                    if(digitalView!=null){
-                        digitalView.setDigital(val);
-                    }
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                logError("listenOrderNumber", databaseError.getMessage());
             }
         });
     }

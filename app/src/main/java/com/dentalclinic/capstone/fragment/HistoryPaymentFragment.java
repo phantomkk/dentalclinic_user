@@ -11,18 +11,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.SearchView;
+
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.adapter.PaymentAdapter;
-import com.dentalclinic.capstone.adapter.ServiceAdapter;
+import com.dentalclinic.capstone.api.APIServiceManager;
+import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
+import com.dentalclinic.capstone.api.services.PaymentService;
+import com.dentalclinic.capstone.models.Patient;
 import com.dentalclinic.capstone.models.Payment;
-import com.dentalclinic.capstone.models.PaymentDetail;
-import com.dentalclinic.capstone.models.Staff;
+import com.dentalclinic.capstone.utils.CoreManager;
+import com.dentalclinic.capstone.utils.Utils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +38,7 @@ import java.util.List;
 public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnActionExpandListener
         , SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
+    private Disposable paymentDisposable;
 
     public HistoryPaymentFragment() {
         // Required empty public constructor
@@ -109,28 +118,67 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
     }
 
     public void prepareData() {
-        Payment payment = new Payment();
-        List<PaymentDetail> paymentDetails = new ArrayList<>();
-        PaymentDetail paymentDetail = new PaymentDetail(new Staff("Vo Quoc Trinh","https://cdn3.vectorstock.com/i/1000x1000/30/97/flat-business-man-user-profile-avatar-icon-vector-4333097.jpg")
-        ,Long.parseLong("100000"));
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-        String dtStart2 = "01-01-1996";
-        try {
-            paymentDetail.setDateCreate(format.parse(dtStart2));
+//        Payment payment = new Payment();
+//        List<PaymentDetail> paymentDetails = new ArrayList<>();
+//        PaymentDetail paymentDetail = new PaymentDetail(new Staff("Vo Quoc Trinh","https://cdn3.vectorstock.com/i/1000x1000/30/97/flat-business-man-user-profile-avatar-icon-vector-4333097.jpg")
+//        ,Long.parseLong("100000"));
+//        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+//        String dtStart2 = "01-01-1996";
+//        try {
+//            paymentDetail.setDateCreate(format.parse(dtStart2));
+//
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        paymentDetails.add(paymentDetail);
+//        paymentDetails.add(paymentDetail);
+//        paymentDetails.add(paymentDetail);
+//        paymentDetails.add(paymentDetail);
+//        payment.setPaymentDetails(paymentDetails);
+//        payment.setDone(true);
+//        payments.add(payment);
+//        payments.add(payment);
+//        payments.add(payment);
+        Patient currentPatient = CoreManager.getCurrentPatient();
+        if (currentPatient != null) {
+            PaymentService paymentService = APIServiceManager.getService(PaymentService.class);
+            paymentService.getByPhone(currentPatient.getPhone())
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new SingleObserver<Response<List<Payment>>>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            paymentDisposable = d;
+                        }
 
-        } catch (ParseException e) {
-            e.printStackTrace();
+                        @Override
+                        public void onSuccess(Response<List<Payment>> paymentResponse) {
+                            if (paymentResponse.isSuccessful()) {
+                                List<Payment> list = paymentResponse.body();
+                                if (list != null && list.size() > 0) {
+                                    payments.addAll(list);
+                                    adapter.notifyDataSetChanged();
+                                }else{
+
+                                }
+                            } else {
+                                try {
+                                    String error = paymentResponse.errorBody().string();
+                                    logError("CallApi",
+                                            "success but fail: " + error);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            logError(HistoryPaymentFragment.class.getSimpleName(), e.getMessage());
+                        }
+                    });
+
         }
-        paymentDetails.add(paymentDetail);
-        paymentDetails.add(paymentDetail);
-        paymentDetails.add(paymentDetail);
-        paymentDetails.add(paymentDetail);
-        payment.setPaymentDetails(paymentDetails);
-        payment.setDone(true);
-        payments.add(payment);
-        payments.add(payment);
-        payments.add(payment);
-
     }
 
     @Override

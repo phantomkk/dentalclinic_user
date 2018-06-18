@@ -44,14 +44,17 @@ public class NewsPageViewFragment extends BaseFragment {
     List<News> listNews = new ArrayList<>();
     private NewsAdapter adapter;
     private NewsService newsService = APIServiceManager.getService(NewsService.class);
-    private Disposable newsServiceDisposable ;
+    private Disposable newsServiceDisposable;
     private final int NUMBER_PAGE_LOAD = 10;
     //    private SmallNewsAdapter smallNewsAdapter;
     private RecyclerView rcvNews;
+
     public NewsPageViewFragment() {
 
     }
-    private int type=0;
+
+    private int type = 0;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,6 +63,7 @@ public class NewsPageViewFragment extends BaseFragment {
 
         return inflater.inflate(R.layout.item_news_page_view, container, false);
     }
+
     protected Handler handler;
 
     @Override
@@ -91,13 +95,13 @@ public class NewsPageViewFragment extends BaseFragment {
             }
         });
         rcvNews.setAdapter(adapter);
-        preparedData();
+//        preparedData();
         adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
                 if (listNews.size() <= 200) {
                     listNews.add(null);
-                    if(listNews.size()>=1) {
+                    if (listNews.size() >= 1) {
                         adapter.notifyItemInserted(listNews.size() - 1);
                     }
 
@@ -116,7 +120,7 @@ public class NewsPageViewFragment extends BaseFragment {
 
                             int end = index + 10;
                             for (int i = index; i < end; i++) {
-                                preparedData();
+//                                preparedData();
                             }
                             adapter.notifyDataSetChanged();
                             adapter.setLoaded();
@@ -133,7 +137,7 @@ public class NewsPageViewFragment extends BaseFragment {
 
     public void callApiGetNews(int currentIndex, int numItem, int typeId) {
         showLoading();
-        newsService.loadMoreByType(currentIndex, numItem,typeId).subscribeOn(Schedulers.io())
+        newsService.loadMoreByType(currentIndex, numItem, typeId).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Response<List<News>>>() {
                     @Override
@@ -141,23 +145,27 @@ public class NewsPageViewFragment extends BaseFragment {
                         hideLoading();
                         newsServiceDisposable = d;
                     }
+
                     @Override
                     public void onSuccess(Response<List<News>> listResponse) {
                         hideLoading();
                         if (listResponse.isSuccessful()) {
-                            listNews.addAll(listResponse.body());
-                            adapter.notifyDataSetChanged();
-                            logError("news", String.valueOf(listResponse.body().size()));
+                            if (listResponse.body() != null) {
+                                listNews.addAll(listResponse.body());
+                                adapter.notifyDataSetChanged();
+                                logError("news", String.valueOf(listResponse.body().size()));
+                            }
                         } else {
                             String erroMsg = Utils.getErrorMsg(listResponse.errorBody());
                             AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
                                     .setMessage(erroMsg)
                                     .setPositiveButton("Thử lại", (DialogInterface dialogInterface, int i) -> {
-                                    }) ;
+                                    });
                             alertDialog.show();
                         }
 
                     }
+
                     @Override
                     public void onError(Throwable e) {
                         hideLoading();
@@ -168,12 +176,12 @@ public class NewsPageViewFragment extends BaseFragment {
     }
 
 
-    public void preparedData(){
+    public void preparedData() {
 //        showLoading();
 //        callApiGetNews(0, NUMBER_PAGE_LOAD);
 
         News news;
-        for(int i =0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             news = new News();
             news.setContent("<div class=\"content\"><p style=\"text-align: justify;\"><em>Xin chào BS.Nguyễn Văn Chung! Tôi xin bắt đầu bằng câu hỏi: có đúng là Hà Nội và TP.HCM dẫn đầu cả nước về con số trường hợp lây nhiễm ký sinh trùng?</em></p>\n" +
                     "<p style=\"text-align: justify;\"><strong>BS.Trả lời</strong> «Đúng là như thế. Hà Nội và TP.HCM dẫn đầu bảng các trường hợp lây nhiễm do kí sinh trùng gây ra. Nguyên nhân ở đây phải kể đến ô nhiễm môi trường, sự bàng quan của nhà nước và ý thức của dân.»</p>\n" +

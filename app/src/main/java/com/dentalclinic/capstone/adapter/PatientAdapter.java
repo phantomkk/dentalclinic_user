@@ -161,7 +161,9 @@ public class PatientAdapter extends BaseExpandableListAdapter{
 
     @Override
     public int getGroupCount() {
-        return this.listDataHeader.size();
+        if(listDataHeader!=null) {
+            return this.listDataHeader.size();
+        }return 0;
     }
 
 

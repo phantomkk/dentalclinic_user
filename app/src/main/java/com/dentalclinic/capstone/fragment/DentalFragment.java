@@ -4,6 +4,8 @@ package com.dentalclinic.capstone.fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +26,7 @@ import com.dentalclinic.capstone.activities.RegisterActivity;
 import com.dentalclinic.capstone.adapter.ServiceAdapter;
 import com.dentalclinic.capstone.animation.AnimatedExpandableListView;
 import com.dentalclinic.capstone.api.APIServiceManager;
+import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
 import com.dentalclinic.capstone.api.services.TreatmentCategoryService;
 import com.dentalclinic.capstone.models.Patient;
 import com.dentalclinic.capstone.models.Treatment;
@@ -31,6 +34,7 @@ import com.dentalclinic.capstone.models.TreatmentCategory;
 import com.dentalclinic.capstone.models.TreatmentHistory;
 import com.dentalclinic.capstone.utils.Utils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,8 +73,6 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_dental, container, false);
 //        prepareData();
-        showLoading();
-        callApiGetAllTreatmentCategories();
         expandableListView = v.findViewById(R.id.eplv_list_categories);
         if(treatmentCategories==null){
 //            prepareData();
@@ -79,6 +81,14 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
         expandableListView.setAdapter(adapter);
         return v;
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        callApiGetAllTreatmentCategories();
+    }
+
     private void expandAll() {
         int count = adapter.getGroupCount();
         for (int i = 0; i < count; i++){
@@ -122,24 +132,27 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
         super.onCreateOptionsMenu(menu, inflater);
     }
     public void prepareData(){
-        treatmentCategories = new ArrayList<>();
-        TreatmentCategory treatmentCategory = new TreatmentCategory("NHA CHU","https://nhakhoakim.com/wp-content/themes/Themesnhakhoaandong/assets/img/igray/11.png");
-        Treatment treatment = new Treatment("TRam RaNG COMPOSITE","tại nhà",Long.parseLong("40000"),Long.parseLong("40000"));
-        Treatment treatment2 = new Treatment("Tay TRaNG",Long.parseLong("40000"),Long.parseLong("40000"));
-        Treatment treatment3 = new Treatment("NHo RaNG CoI LoN HOaC RaNG KHoN HaM TReN",Long.parseLong("40000"),Long.parseLong("40000"));
-        treatmentCategory.getTreatments().add(treatment);
-        treatmentCategory.getTreatments().add(treatment2);
-        treatmentCategory.getTreatments().add(treatment3);
-        TreatmentCategory treatmentCategory2 = new TreatmentCategory("PHuC HiNH Co ĐiNH","https://nhakhoakim.com/wp-content/themes/Themesnhakhoaandong/assets/img/igray/12.png");
-        Treatment treatment4 = new Treatment("TRaM RaNG COMPOSITE","tại nhà",Long.parseLong("40000"),Long.parseLong("40000"));
-        Treatment treatment5 = new Treatment("TaY TRaNG",Long.parseLong("40000"),Long.parseLong("40000"));
-        Treatment treatment6 = new Treatment("NHo RaNG CoI LoN HOaC RaNG KHoN HaM TReN",Long.parseLong("40000"),Long.parseLong("40000"));
-        treatmentCategory.getTreatments().add(treatment4);
-        treatmentCategory.getTreatments().add(treatment5);
-        treatmentCategory.getTreatments().add(treatment6);
-        treatmentCategories.add(treatmentCategory);
-        treatmentCategories.add(treatmentCategory);
-        treatmentCategories.add(treatmentCategory);
+//        treatmentCategories = new ArrayList<>();
+//        TreatmentCategory treatmentCategory = new TreatmentCategory("NHA CHU","https://nhakhoakim.com/wp-content/themes/Themesnhakhoaandong/assets/img/igray/11.png");
+//        Treatment treatment = new Treatment("TRam RaNG COMPOSITE","tại nhà",Long.parseLong("40000"),Long.parseLong("40000"));
+//        Treatment treatment2 = new Treatment("Tay TRaNG",Long.parseLong("40000"),Long.parseLong("40000"));
+//        Treatment treatment3 = new Treatment("NHo RaNG CoI LoN HOaC RaNG KHoN HaM TReN",Long.parseLong("40000"),Long.parseLong("40000"));
+//        treatmentCategory.getTreatments().add(treatment);
+//        treatmentCategory.getTreatments().add(treatment2);
+//        treatmentCategory.getTreatments().add(treatment3);
+//        TreatmentCategory treatmentCategory2 = new TreatmentCategory("PHuC HiNH Co ĐiNH","https://nhakhoakim.com/wp-content/themes/Themesnhakhoaandong/assets/img/igray/12.png");
+//        Treatment treatment4 = new Treatment("TRaM RaNG COMPOSITE","tại nhà",Long.parseLong("40000"),Long.parseLong("40000"));
+//        Treatment treatment5 = new Treatment("TaY TRaNG",Long.parseLong("40000"),Long.parseLong("40000"));
+//        Treatment treatment6 = new Treatment("NHo RaNG CoI LoN HOaC RaNG KHoN HaM TReN",Long.parseLong("40000"),Long.parseLong("40000"));
+//        treatmentCategory.getTreatments().add(treatment4);
+//        treatmentCategory.getTreatments().add(treatment5);
+//        treatmentCategory.getTreatments().add(treatment6);
+//        treatmentCategories.add(treatmentCategory);
+//        treatmentCategories.add(treatmentCategory);
+//        treatmentCategories.add(treatmentCategory);
+
+
+
     }
 
     @Override
@@ -155,6 +168,7 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
     private Disposable treatmentCategoriesServiceDisposable;
 
     public void callApiGetAllTreatmentCategories() {
+        showLoading();
         treatmentCategory.getAll().subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Response<List<TreatmentCategory>>>() {
@@ -167,17 +181,21 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
                     public void onSuccess(Response<List<TreatmentCategory>> listResponse) {
                         hideLoading();
                         if (listResponse.isSuccessful()) {
-                            treatmentCategories.addAll(listResponse.body());
-                            adapter.getListDataHeaderOriginal().addAll(treatmentCategories);
-                            adapter.notifyDataSetChanged();
-                            logError("treatmentCategories", String.valueOf(treatmentCategories.size()));
+                            if(listResponse.body()!=null) {
+                                treatmentCategories.addAll(listResponse.body());
+                                adapter.getListDataHeaderOriginal().addAll(treatmentCategories);
+                                adapter.notifyDataSetChanged();
+                                logError("treatmentCategories", String.valueOf(treatmentCategories.size()));
+                            }
                         } else {
-//                            String erroMsg = Utils.getErrorMsg(listResponse.errorBody());
-//                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
-//                                    .setMessage(erroMsg)
-//                                    .setPositiveButton("Thử lại", (DialogInterface dialogInterface, int i) -> {
-//                                    }) ;
-//                            alertDialog.show();
+                            ErrorResponse erroMsg = null;
+                            try {
+                                erroMsg = Utils.parseJson(listResponse.errorBody().string(), ErrorResponse.class);
+                                showMessage(erroMsg.getErrorMessage());
+                                logError("CallAPI",erroMsg.getExceptionMessage());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
 
                     }
