@@ -1,21 +1,26 @@
 package com.dentalclinic.capstone.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dentalclinic.capstone.R;
+import com.dentalclinic.capstone.activities.PhotoViewActivity;
 import com.dentalclinic.capstone.animation.MyGridView;
 import com.dentalclinic.capstone.models.Prescription;
 import com.dentalclinic.capstone.models.TreatmentDetail;
 import com.dentalclinic.capstone.models.TreatmentDetailStep;
 import com.dentalclinic.capstone.models.TreatmentImage;
 import com.dentalclinic.capstone.models.TreatmentStep;
+import com.dentalclinic.capstone.utils.AppConst;
 import com.dentalclinic.capstone.utils.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -78,6 +83,16 @@ public class TreatmentDetailAdapter extends ArrayAdapter<TreatmentDetail> {
             viewHolder.mPrescription.setText(prescription);
             ImageAdapter imageAdapter = new ImageAdapter(getContext(), treatmentDetail.getTreatmentImages());
             viewHolder.gridViewListimage.setAdapter(imageAdapter);
+            viewHolder.gridViewListimage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Intent intent = new Intent(getContext(), PhotoViewActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(AppConst.IMAGE_OBJ, treatmentDetail.getTreatmentImages().get(i));
+                    intent.putExtra(AppConst.BUNDLE, bundle);
+                    getContext().startActivity(intent);
+                }
+            });
         }
         return convertView;
     }

@@ -31,6 +31,7 @@ import com.dentalclinic.capstone.api.services.AddressService;
 import com.dentalclinic.capstone.api.services.GuestService;
 import com.dentalclinic.capstone.api.services.PatientService;
 import com.dentalclinic.capstone.api.services.UserService;
+import com.dentalclinic.capstone.databaseHelper.DatabaseHelper;
 import com.dentalclinic.capstone.models.City;
 import com.dentalclinic.capstone.models.District;
 import com.dentalclinic.capstone.models.User;
@@ -70,6 +71,7 @@ public class RegisterActivity extends BaseActivity {
     private Spinner spnCity;
     private Spinner spnDistrict;
 
+    private DatabaseHelper cityDatabaseHelper = new DatabaseHelper(RegisterActivity.this);
 
     AddressService addressService = APIServiceManager.getService(AddressService.class);
 
@@ -94,7 +96,31 @@ public class RegisterActivity extends BaseActivity {
         });
 
         setEventForBirthday();
-        setEvenForCityDistrict();
+//        setEvenForCityDistrict();
+
+        if(cityDatabaseHelper.getAllCity().isEmpty()){
+            cityDatabaseHelper.insertDataCity();
+        }
+        if(cityDatabaseHelper.getAllDistrict().isEmpty()){
+            cityDatabaseHelper.insertDataDistrict();
+        }
+        spnCity.setAdapter(new CitySpinnerAdapter(
+                RegisterActivity.this,
+                android.R.layout.simple_spinner_item, cityDatabaseHelper.getAllCity()));
+        spnCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                City city = (City) spnCity.getSelectedItem();
+                if (city != null) {
+                    spnDistrict.setAdapter(new DistrictSpinnerAdapter(RegisterActivity.this,
+                            android.R.layout.simple_spinner_item,cityDatabaseHelper.getDistrictOfCity(city.getId())));
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     public void setEventForBirthday() {

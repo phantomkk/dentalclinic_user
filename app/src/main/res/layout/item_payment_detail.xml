@@ -29,8 +29,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:text="Người Nhận"
-                    android:textColor="@color/color_black" />
+                    android:text="Người Nhận" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -48,6 +47,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginLeft="10dp"
+                        android:textColor="@color/color_black"
                         android:text="Vo Quoc Trinh" />
                 </LinearLayout>
             </LinearLayout>
@@ -62,8 +62,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:text="Ngày nhận"
-                    android:textColor="@color/color_black" />
+                    android:text="Ngày nhận" />
 
                 <TextView
                     android:id="@+id/txt_date"
@@ -72,6 +71,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginTop="5dp"
                     android:text="30/06/1996"
+                    android:textColor="@color/color_black"
                     android:textSize="15dp" />
             </LinearLayout>
         </LinearLayout>
@@ -93,8 +93,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
-                android:text="Trả Trước"
-                android:textColor="@color/color_black" />
+                android:text="Trả Trước"/>
 
             <TextView
                 android:id="@+id/txt_prepaid_money"

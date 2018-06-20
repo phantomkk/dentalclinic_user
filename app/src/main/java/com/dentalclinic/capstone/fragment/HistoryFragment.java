@@ -15,7 +15,7 @@ import com.dentalclinic.capstone.adapter.HistoryPageAdapter;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HistoryFragment extends Fragment {
+public class HistoryFragment extends BaseFragment {
 
     public HistoryFragment() {
     }

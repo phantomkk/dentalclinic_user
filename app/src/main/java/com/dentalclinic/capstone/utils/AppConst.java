@@ -22,6 +22,8 @@ public class AppConst {
 
 
     public final static String PATIENT_OBJ = "PATIENT_OBJ";
+    public final static String IMAGE_OBJ = "IMAGE_OBJ";
+    public final static String BUNDLE = "BUNDLE";
 
     public final static String PRODUCT_PARAM = "PRODUCT_PARAM";
     public final static String CATEGORY_PARAM = "CATEGORY_PARAM";

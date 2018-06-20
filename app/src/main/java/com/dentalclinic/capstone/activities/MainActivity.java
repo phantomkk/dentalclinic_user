@@ -17,6 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.fragment.AppointmentFragment;
@@ -62,6 +64,7 @@ import com.rupins.drawercardbehaviour.CardDrawerLayout;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends BaseActivity
@@ -70,13 +73,14 @@ public class MainActivity extends BaseActivity
     private CardDrawerLayout drawer;
     private AccountHeader headerResult = null;
     private Drawer result = null;
+    private TextView currentDate;
     private static final int PROFILE_SETTING = 100000;
     private long elapsedTime = 0;
     private Button button;
     private DigitalView digitalView;
     private Handler handler;
     private FirebaseDatabase firebaseDbInstance;
-
+    private ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,23 +91,11 @@ public class MainActivity extends BaseActivity
         NewsFragment newFragment = new NewsFragment();
         fragmentManager.beginTransaction().replace(R.id.main_fragment, newFragment).commit();
         digitalView = findViewById(R.id.digital);
-        button = findViewById(R.id.btn_cout);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                digitalView.setDigital(elapsedTime++);
-            }
-        });
-//        handler = new Handler();
-
-//        final Runnable r = new Runnable() {
-//            public void run() {
-//                digitalView.setDigital(elapsedTime++);
-//                handler.postDelayed(this, 1000);
-//            }
-//        };
-
-//        handler.postDelayed(r, 1000);
+        currentDate = findViewById(R.id.txt_date);
+//        Date currentTime = Calendar.getInstance().getTime();
+//        logError("Date",currentTime.toString());
+        currentDate.setText(DateUtils.getCurrentDateFormat());
+        listView = findViewById(R.id.lv_appointment_list);
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -117,7 +109,7 @@ public class MainActivity extends BaseActivity
 ////        drawer.setViewElevation(Gravity.START, 20);
 //        navigationView.getMenu().getItem(0).setChecked(true);
 
-        NavigationView rightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
+//        NavigationView rightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
 
         //new code
         User user = CoreManager.getUser(this);
@@ -240,7 +232,7 @@ public class MainActivity extends BaseActivity
                                 fragmentManager.beginTransaction().replace(R.id.main_fragment, myAccoutFragment).commit();
                             } else if (drawerItem.getIdentifier() == 5) {
 
-                                setTitle(getResources().getString(R.string.history_appointment_title));
+                                setTitle(getResources().getString(R.string.histrory_fragment_title));
                                 HistoryFragment dentalFragment = new HistoryFragment();
                                 fragmentManager.beginTransaction().replace(R.id.main_fragment, dentalFragment).commit();
                             } else if (drawerItem.getIdentifier() == 6) {

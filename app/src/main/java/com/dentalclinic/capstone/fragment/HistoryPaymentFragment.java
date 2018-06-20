@@ -19,10 +19,13 @@ import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
 import com.dentalclinic.capstone.api.services.PaymentService;
 import com.dentalclinic.capstone.models.Patient;
 import com.dentalclinic.capstone.models.Payment;
+import com.dentalclinic.capstone.models.PaymentDetail;
+import com.dentalclinic.capstone.models.Staff;
 import com.dentalclinic.capstone.utils.CoreManager;
 import com.dentalclinic.capstone.utils.Utils;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,7 +72,6 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
         }
         adapter = new PaymentAdapter(getContext(), payments);
         expandableListView.setAdapter(adapter);
-        showMessage("paymentloading");
         return v;
     }
 
@@ -119,67 +121,64 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
     }
 
     public void prepareData() {
-//        Payment payment = new Payment();
-//        List<PaymentDetail> paymentDetails = new ArrayList<>();
-//        PaymentDetail paymentDetail = new PaymentDetail(new Staff("Vo Quoc Trinh","https://cdn3.vectorstock.com/i/1000x1000/30/97/flat-business-man-user-profile-avatar-icon-vector-4333097.jpg")
-//        ,Long.parseLong("100000"));
-//        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-//        String dtStart2 = "01-01-1996";
-//        try {
-//            paymentDetail.setDateCreate(format.parse(dtStart2));
+        Payment payment = new Payment();
+        List<PaymentDetail> paymentDetails = new ArrayList<>();
+        PaymentDetail paymentDetail = new PaymentDetail(new Staff("Vo Quoc Trinh","https://cdn3.vectorstock.com/i/1000x1000/30/97/flat-business-man-user-profile-avatar-icon-vector-4333097.jpg")
+        ,Long.parseLong("100000"));
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        String dtStart2 = "2018-06-19 00:00:00";
+        paymentDetail.setDateCreate(dtStart2);
+        paymentDetails.add(paymentDetail);
+        paymentDetails.add(paymentDetail);
+        paymentDetails.add(paymentDetail);
+        paymentDetails.add(paymentDetail);
+        payment.setPaymentDetails(paymentDetails);
+        payment.setDone(true);
+        payments.add(payment);
+        payments.add(payment);
+        payments.add(payment);
+
+
+//        Patient currentPatient = CoreManager.getCurrentPatient();
+//        if (currentPatient != null) {
+//            PaymentService paymentService = APIServiceManager.getService(PaymentService.class);
+//            paymentService.getByPhone(currentPatient.getPhone())
+//                    .subscribeOn(Schedulers.newThread())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(new SingleObserver<Response<List<Payment>>>() {
+//                        @Override
+//                        public void onSubscribe(Disposable d) {
+//                            paymentDisposable = d;
+//                        }
 //
-//        } catch (ParseException e) {
-//            e.printStackTrace();
+//                        @Override
+//                        public void onSuccess(Response<List<Payment>> paymentResponse) {
+//                            if (paymentResponse.isSuccessful()) {
+//                                List<Payment> list = paymentResponse.body();
+//                                if (list != null && list.size() > 0) {
+//                                    payments.addAll(list);
+//                                    adapter.notifyDataSetChanged();
+//                                }else{
+//
+//                                }
+//                            } else {
+//                                try {
+//                                    String error = paymentResponse.errorBody().string();
+//                                    logError("CallApi",
+//                                            "success but fail: " + error);
+//                                } catch (IOException e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onError(Throwable e) {
+//                            logError(HistoryPaymentFragment.class.getSimpleName(), e.getMessage());
+//                        }
+//                    });
+//
 //        }
-//        paymentDetails.add(paymentDetail);
-//        paymentDetails.add(paymentDetail);
-//        paymentDetails.add(paymentDetail);
-//        paymentDetails.add(paymentDetail);
-//        payment.setPaymentDetails(paymentDetails);
-//        payment.setDone(true);
-//        payments.add(payment);
-//        payments.add(payment);
-//        payments.add(payment);
-        Patient currentPatient = CoreManager.getCurrentPatient();
-        if (currentPatient != null) {
-            PaymentService paymentService = APIServiceManager.getService(PaymentService.class);
-            paymentService.getByPhone(currentPatient.getPhone())
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new SingleObserver<Response<List<Payment>>>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
-                            paymentDisposable = d;
-                        }
-
-                        @Override
-                        public void onSuccess(Response<List<Payment>> paymentResponse) {
-                            if (paymentResponse.isSuccessful()) {
-                                List<Payment> list = paymentResponse.body();
-                                if (list != null && list.size() > 0) {
-                                    payments.addAll(list);
-                                    adapter.notifyDataSetChanged();
-                                }else{
-
-                                }
-                            } else {
-                                try {
-                                    String error = paymentResponse.errorBody().string();
-                                    logError("CallApi",
-                                            "success but fail: " + error);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            logError(HistoryPaymentFragment.class.getSimpleName(), e.getMessage());
-                        }
-                    });
-
-        }
     }
 
     @Override

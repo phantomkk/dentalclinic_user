@@ -11,51 +11,51 @@
     <string name="waiting_msg">Xin vui lòng chờ...</string>
     <string name="dialog_cancel">Bạn đã hủy</string>
     <!-- Strings related to login -->
-    <string name="prompt_phone">Phone number</string>
+    <string name="prompt_phone">Số Điện Thoại</string>
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in</string>
-    <string name="action_register">Sign Up</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
+    <string name="prompt_password">Mật Khẩu</string>
+    <string name="action_sign_in"></string>
+    <string name="action_register">Đăng Ký</string>
+    <string name="action_sign_in_short">Đăng Nhập</string>
+    <string name="error_invalid_email">Email không đúng</string>
+    <string name="error_incorrect_password">Mật khẩu không đúng</string>
+    <string name="error_field_required">Vui lòng nhập vào</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="logout_titile">Log Out</string>
+    <string name="logout_titile">Đăng Xuất</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="new_fragment_title">New Fagment</string>
+    <string name="new_fragment_title">Tin Tức</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="dental_fragment_title">Service Fragment</string>
+    <string name="dental_fragment_title">Dịch Vụ</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="appointment_fragment_title">Appointment Fragment</string>
+    <string name="appointment_fragment_title">Đặt Lịch</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="promotion_fragment_title">Promotion Fragment</string>
+    <string name="promotion_fragment_title">Khuyến Mãi</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="history_treatment_fragment_title">History Treatment Fragment</string>
-    <string name="history_payment_fragment_title">History Payment Fragment</string>
-    <string name="my_accout_fragment_title">My Accout Fragment</string>
+    <string name="history_treatment_fragment_title">Điều Trị</string>
+    <string name="history_payment_fragment_title">Chi Trả</string>
+    <string name="my_accout_fragment_title">Thông Tin Tài Khoản</string>
     <string name="treatment_detail_title_activity">Lộ Trình Chi Tiết</string>
     <string name="news_tab_title">Tin Tức</string>
     <string name="promotion_tab_titile">Khuyến Mãi</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="history_appointment_title">History Appointment Fragment</string>
-    <string name="histrory_fragment_title">History Fragment</string>
-    <string name="text_make_quickly_appointment">Make appointment</string>
+    <string name="history_appointment_title">Lịch Đặt</string>
+    <string name="histrory_fragment_title">Lịch Sử Điều Trị</string>
+    <string name="text_make_quickly_appointment">Đặt Lịch Khám</string>
     <!-- Quick register section -->
-    <string name="tv_quickbook">Quick book appointment</string>
+    <string name="tv_quickbook">Đặt lịch nhanh</string>
     <string name="tv_promt_fullname">Họ và tên</string>
-    <string name="tv_promt_phone">Phone number</string>
+    <string name="tv_promt_phone">Số điện thoại</string>
     <string name="tv_promt_content">Nội dung</string>
-    <string name="btn_quickbook">Quick book appointment</string>
+    <string name="btn_quickbook">Đặt Lịch</string>
     <!--Login-->
     <string name="label_password_promt">Nhập mật khẩu</string>
     <string name="label_confirm_password_promt">Nhập lại mật khẩu</string>
@@ -88,7 +88,7 @@
     <string name="percent">%</string>
     <string name="status_not_done">Chưa Hoàn Thành</string>
     <string name="status_done">Hoàn Thành</string>
-    <string name="account_nav_bar_title">Tài Khoàn</string>
+    <string name="account_nav_bar_title">Tài Khoản</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -100,96 +100,7 @@
     <string name="error_invalid_address">Địa chỉ không hợp lệ, bạn vui lòng thử lại</string>
     <string name="error_on_error_when_call_api">Hình như đã có lỗi trong đường truyền, vui lòng thử lại</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_news_detail">NewsDetailActivity</string>
-    <string name="large_text">
-        "Material is the metaphor.\n\n"
-
-        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
-        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
-        "technologically advanced and open to imagination and magic.\n"
-        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
-        "use of familiar tactile attributes helps users quickly understand affordances. Yet the "
-        "flexibility of the material creates new affordances that supercede those in the physical "
-        "world, without breaking the rules of physics.\n"
-        "The fundamentals of light, surface, and movement are key to conveying how objects move, "
-        "interact, and exist in space and in relation to each other. Realistic lighting shows "
-        "seams, divides space, and indicates moving parts.\n\n"
-
-        "Bold, graphic, intentional.\n\n"
-
-        "The foundational elements of print based design typography, grids, space, scale, color, "
-        "and use of imagery guide visual treatments. These elements do far more than please the "
-        "eye. They create hierarchy, meaning, and focus. Deliberate color choices, edge to edge "
-        "imagery, large scale typography, and intentional white space create a bold and graphic "
-        "interface that immerse the user in the experience.\n"
-        "An emphasis on user actions makes core functionality immediately apparent and provides "
-        "waypoints for the user.\n\n"
-
-        "Motion provides meaning.\n\n"
-
-        "Motion respects and reinforces the user as the prime mover. Primary user actions are "
-        "inflection points that initiate motion, transforming the whole design.\n"
-        "All action takes place in a single environment. Objects are presented to the user without "
-        "breaking the continuity of experience even as they transform and reorganize.\n"
-        "Motion is meaningful and appropriate, serving to focus attention and maintain continuity. "
-        "Feedback is subtle yet clear. Transitions are efﬁcient yet coherent.\n\n"
-
-        "3D world.\n\n"
-
-        "The material environment is a 3D space, which means all objects have x, y, and z "
-        "dimensions. The z-axis is perpendicularly aligned to the plane of the display, with the "
-        "positive z-axis extending towards the viewer. Every sheet of material occupies a single "
-        "position along the z-axis and has a standard 1dp thickness.\n"
-        "On the web, the z-axis is used for layering and not for perspective. The 3D world is "
-        "emulated by manipulating the y-axis.\n\n"
-
-        "Light and shadow.\n\n"
-
-        "Within the material environment, virtual lights illuminate the scene. Key lights create "
-        "directional shadows, while ambient light creates soft shadows from all angles.\n"
-        "Shadows in the material environment are cast by these two light sources. In Android "
-        "development, shadows occur when light sources are blocked by sheets of material at "
-        "various positions along the z-axis. On the web, shadows are depicted by manipulating the "
-        "y-axis only. The following example shows the card with a height of 6dp.\n\n"
-
-        "Resting elevation.\n\n"
-
-        "All material objects, regardless of size, have a resting elevation, or default elevation "
-        "that does not change. If an object changes elevation, it should return to its resting "
-        "elevation as soon as possible.\n\n"
-
-        "Component elevations.\n\n"
-
-        "The resting elevation for a component type is consistent across apps (e.g., FAB elevation "
-        "does not vary from 6dp in one app to 16dp in another app).\n"
-        "Components may have different resting elevations across platforms, depending on the depth "
-        "of the environment (e.g., TV has a greater depth than mobile or desktop).\n\n"
-
-        "Responsive elevation and dynamic elevation offsets.\n\n"
-
-        "Some component types have responsive elevation, meaning they change elevation in response "
-        "to user input (e.g., normal, focused, and pressed) or system events. These elevation "
-        "changes are consistently implemented using dynamic elevation offsets.\n"
-        "Dynamic elevation offsets are the goal elevation that a component moves towards, relative "
-        "to the component’s resting state. They ensure that elevation changes are consistent "
-        "across actions and component types. For example, all components that lift on press have "
-        "the same elevation change relative to their resting elevation.\n"
-        "Once the input event is completed or cancelled, the component will return to its resting "
-        "elevation.\n\n"
-
-        "Avoiding elevation interference.\n\n"
-
-        "Components with responsive elevations may encounter other components as they move between "
-        "their resting elevations and dynamic elevation offsets. Because material cannot pass "
-        "through other material, components avoid interfering with one another any number of ways, "
-        "whether on a per component basis or using the entire app layout.\n"
-        "On a component level, components can move or be removed before they cause interference. "
-        "For example, a floating action button (FAB) can disappear or move off screen before a "
-        "user picks up a card, or it can move if a snackbar appears.\n"
-        "On the layout level, design your app layout to minimize opportunities for interference. "
-        "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
-        "when a user tries to pick up one of cards.\n\n"
-    </string>
+    <string name="title_activity_news_detail">Tin Tức</string>
     <!-- Drawer Items -->
     <string name="drawer_item_persistent_compact_header">PersistentHeader Drawer</string>
     <string name="drawer_item_persistent_compact_header_desc">Smaller persistent account header</string>
@@ -235,15 +146,15 @@
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</string>
 
     <!-- My Accout fragment -->
-    <string name="my_acc_phone_label">Phone</string>
-    <string name="my_acc_password_label">Password</string>
+    <string name="my_acc_phone_label">Số điện thoại</string>
+    <string name="my_acc_password_label">Mật khẩu</string>
     <string name="my_acc_password_text_view">**********</string>
-    <string name="my_acc_gender_label">Gender</string>
-    <string name="my_acc_address_label">Address</string>
-    <string name="my_acc_birthday_label">Birth Day</string>
-    <string name="my_acc_edit_button">Edit Account</string>
-    <string name="my_acc_district_text">quận</string>
-    <string name="my_acc_city_text">thành phố</string>
+    <string name="my_acc_gender_label">Giới tính</string>
+    <string name="my_acc_address_label">Địa chỉ</string>
+    <string name="my_acc_birthday_label">Ngày sinh</string>
+    <string name="my_acc_edit_button">Chỉnh Sửa Tài Khoản</string>
+    <string name="my_acc_district_text">Quận</string>
+    <string name="my_acc_city_text">Thành phố</string>
     <!-- Edit Accout Activity -->
     <string name="edit_acc_title">Chỉnh Sửa Tài Khoản</string>
     <string name="edit_acc_update_button">Cập Nhật</string>
