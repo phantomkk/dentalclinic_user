@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
+import android.util.TypedValue;
 
 import com.dentalclinic.capstone.models.Patient;
 import com.dentalclinic.capstone.models.User;

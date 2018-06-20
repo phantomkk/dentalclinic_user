@@ -7,9 +7,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -57,58 +61,90 @@ public class HistoryAppointmentFragment extends BaseFragment implements View.OnC
         adapter = new AppointmentAdapter(getContext(), appointments);
 //        prepareData();
         lvHistoryAppoint.setAdapter(adapter);
+        registerForContextMenu(lvHistoryAppoint);
         return view;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (v.getId()==R.id.lv_history_appointment) {
+            MenuInflater inflater = getActivity().getMenuInflater();
+            inflater.inflate(R.menu.menu_list, menu);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int selectpos = info.position; //position in the adapter
+        switch(item.getItemId()) {
+            case R.id.edit:
+                // edit stuff here
+                return true;
+            case R.id.delete:
+                // remove stuff here
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        prepareData();
+        prepareData();
     }
 
     public void prepareData() {
 //        Patient patient = CoreManager.getCurrentPatient();
-        showLoading();
-        AppointmentService appointmentService = APIServiceManager.getService(AppointmentService.class);
-        appointmentService.getByPhone("0915469963")
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<Response<List<Appointment>>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(Response<List<Appointment>> listResponse) {
-                        if (listResponse.body() != null) {
-//                            List<Appointment> appointments = listResponse.body();
-//                            appointments.sort(new Comparator<Appointment>() {
-//                                @Override
-//                                public int compare(Appointment appointment, Appointment t1) {
-//                                    return appointment.getStartTime() - appointment.getStartTime();
-//                                }
-//                            });
-                            appointments.addAll(listResponse.body());
-                            adapter.notifyDataSetChanged();
-                        } else {
-                            Toast.makeText(getContext(), "SUCCESS but else", Toast.LENGTH_SHORT).show();
-                        }
-                        hideLoading();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        Toast.makeText(getContext(), "On Error", Toast.LENGTH_SHORT).show();
-                        hideLoading();
-                    }
-                });
-//        Appointment appointment = new Appointment();
-//        appointments.add(appointment);
-//        appointments.add(appointment);
-//        appointments.add(appointment);
-//        appointments.add(appointment);
+//        showLoading();
+//        AppointmentService appointmentService = APIServiceManager.getService(AppointmentService.class);
+//        appointmentService.getByPhone("0915469963")
+//                .subscribeOn(Schedulers.newThread())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new SingleObserver<Response<List<Appointment>>>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(Response<List<Appointment>> listResponse) {
+//                        if (listResponse.body() != null) {
+////                            List<Appointment> appointments = listResponse.body();
+////                            appointments.sort(new Comparator<Appointment>() {
+////                                @Override
+////                                public int compare(Appointment appointment, Appointment t1) {
+////                                    return appointment.getStartTime() - appointment.getStartTime();
+////                                }
+////                            });
+//                            appointments.addAll(listResponse.body());
+//                            adapter.notifyDataSetChanged();
+//                        } else {
+//                            Toast.makeText(getContext(), "SUCCESS but else", Toast.LENGTH_SHORT).show();
+//                        }
+//                        hideLoading();
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        e.printStackTrace();
+//                        Toast.makeText(getContext(), "On Error", Toast.LENGTH_SHORT).show();
+//                        hideLoading();
+//                    }
+//                });
+        Appointment appointment = new Appointment();
+        appointment.setNumericalOrder(12);
+        appointment.setStartTime("2018-06-21 00:00:00");
+        appointment.setId(1);
+        appointments.add(appointment);
+        appointment.setId(2);
+        appointments.add(appointment);
+        appointment.setId(3);
+        appointments.add(appointment);
+        appointment.setId(4);
+        appointments.add(appointment);
         adapter.notifyDataSetChanged();
     }
 
