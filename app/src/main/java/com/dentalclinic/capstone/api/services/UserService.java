@@ -1,17 +1,23 @@
 package com.dentalclinic.capstone.api.services;
 
+import android.support.v4.media.MediaBrowserCompat;
+
 import com.dentalclinic.capstone.api.requestobject.RegisterRequest;
+import com.dentalclinic.capstone.api.responseobject.SuccessResponse;
 import com.dentalclinic.capstone.models.User;
 
 import io.reactivex.Single;
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 /**
@@ -35,5 +41,12 @@ public interface UserService {
     @FormUrlEncoded
     @POST("/api/user/login")
     Single<Response<User>> login(@Field("phone") String phone, @Field("password") String password);
+
+    @Multipart
+    @POST("api/user/changeAvatar")
+    Single<Response<SuccessResponse>> changeAvatar(
+            @Part MultipartBody.Part image,
+            @Part MultipartBody.Part phone);
+
 
 }
