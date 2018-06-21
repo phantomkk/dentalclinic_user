@@ -14,6 +14,13 @@ public class District implements Serializable {
     @SerializedName("city")
     private City city;
 
+    public District() {
+    }
+
+    public District(int id) {
+        this.id = id;
+    }
+
     public District(String name, City city) {
         this.name = name;
         this.city = city;

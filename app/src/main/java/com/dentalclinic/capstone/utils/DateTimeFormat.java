@@ -28,5 +28,11 @@ public enum DateTimeFormat {
         public String toString() {
             return "dd/MM/yyyy";
         }
+    },
+    DATE_APP_3 {
+        public String toString() {
+            return "";
+        }
     };
+
 }

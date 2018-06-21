@@ -60,8 +60,7 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/input_margin_top"
-                >
+                android:layout_marginTop="@dimen/input_margin_top">
 
                 <AutoCompleteTextView
                     android:id="@+id/tv_phone_quickbook"
@@ -70,7 +69,7 @@
                     android:drawableStart="@drawable/ic_phone_iphone_black_24dp"
                     android:drawablePadding="10dp"
                     android:hint="@string/label_phone_quickbook"
-                    android:inputType="textPhonetic"
+                    android:inputType="number"
                     android:maxLines="1"
                     android:singleLine="true" />
 

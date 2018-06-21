@@ -187,14 +187,14 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
                                 logError("treatmentCategories", String.valueOf(treatmentCategories.size()));
                             }
                         } else {
-                            ErrorResponse erroMsg = null;
-                            try {
-                                erroMsg = Utils.parseJson(listResponse.errorBody().string(), ErrorResponse.class);
-                                showMessage(erroMsg.getErrorMessage());
-                                logError("CallAPI",erroMsg.getExceptionMessage());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+//                            ErrorResponse erroMsg = null;
+//                            try {
+////                                erroMsg = Utils.parseJson(listResponse.errorBody().string(), ErrorResponse.class);
+////                                showMessage(erroMsg.getErrorMessage());
+////                                logError("CallAPI",erroMsg.getExceptionMessage());
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
                         }
 
                     }

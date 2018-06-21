@@ -34,6 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Trám Răng"
+                android:textColor="@color/color_black"
                 android:textSize="15dp" />
 
             <View
@@ -54,8 +55,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="4"
-                    android:text="Tổng Tiền"
-                    android:textColor="@color/color_black"/>
+                    android:text="Tổng Tiền"/>
 
                 <TextView
                     android:id="@+id/txt_total"
@@ -78,8 +78,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="4"
-                    android:text="Đã Trả"
-                    android:textColor="@color/color_black" />
+                    android:text="Đã Trả"/>
 
                 <TextView
                     android:id="@+id/txt_prepaid"
@@ -102,8 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="4"
-                    android:text="Còn Lại"
-                    android:textColor="@color/color_black" />
+                    android:text="Còn Lại" />
 
                 <TextView
                     android:id="@+id/txt_not_payable"
@@ -131,8 +129,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="4"
-                    android:text="Trạng Thái"
-                    android:textColor="@color/color_black" />
+                    android:text="Trạng Thái" />
 
                 <TextView
                     android:id="@+id/txt_status"

@@ -86,6 +86,7 @@ public class NewsPageViewFragment extends BaseFragment {
         rcvNews = view.findViewById(R.id.rcv_news);
         rcvNews.setLayoutManager(new LinearLayoutManager(getActivity()));
         rcvNews.setItemAnimator(new DefaultItemAnimator());
+//        preparedData();
         adapter = new NewsAdapter(rcvNews, listNews, getActivity(), new NewsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(News item) {
@@ -95,7 +96,7 @@ public class NewsPageViewFragment extends BaseFragment {
             }
         });
         rcvNews.setAdapter(adapter);
-//        preparedData();
+        preparedData();
         adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
@@ -118,9 +119,9 @@ public class NewsPageViewFragment extends BaseFragment {
                             //Generating more data
                             int index = listNews.size();
 
-                            int end = index + 10;
+                            int end = index + 1;
                             for (int i = index; i < end; i++) {
-//                                preparedData();
+                                preparedData();
                             }
                             adapter.notifyDataSetChanged();
                             adapter.setLoaded();

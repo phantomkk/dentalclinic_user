@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.multidex.MultiDex;
 import android.widget.ImageView;
 
 import com.dentalclinic.capstone.R;
@@ -17,6 +18,13 @@ import com.squareup.picasso.Picasso;
  * Created by mikepenz on 27.03.15.
  */
 public class CustomApplication extends Application {
+
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
     @Override
     public void onCreate() {

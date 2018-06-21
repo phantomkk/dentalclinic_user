@@ -9,6 +9,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+
     }
     buildTypes {
         release {
@@ -45,7 +47,11 @@ dependencies {
     implementation 'com.mikepenz:crossfader:1.5.2'
     implementation "com.mikepenz:itemanimators:1.0.2@aar"
     implementation 'com.mikepenz:google-material-typeface:3.0.1.1.original@aar'
+//    implementation 'com.github.chrisbanes.photoview:library:1.2.4'
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation project(':photoview')
 
+//    implementation 'com.github.chrisbanes:PhotoView:1.2.4'
     // RxJava
     // RxAndroid
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'

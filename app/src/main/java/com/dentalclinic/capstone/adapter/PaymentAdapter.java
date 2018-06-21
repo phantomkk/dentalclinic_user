@@ -15,6 +15,8 @@ import com.dentalclinic.capstone.models.PaymentDetail;
 import com.dentalclinic.capstone.models.Staff;
 import com.dentalclinic.capstone.models.Treatment;
 import com.dentalclinic.capstone.models.TreatmentHistory;
+import com.dentalclinic.capstone.utils.DateTimeFormat;
+import com.dentalclinic.capstone.utils.DateUtils;
 import com.dentalclinic.capstone.utils.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -86,8 +88,8 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
                 }
             }
             if (paymentDetail.getDateCreate() != null) {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-                txtDate.setText(dateFormat.format(paymentDetail.getDateCreate()));
+//                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                txtDate.setText(DateUtils.changeDateFormat(paymentDetail.getDateCreate(), DateTimeFormat.DATE_TIME_DB, DateTimeFormat.DATE_APP_2));
             }
             if (paymentDetail.getReceivedMoney() != null) {
                 txtPrepaidMoney.setText(Utils.formatMoney(paymentDetail.getReceivedMoney()) + context.getResources().getString(R.string.current_unit));
@@ -206,9 +208,9 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
                 Log.v("paymentDetails", String.valueOf(paymentDetails.size()));
                 List<PaymentDetail> newPaymentDetails = new ArrayList<PaymentDetail>();
                 for (PaymentDetail paymentDetail : paymentDetails) {
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-                    String date = dateFormat.format(paymentDetail.getDateCreate());
-                    if (date.contains(query.toLowerCase())) {
+//                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                    String date = DateUtils.changeDateFormat(paymentDetail.getDateCreate(),DateTimeFormat.DATE_TIME_DB, DateTimeFormat.DATE_APP_2);
+                    if (paymentDetail.getDateCreate().contains(query.toLowerCase())) {
                         newPaymentDetails.add(paymentDetail);
                     }
                 }

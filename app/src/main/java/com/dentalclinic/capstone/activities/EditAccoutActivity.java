@@ -5,7 +5,6 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,7 +16,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.adapter.CitySpinnerAdapter;
@@ -26,6 +24,8 @@ import com.dentalclinic.capstone.api.APIServiceManager;
 import com.dentalclinic.capstone.api.requestobject.RegisterRequest;
 import com.dentalclinic.capstone.api.services.AddressService;
 import com.dentalclinic.capstone.api.services.GuestService;
+import com.dentalclinic.capstone.databaseHelper.DatabaseHelper;
+import com.dentalclinic.capstone.databaseHelper.DistrictDatabaseHelper;
 import com.dentalclinic.capstone.models.City;
 import com.dentalclinic.capstone.models.District;
 import com.dentalclinic.capstone.models.Patient;
@@ -34,11 +34,9 @@ import com.dentalclinic.capstone.utils.AppConst;
 import com.dentalclinic.capstone.utils.Utils;
 import com.dentalclinic.capstone.utils.Validation;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -58,7 +56,9 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
     private Disposable addrServiceDisposable;
     private Disposable registerServiceDisposable;
     private Disposable districtServiceDisposable;
-
+    private DistrictDatabaseHelper districtDatabaseHelper = new DistrictDatabaseHelper(EditAccoutActivity.this);
+    private DatabaseHelper cityDatabaseHelper = new DatabaseHelper(EditAccoutActivity.this);
+    private DistrictSpinnerAdapter districtSpinnerAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +91,31 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
             patient.setId(-1);
         }
 
-        setEvenForCityDistrict();
+//        setEvenForCityDistrict();
+        if(cityDatabaseHelper.getAllCity().isEmpty()){
+            cityDatabaseHelper.insertDataCity();
+        }
+        if(cityDatabaseHelper.getAllDistrict().isEmpty()){
+            cityDatabaseHelper.insertDataDistrict();
+        }
+        spCity.setAdapter(new CitySpinnerAdapter(
+                EditAccoutActivity.this,
+                android.R.layout.simple_spinner_item, cityDatabaseHelper.getAllCity()));
+        spCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                City city = (City) spCity.getSelectedItem();
+                if (city != null) {
+                    spDistrict.setAdapter(new DistrictSpinnerAdapter(EditAccoutActivity.this,
+                            android.R.layout.simple_spinner_item,cityDatabaseHelper.getDistrictOfCity(city.getId())));
+
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
     }
 
@@ -177,8 +201,9 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
                                         EditAccoutActivity.this,
                                         android.R.layout.simple_spinner_item,
                                         listResponse.body()));
-                                for (int i=0; i<listResponse.body().size();i++){
-                                    if(patient.getDistrict().getCity().getId()==listResponse.body().get(i).getId()){
+//                                cityDatabaseHelper.addAllCities(listResponse.body());
+                                for (int i = 0; i < listResponse.body().size(); i++) {
+                                    if (patient.getDistrict().getCity().getId() == listResponse.body().get(i).getId()) {
                                         spCity.setSelection(i);
                                         break;
                                     }
@@ -232,8 +257,9 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
 //                                for (District d : listResponse.body()) {
 //                                    listDistrictStrs.add(d.getName());
 //                                }
-                                for (int i=0; i<listResponse.body().size();i++){
-                                    if(patient.getDistrict().getId()==listResponse.body().get(i).getId()){
+//                                districtDatabaseHelper.addAllDistricts(listResponse.body());
+                                for (int i = 0; i < listResponse.body().size(); i++) {
+                                    if (patient.getDistrict().getId() == listResponse.body().get(i).getId()) {
                                         spDistrict.setSelection(i);
                                         break;
                                     }

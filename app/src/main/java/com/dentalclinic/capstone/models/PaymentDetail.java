@@ -13,7 +13,7 @@ public class PaymentDetail implements Serializable{
     @SerializedName("staff")
     private Staff receptionist;
     @SerializedName("date_create")
-    private Date dateCreate;
+    private String dateCreate;
     @SerializedName("received_money")
     private Long receivedMoney;
 
@@ -22,7 +22,7 @@ public class PaymentDetail implements Serializable{
         this.receivedMoney = receivedMoney;
     }
 
-    public PaymentDetail(Staff receptionist, Date dateCreate, Long receivedMoney) {
+    public PaymentDetail(Staff receptionist, String dateCreate, Long receivedMoney) {
         this.receptionist = receptionist;
         this.dateCreate = dateCreate;
         this.receivedMoney = receivedMoney;
@@ -52,11 +52,11 @@ public class PaymentDetail implements Serializable{
         this.receptionist = receptionist;
     }
 
-    public Date getDateCreate() {
+    public String getDateCreate() {
         return dateCreate;
     }
 
-    public void setDateCreate(Date dateCreate) {
+    public void setDateCreate(String dateCreate) {
         this.dateCreate = dateCreate;
     }
 
