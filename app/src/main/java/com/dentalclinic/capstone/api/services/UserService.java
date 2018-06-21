@@ -46,7 +46,7 @@ public interface UserService {
     @POST("api/user/changeAvatar")
     Single<Response<SuccessResponse>> changeAvatar(
             @Part MultipartBody.Part image,
-            @Part MultipartBody.Part phone);
+            @Part MultipartBody.Part id);
 
 
 }
