@@ -45,7 +45,7 @@ public class NewsPageViewFragment extends BaseFragment {
     private NewsAdapter adapter;
     private NewsService newsService = APIServiceManager.getService(NewsService.class);
     private Disposable newsServiceDisposable;
-    private final int NUMBER_PAGE_LOAD = 10;
+    private final int NUMBER_PAGE_LOAD = 3;
     //    private SmallNewsAdapter smallNewsAdapter;
     private RecyclerView rcvNews;
 
@@ -53,7 +53,7 @@ public class NewsPageViewFragment extends BaseFragment {
 
     }
 
-    private int type = 0;
+    private int type = 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -96,40 +96,43 @@ public class NewsPageViewFragment extends BaseFragment {
             }
         });
         rcvNews.setAdapter(adapter);
-        preparedData();
+//        preparedData();
+        callApiGetNews(0, NUMBER_PAGE_LOAD, type);
         adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                if (listNews.size() <= 200) {
-                    listNews.add(null);
-                    if (listNews.size() >= 1) {
-                        adapter.notifyItemInserted(listNews.size() - 1);
-                    }
-
-                    //Generating more data
+//                if (listNews.size() <= 200) {
+                listNews.add(null);
+                if (listNews.size() >= 1) {
+                    adapter.notifyItemInserted(listNews.size()-1);
+                }
+                listNews.remove(listNews.size() - 1);
+                adapter.notifyItemRemoved(listNews.size());
+                int index = listNews.size();
+                callApiGetNews(index, NUMBER_PAGE_LOAD,type);
+//                adapter.notifyDataSetChanged();
+//                adapter.setLoaded();
+                //Generating more data
 //                    int index = listNews.size();
 //                    callApiGetNews(index,NUMBER_PAGE_LOAD);
 //                    adapter.setLoaded();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            listNews.remove(listNews.size() - 1);
-                            adapter.notifyItemRemoved(listNews.size());
-
-                            //Generating more data
-                            int index = listNews.size();
-
-                            int end = index + 1;
-                            for (int i = index; i < end; i++) {
-                                preparedData();
-                            }
-                            adapter.notifyDataSetChanged();
-                            adapter.setLoaded();
-                        }
-                    }, 2000);
-                } else {
-                    Toast.makeText(getActivity(), "Loading data completed", Toast.LENGTH_SHORT).show();
-                }
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        listNews.remove(listNews.size() - 1);
+//                        adapter.notifyItemRemoved(listNews.size());
+//
+//                        //Generating more data
+//
+//                        for (int i = index; i < end; i++) {
+//                            preparedData();
+//                        }
+//
+//                    }
+//                }, 2000);
+//                } else {
+//                    Toast.makeText(getActivity(), "Loading data completed", Toast.LENGTH_SHORT).show();
+//                }
             }
         });
 //        showMessage("TYPE"+ type);
@@ -154,6 +157,7 @@ public class NewsPageViewFragment extends BaseFragment {
                             if (listResponse.body() != null) {
                                 listNews.addAll(listResponse.body());
                                 adapter.notifyDataSetChanged();
+//                                adapter.setLoaded();
                                 logError("news", String.valueOf(listResponse.body().size()));
                             }
                         } else {

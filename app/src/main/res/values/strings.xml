@@ -162,4 +162,8 @@
     <string name="edit_pass_title">Chỉnh Sửa Mật Khẩu</string>
     <string name="edit_pass_button">Cập Nhật</string>
 
+
+    <string name="label_content_feedback">Góp Ý</string>
+    <string name="label_question_feedback">Bạn thấy dịch vụ của chúng tôi như thế nào?</string>
+
 </resources>

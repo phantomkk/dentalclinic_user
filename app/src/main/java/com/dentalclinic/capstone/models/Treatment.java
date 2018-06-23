@@ -29,6 +29,10 @@ public class Treatment implements Serializable {
         this.event = event;
     }
 
+    public Treatment(String name) {
+        this.name = name;
+    }
+
     public Treatment(String name, Long maxPrice, Long minPrice) {
         this.name = name;
         this.maxPrice = maxPrice;

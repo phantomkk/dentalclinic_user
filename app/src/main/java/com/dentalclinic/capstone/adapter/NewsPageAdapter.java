@@ -24,10 +24,10 @@ public class NewsPageAdapter extends FragmentPagerAdapter {
         NewsPageViewFragment newsPageViewFragment = new NewsPageViewFragment();
         int type =0;
         if (position == 0) {
-            type=0;
+            type=1;
 //            bundle.putInt("TYPE", 0);
         } else {
-            type=1;
+            type=2;
 //            bundle.putInt("TYPE", 0);
         }
         bundle.putInt("TYPE",type);

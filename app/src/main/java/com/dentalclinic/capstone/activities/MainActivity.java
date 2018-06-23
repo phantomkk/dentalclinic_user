@@ -1,6 +1,7 @@
 package com.dentalclinic.capstone.activities;
 
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -16,8 +17,11 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.dentalclinic.capstone.R;
@@ -31,6 +35,9 @@ import com.dentalclinic.capstone.fragment.MyAccoutFragment;
 import com.dentalclinic.capstone.fragment.NewsFragment;
 import com.dentalclinic.capstone.fragment.PromotionFragment;
 import com.dentalclinic.capstone.models.Patient;
+import com.dentalclinic.capstone.models.Staff;
+import com.dentalclinic.capstone.models.Treatment;
+import com.dentalclinic.capstone.models.TreatmentDetail;
 import com.dentalclinic.capstone.models.User;
 import com.dentalclinic.capstone.utils.CoreManager;
 import com.dentalclinic.capstone.utils.DateTimeFormat;
@@ -61,11 +68,14 @@ import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.rupins.drawercardbehaviour.CardDrawerLayout;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -90,6 +100,18 @@ public class MainActivity extends BaseActivity
         setTitle(getResources().getString(R.string.new_fragment_title));
         NewsFragment newFragment = new NewsFragment();
         fragmentManager.beginTransaction().replace(R.id.main_fragment, newFragment).commit();
+        button = findViewById(R.id.btn_test);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TreatmentDetail detail = new TreatmentDetail();
+                detail.setDentist(new Staff("Vo Quoc Trinh","https://thumbs.dreamstime.com/b/dentist-avatar-flat-icon-isolated-white-series-caucasian-blue-coat-background-eps-file-available-95672861.jpg"));
+                detail.setCreatedDate(new Date());
+                detail.setTreatment(new Treatment("Tram Rang"));
+                showFeedbackDialog(detail);
+            }
+        });
+
         digitalView = findViewById(R.id.digital);
         currentDate = findViewById(R.id.txt_date);
 //        Date currentTime = Calendar.getInstance().getTime();
@@ -291,6 +313,45 @@ public class MainActivity extends BaseActivity
     @Override
     public void onCancelLoading() {
 
+    }
+
+
+    protected void showFeedbackDialog(TreatmentDetail treatmentDetail) {
+        // TODO Auto-generated method stub
+        final Dialog dialog = new Dialog(MainActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_feedback);
+        TextView txtName = dialog.findViewById(R.id.txt_dentist_name);
+        CircleImageView imgAvatar = dialog.findViewById(R.id.img_dentist_avatar);
+        TextView txtTreatmentContent = dialog.findViewById(R.id.treatment_content_feedback);
+        RatingBar ratingBar = dialog.findViewById(R.id.rate_bar);
+        AutoCompleteTextView  contentFeedback = dialog.findViewById(R.id.edit_content);
+        Button button = dialog.findViewById(R.id.btn_submit_feedback);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        if(treatmentDetail.getDentist().getName()!=null){
+            txtName.setText(treatmentDetail.getDentist().getName());
+        }
+        String result = "";
+        if(treatmentDetail.getTreatment().getName()!=null){
+            result += treatmentDetail.getTreatment().getName();
+        }
+        if(treatmentDetail.getCreatedDate()!=null){
+            result+=treatmentDetail.getCreatedDate();
+        }
+        if(!result.isEmpty()){
+            txtTreatmentContent.setText(result);
+        }
+        if(treatmentDetail.getDentist().getAvatar()!=null){
+            Picasso.get().load("https://thumbs.dreamstime.com/b/dentist-avatar-flat-icon-isolated-white-series-caucasian-blue-coat-background-eps-file-available-95672861.jpg").into(imgAvatar);
+        }
+
+
+        dialog.show();
     }
 
     @Override
