@@ -3,6 +3,8 @@ package com.dentalclinic.capstone.api;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -19,7 +21,9 @@ public class RetrofitClient {
 //    private static String baseUrl = "http://150.95.104.237";
     private static String baseUrl = "http://10.0.2.2:8000";
     public static Retrofit getClient(){
-        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();//.addInterceptor(interceptor).build();
+        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
+                .readTimeout(60, TimeUnit.SECONDS)
+                .connectTimeout(60, TimeUnit.SECONDS);//.addInterceptor(interceptor).build();
         //add header in case of authorization
 //        clientBuilder.addInterceptor((chain) -> {
 //                    Request original = chain.request();

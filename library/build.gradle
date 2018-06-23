@@ -2,7 +2,6 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion setup.compileSdk
-    buildToolsVersion setup.buildTools
 
     defaultConfig {
         minSdkVersion setup.minSdk
@@ -23,6 +22,7 @@ android {
     lintOptions {
         abortOnError false
     }
+    buildToolsVersion '27.0.3'
 }
 
 dependencies {
