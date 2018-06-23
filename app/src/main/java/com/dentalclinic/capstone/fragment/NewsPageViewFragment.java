@@ -102,34 +102,36 @@ public class NewsPageViewFragment extends BaseFragment {
             @Override
             public void onLoadMore() {
 //                if (listNews.size() <= 200) {
-                listNews.add(null);
-                if (listNews.size() >= 1) {
-                    adapter.notifyItemInserted(listNews.size()-1);
-                }
+                    listNews.add(null);
+                    if (listNews.size() >= 1) {
+                        adapter.notifyItemInserted(listNews.size() - 1);
+                    }
                 listNews.remove(listNews.size() - 1);
-                adapter.notifyItemRemoved(listNews.size());
+                adapter.notifyItemRemoved(listNews.size()-1);
                 int index = listNews.size();
-                callApiGetNews(index, NUMBER_PAGE_LOAD,type);
+                callApiGetNewsLoadMore(index, NUMBER_PAGE_LOAD,type);
 //                adapter.notifyDataSetChanged();
 //                adapter.setLoaded();
-                //Generating more data
+                    //Generating more data
 //                    int index = listNews.size();
 //                    callApiGetNews(index,NUMBER_PAGE_LOAD);
 //                    adapter.setLoaded();
-//                handler.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        listNews.remove(listNews.size() - 1);
-//                        adapter.notifyItemRemoved(listNews.size());
+//                    handler.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            listNews.remove(listNews.size() - 1);
+//                            adapter.notifyItemRemoved(listNews.size());
 //
-//                        //Generating more data
+//                            //Generating more data
+//                            int index = listNews.size();
 //
-//                        for (int i = index; i < end; i++) {
-//                            preparedData();
+//                            for (int i = index; i < index + 1; i++) {
+//                                preparedData();
+//                                adapter.setLoaded();
+//                            }
+//
 //                        }
-//
-//                    }
-//                }, 2000);
+//                    }, 3000);
 //                } else {
 //                    Toast.makeText(getActivity(), "Loading data completed", Toast.LENGTH_SHORT).show();
 //                }
@@ -179,6 +181,45 @@ public class NewsPageViewFragment extends BaseFragment {
                 });
     }
 
+    public void callApiGetNewsLoadMore(int currentIndex, int numItem, int typeId) {
+//        showLoading();
+        newsService.loadMoreByType(currentIndex, numItem, typeId).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<Response<List<News>>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        newsServiceDisposable = d;
+                    }
+
+                    @Override
+                    public void onSuccess(Response<List<News>> listResponse) {
+//                        hideLoading();
+                        if (listResponse.isSuccessful()) {
+                            if (listResponse.body() != null) {
+                                listNews.addAll(listResponse.body());
+                                adapter.notifyDataSetChanged();
+                                adapter.setLoaded();
+                                logError("news", String.valueOf(listResponse.body().size()));
+                            }
+                        } else {
+                            String erroMsg = Utils.getErrorMsg(listResponse.errorBody());
+                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
+                                    .setMessage(erroMsg)
+                                    .setPositiveButton("Thử lại", (DialogInterface dialogInterface, int i) -> {
+                                    });
+                            alertDialog.show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+//                        hideLoading();
+                        e.printStackTrace();
+                        Toast.makeText(getContext(), getResources().getString(R.string.error_on_error_when_call_api), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
 
     public void preparedData() {
 //        showLoading();

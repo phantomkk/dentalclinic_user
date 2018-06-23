@@ -7,8 +7,12 @@ import android.os.Bundle;
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.models.TreatmentImage;
 import com.dentalclinic.capstone.utils.AppConst;
-import com.github.chrisbanes.photoview.PhotoView;
+//import com.github.chrisbanes.photoview.PhotoView;
 import com.squareup.picasso.Picasso;
+
+import uk.co.senab.photoview.PhotoView;
+
+//import uk.co.senab.photoview.PhotoView;
 
 
 public class PhotoViewActivity extends AppCompatActivity {
