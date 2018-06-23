@@ -3,6 +3,7 @@ package com.dentalclinic.capstone.api.services;
 import android.support.v4.media.MediaBrowserCompat;
 
 import com.dentalclinic.capstone.api.requestobject.RegisterRequest;
+import com.dentalclinic.capstone.api.requestobject.UpdatePatientRequest;
 import com.dentalclinic.capstone.api.responseobject.SuccessResponse;
 import com.dentalclinic.capstone.models.User;
 
@@ -40,7 +41,8 @@ public interface UserService {
 
     @FormUrlEncoded
     @POST("/api/user/login")
-    Single<Response<User>> login(@Field("phone") String phone, @Field("password") String password);
+    Single<Response<User>> login(@Field("phone") String phone,
+                                 @Field("password") String password);
 
     @Multipart
     @POST("api/user/changeAvatar")
@@ -48,5 +50,11 @@ public interface UserService {
             @Part MultipartBody.Part image,
             @Part MultipartBody.Part id);
 
+    @POST("api/user/changePassword")
+    Single<Response<SuccessResponse>> changePassword(@Field("phone") String phone,
+                                                     @Field("password") String password);
+
+    @POST("api/user/updatePatient")
+    Single<Response<SuccessResponse>> changePatientInfo(@Body UpdatePatientRequest request);
 
 }
