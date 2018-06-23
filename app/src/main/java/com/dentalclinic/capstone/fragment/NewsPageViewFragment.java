@@ -146,7 +146,6 @@ public class NewsPageViewFragment extends BaseFragment {
                 .subscribe(new SingleObserver<Response<List<News>>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        hideLoading();
                         newsServiceDisposable = d;
                     }
 
