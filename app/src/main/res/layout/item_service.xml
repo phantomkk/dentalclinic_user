@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/color_white"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     app:cardUseCompatPadding="true">
 
     <LinearLayout
@@ -17,8 +17,8 @@
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/img_icon_service"
             civ_border_color="@color/color_grey_300"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:src="@drawable/ic_search_black_24dp"
             app:civ_border_color="@color/color_blue_grey_50"
             app:civ_border_width="2dp" />
@@ -32,7 +32,7 @@
             android:text="Loại"
             android:layout_marginLeft="16dp"
             android:textAllCaps="true"
-            android:textSize="20dp"
+            android:textSize="18dp"
             android:textColor="@color/color_black"/>
 
         <ImageView
@@ -42,4 +42,8 @@
             android:layout_gravity="center"
             android:src="@drawable/ic_keyboard_arrow_down_black_24dp" />
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_grey_200"/>
 </LinearLayout>

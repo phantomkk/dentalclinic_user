@@ -189,24 +189,17 @@
                 android:paddingStart="6dp"
                 android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
-        <LinearLayout
+        <Spinner
+        android:id="@+id/spinner_district"
+            android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+        <Spinner
+            android:id="@+id/spinner_city"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/input_margin_top"
-            android:weightSum="100">
-            <Spinner
-                android:id="@+id/spinner_district"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="50"/>
-            <Spinner
-                android:id="@+id/spinner_city"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="50">
-            </Spinner>
-        </LinearLayout>
-
+            android:layout_height="wrap_content">
+        </Spinner>
         <Button
             android:id="@+id/btn_register"
             style="@style/custom_button_green"

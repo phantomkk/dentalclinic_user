@@ -6,13 +6,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.dentalclinic.capstone.R;
+import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
 import com.dentalclinic.capstone.utils.AppConst;
+import com.dentalclinic.capstone.utils.Utils;
 
 public abstract class BaseActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
@@ -29,6 +32,14 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public abstract String getMainTitle();
 
+
+    public void showDialog(String message){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this)
+                .setMessage(message)
+                .setPositiveButton("Thử lại", (DialogInterface dialogInterface, int i) -> {
+                });
+        alertDialog.show();
+    }
     public void showLoading() {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(this);

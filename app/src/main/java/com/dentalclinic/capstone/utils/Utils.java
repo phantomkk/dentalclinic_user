@@ -109,7 +109,7 @@ public class Utils {
 //        NumberFormat formatter = new DecimalFormat("#,###");
 //        double myNumber = 1000000;
 //        String formattedNumber = formatter.format(myNumber);
-        return (String.format("%,d", money)).replace(',', ' ');
+        return (String.format("%,d", money)).replace(',', '.');
     }
 
     public static <T> T parseJson(String source, Class<T> c) {

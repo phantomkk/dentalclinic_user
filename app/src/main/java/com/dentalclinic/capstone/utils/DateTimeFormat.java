@@ -6,6 +6,11 @@ public enum DateTimeFormat {
             return "yyyy-MM-dd HH:mm:ss";
         }
     },
+    DATE_TIME_DB_2 {
+        public String toString() {
+            return "yyyy-MM-dd";
+        }
+    },
     DATE_TIME_APP {
         public String toString() {
             return "h:mm a dd-MM-yyyy";

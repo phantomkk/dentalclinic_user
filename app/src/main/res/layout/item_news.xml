@@ -20,16 +20,17 @@
             android:orientation="horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img_avatar_author"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/avatar" />
 
             <TextView
+                android:id="@+id/txt_date_create"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:text="vo quoc trinh - 1 giờ trước" />
+                android:layout_marginLeft="10dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -46,15 +47,13 @@
                 android:layout_marginTop="5dp"
                 android:layout_weight="7"
                 android:textSize="18dp"
-                android:text="Trả hồ sơ vụ ngư dân bắt cá đen 'khủng' 71kg không bao giờ trả lại crimea cho ukraine"
                 android:textColor="@color/color_black" />
             <ImageView
                 android:id="@+id/img_news"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:layout_gravity="center"
-                android:src="@drawable/mattrang" />
+                android:layout_gravity="center" />
 
         </LinearLayout>
     </LinearLayout>

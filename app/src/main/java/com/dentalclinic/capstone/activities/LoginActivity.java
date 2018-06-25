@@ -3,6 +3,7 @@ package com.dentalclinic.capstone.activities;
 import android.content.Intent;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -66,6 +67,11 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.side_nav_bar));
+        }
         txtPhone = findViewById(R.id.txt_phone_loginact);
         txtErrorServer = findViewById(R.id.txt_error_server_loginact);
         txtPassword = findViewById(R.id.password);
@@ -154,6 +160,11 @@ public class LoginActivity extends BaseActivity {
         return password.length() > 8;
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
     public void callApiLogin(String phone, String password) {
         showLoading();
         UserService userService = APIServiceManager.getService(UserService.class);

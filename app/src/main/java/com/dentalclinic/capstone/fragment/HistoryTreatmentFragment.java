@@ -92,7 +92,7 @@ public class HistoryTreatmentFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Patient p = CoreManager.getCurrentPatient();
+        Patient p = CoreManager.getCurrentPatient(getContext());
         if (p != null) {
 //            callApi(p.getId());
         }
@@ -171,7 +171,7 @@ public class HistoryTreatmentFragment extends BaseFragment {
                         if (listResponse.isSuccessful()) {
                             if (listResponse.body() != null) {
                                 List<TreatmentHistory> list = listResponse.body();
-                                Patient patient = CoreManager.getCurrentPatient();
+                                Patient patient = CoreManager.getCurrentPatient(getContext());
                                 if (patient != null) {
                                     patient.setTreatmentHistories(list);
                                     adapter.notifyDataSetChanged();

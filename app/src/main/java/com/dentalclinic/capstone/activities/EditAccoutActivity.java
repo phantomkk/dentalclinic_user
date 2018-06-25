@@ -22,15 +22,20 @@ import com.dentalclinic.capstone.adapter.CitySpinnerAdapter;
 import com.dentalclinic.capstone.adapter.DistrictSpinnerAdapter;
 import com.dentalclinic.capstone.api.APIServiceManager;
 import com.dentalclinic.capstone.api.requestobject.RegisterRequest;
+import com.dentalclinic.capstone.api.requestobject.UpdatePatientRequest;
+import com.dentalclinic.capstone.api.responseobject.SuccessResponse;
 import com.dentalclinic.capstone.api.services.AddressService;
 import com.dentalclinic.capstone.api.services.GuestService;
+import com.dentalclinic.capstone.api.services.UserService;
 import com.dentalclinic.capstone.databaseHelper.DatabaseHelper;
 import com.dentalclinic.capstone.databaseHelper.DistrictDatabaseHelper;
+import com.dentalclinic.capstone.fragment.MyAccoutFragment;
 import com.dentalclinic.capstone.models.City;
 import com.dentalclinic.capstone.models.District;
 import com.dentalclinic.capstone.models.Patient;
 import com.dentalclinic.capstone.models.User;
 import com.dentalclinic.capstone.utils.AppConst;
+import com.dentalclinic.capstone.utils.CoreManager;
 import com.dentalclinic.capstone.utils.Utils;
 import com.dentalclinic.capstone.utils.Validation;
 
@@ -68,7 +73,7 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
             actionBar.setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.side_nav_bar));
         }
-        Bundle bundle = getIntent().getBundleExtra("Bunder");
+        Bundle bundle = getIntent().getBundleExtra(AppConst.BUNDLE);
 
         txtName = findViewById(R.id.edt_name);
         rgGender = findViewById(R.id.rg_gender_register);
@@ -108,7 +113,7 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
                 if (city != null) {
                     spDistrict.setAdapter(new DistrictSpinnerAdapter(EditAccoutActivity.this,
                             android.R.layout.simple_spinner_item,cityDatabaseHelper.getDistrictOfCity(city.getId())));
-
+                    spDistrict.setSelection(cityDatabaseHelper.getPositionDistrictById(patient.getDistrict()));
                 }
             }
             @Override
@@ -116,6 +121,7 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
 
             }
         });
+        spCity.setSelection(cityDatabaseHelper.getPositionCityById(patient.getCity().getId()));
 
     }
 
@@ -312,14 +318,14 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
         if (cancel) {
             focusView.requestFocus();
         } else {
-            RegisterRequest registerRequest = new RegisterRequest();
-            registerRequest.setId(patient.getId());
-            registerRequest.setAddress(address);
-            registerRequest.setDistrictId(districtID);
-            registerRequest.setName(name);
-            registerRequest.setGender(gender);
-            registerRequest.setBirthday(birthdayStr);
-//            callApiRegister(registerRequest);
+            UpdatePatientRequest request = new UpdatePatientRequest();
+            request.setPatientId(patient.getId());
+            request.setName(name);
+            request.setAddress(address);
+            request.setGender(gender);
+            request.setDistrictId(districtID);
+            request.setBirthday(birthdayStr);
+            callApiUpdate(request);
 
         }
     }
@@ -374,13 +380,13 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
         return value;
     }
 
-    public void callApiUpdate(RegisterRequest requestObj) {
+    public void callApiUpdate(UpdatePatientRequest requestObj) {
         showLoading();
-        GuestService guestService = APIServiceManager.getService(GuestService.class);
-        guestService.register(requestObj)
+        UserService userService = APIServiceManager.getService(UserService.class);
+        userService.changePatientInfo(requestObj)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<Response<User>>() {
+                .subscribe(new SingleObserver<Response<SuccessResponse>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         registerServiceDisposable = d;
@@ -388,24 +394,28 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
                     }
 
                     @Override
-                    public void onSuccess(Response<User> userResponse) {
-                        if (userResponse.isSuccessful()) {
-                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(EditAccoutActivity.this)
-                                    .setMessage("Đăng kí tài khoản thành công")
-                                    .setPositiveButton("Đăng nhập", (DialogInterface dialogInterface, int i) -> {
-                                        Intent intent = new Intent(EditAccoutActivity.this, LoginActivity.class);
-                                        startActivity(intent);
-                                    });
-                            alertDialog.show();
+                    public void onSuccess(Response<SuccessResponse> response) {
+                        if (response.isSuccessful()) {
+//                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(EditAccoutActivity.this)
+////                                    .setMessage("Đăng kí tài khoản thành công")
+////                                    .setPositiveButton("Đăng nhập", (DialogInterface dialogInterface, int i) -> {
+////                                        Intent intent = new Intent(EditAccoutActivity.this, LoginActivity.class);
+////                                        startActivity(intent);
+////                                    });
+////                            alertDialog.show();
+                            CoreManager.savePatient(EditAccoutActivity.this,requestObj);
+                            MainActivity.resetHeader(EditAccoutActivity.this);
+                            showMessage(getResources().getString(R.string.success_message_api));
+                            setResult(RESULT_OK);
+                            finish();
                         } else {
-                            String erroMsg = Utils.getErrorMsg(userResponse.errorBody());
+//                            String erroMsg = Utils.getErrorMsg(response.errorBody());
                             AlertDialog.Builder alertDialog = new AlertDialog.Builder(EditAccoutActivity.this)
-                                    .setMessage(erroMsg)
+                                    .setMessage(getResources().getString(R.string.error_message_api))
                                     .setPositiveButton("Thử lại", (DialogInterface dialogInterface, int i) -> {
                                     });
                             alertDialog.show();
-
-                            logError("CallApiRegister", "SuccessBut on Failed");
+//                            logError("CallApiRegister", "SuccessBut on Failed");
                         }
 
                         hideLoading();
@@ -419,5 +429,8 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
                     }
                 });
     }
+
+
+
 
 }

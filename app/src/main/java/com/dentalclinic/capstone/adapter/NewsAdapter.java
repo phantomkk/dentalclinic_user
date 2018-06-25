@@ -18,6 +18,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<News> news;
     private final int VIEW_TYPE_ITEM = 0;
@@ -106,17 +108,23 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     class ListViewHolder extends RecyclerView.ViewHolder {
         ImageView imgNews;
-        TextView txtTitle;
+        TextView txtTitle, txtDate;
+        CircleImageView circleImageView;
 
         public ListViewHolder(View itemView) {
             super(itemView);
             txtTitle = itemView.findViewById(R.id.txt_title_news);
             imgNews = itemView.findViewById(R.id.img_news);
+            circleImageView = itemView.findViewById(R.id.img_avatar_author);
+            txtDate = itemView.findViewById(R.id.txt_date_create);
         }
 
         public void bind(final News item, final OnItemClickListener listener) {
             txtTitle.setText(item.getTitle());
             Picasso.get().load(item.getNewsImage()).into(imgNews);
+            if(item.getAuthor()!=null){
+            Picasso.get().load(item.getAuthor().getAvatar()).into(circleImageView);}
+            txtDate.setText(item.getCreateDate());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

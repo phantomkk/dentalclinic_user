@@ -15,17 +15,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.activities.QuickBookActivity;
 import com.dentalclinic.capstone.adapter.AppointmentAdapter;
 import com.dentalclinic.capstone.api.APIServiceManager;
+import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
 import com.dentalclinic.capstone.api.services.AppointmentService;
 import com.dentalclinic.capstone.models.Appointment;
 import com.dentalclinic.capstone.models.Patient;
 import com.dentalclinic.capstone.utils.CoreManager;
+import com.dentalclinic.capstone.utils.Utils;
+import com.google.gson.JsonSyntaxException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -47,6 +52,7 @@ public class HistoryAppointmentFragment extends BaseFragment implements View.OnC
     }
 
     ListView lvHistoryAppoint;
+    TextView txtEmptyList;
     AppointmentAdapter adapter;
     List<Appointment> appointments = new ArrayList<>();
     FloatingActionButton button;
@@ -57,6 +63,7 @@ public class HistoryAppointmentFragment extends BaseFragment implements View.OnC
         View view = inflater.inflate(R.layout.fragment_history_appointment, container, false);
         lvHistoryAppoint = view.findViewById(R.id.lv_history_appointment);
         button = view.findViewById(R.id.fab_button);
+        txtEmptyList = view.findViewById(R.id.txt_list_empty);
         button.setOnClickListener(this);
         adapter = new AppointmentAdapter(getContext(), appointments);
 //        prepareData();
@@ -95,57 +102,51 @@ public class HistoryAppointmentFragment extends BaseFragment implements View.OnC
         super.onViewCreated(view, savedInstanceState);
         prepareData();
     }
+    private  Disposable appointmentDisposable;
 
     public void prepareData() {
 //        Patient patient = CoreManager.getCurrentPatient();
-//        showLoading();
-//        AppointmentService appointmentService = APIServiceManager.getService(AppointmentService.class);
-//        appointmentService.getByPhone("0915469963")
-//                .subscribeOn(Schedulers.newThread())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new SingleObserver<Response<List<Appointment>>>() {
-//                    @Override
-//                    public void onSubscribe(Disposable d) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onSuccess(Response<List<Appointment>> listResponse) {
-//                        if (listResponse.body() != null) {
-////                            List<Appointment> appointments = listResponse.body();
-////                            appointments.sort(new Comparator<Appointment>() {
-////                                @Override
-////                                public int compare(Appointment appointment, Appointment t1) {
-////                                    return appointment.getStartTime() - appointment.getStartTime();
-////                                }
-////                            });
-//                            appointments.addAll(listResponse.body());
-//                            adapter.notifyDataSetChanged();
-//                        } else {
-//                            Toast.makeText(getContext(), "SUCCESS but else", Toast.LENGTH_SHORT).show();
-//                        }
-//                        hideLoading();
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        e.printStackTrace();
-//                        Toast.makeText(getContext(), "On Error", Toast.LENGTH_SHORT).show();
-//                        hideLoading();
-//                    }
-//                });
-        Appointment appointment = new Appointment();
-        appointment.setNumericalOrder(12);
-        appointment.setStartTime("2018-06-21 00:00:00");
-        appointment.setId(1);
-        appointments.add(appointment);
-        appointment.setId(2);
-        appointments.add(appointment);
-        appointment.setId(3);
-        appointments.add(appointment);
-        appointment.setId(4);
-        appointments.add(appointment);
-        adapter.notifyDataSetChanged();
+        showLoading();
+        AppointmentService appointmentService = APIServiceManager.getService(AppointmentService.class);
+        appointmentService.getByPhone(CoreManager.getUser(getContext()).getPhone())
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<Response<List<Appointment>>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        appointmentDisposable = d;
+                    }
+
+                    @Override
+                    public void onSuccess(Response<List<Appointment>> listResponse) {
+                        if (listResponse.body() != null) {
+                            if(listResponse.body().size()>0){
+                                txtEmptyList.setVisibility(View.GONE);
+                            }else{
+                                txtEmptyList.setVisibility(View.VISIBLE);
+                            }
+                            appointments.addAll(listResponse.body());
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            try {
+                                ErrorResponse errorResponse = Utils.parseJson(listResponse.errorBody().string(), ErrorResponse.class);
+                                showDialog(errorResponse.getErrorMessage());
+                            } catch (IOException e) {
+                                showDialog(getResources().getString(R.string.error_message_api));
+                            } catch (JsonSyntaxException e){
+                                showDialog(getResources().getString(R.string.error_message_api));
+                            }
+                        }
+                        hideLoading();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        Toast.makeText(getContext(), "On Error", Toast.LENGTH_SHORT).show();
+                        hideLoading();
+                    }
+                });
     }
 
     @Override

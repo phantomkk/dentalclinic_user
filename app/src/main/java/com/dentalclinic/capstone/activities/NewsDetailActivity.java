@@ -62,7 +62,7 @@ public class NewsDetailActivity extends BaseActivity {
             if(news.getCreateDate()!=null){
                 txtCreateDate.setVisibility(View.VISIBLE);
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-                txtCreateDate.setText(dateFormat.format(news.getCreateDate()));
+                txtCreateDate.setText(news.getCreateDate());
             }
             if(news.getAuthor()!=null){
                 txtAuthor.setVisibility(View.VISIBLE);

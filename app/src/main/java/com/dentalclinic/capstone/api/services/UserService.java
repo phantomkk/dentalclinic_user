@@ -50,8 +50,10 @@ public interface UserService {
             @Part MultipartBody.Part image,
             @Part MultipartBody.Part id);
 
+    @FormUrlEncoded
     @POST("api/user/changePassword")
     Single<Response<SuccessResponse>> changePassword(@Field("phone") String phone,
+                                                     @Field("current_password") String currentPassword,
                                                      @Field("password") String password);
 
     @POST("api/user/updatePatient")

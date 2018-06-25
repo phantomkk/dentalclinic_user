@@ -33,16 +33,15 @@
             android:id="@+id/sliding_tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/side_nav_bar"
-            app:tabTextColor="@color/color_white"
-            app:tabSelectedTextColor="@color/color_grey_500"
+            android:background="@color/color_white"
+            app:tabSelectedTextColor="@color/color_blue_900"
             app:tabMode="fixed" />
 
         <android.support.v4.view.ViewPager
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/white" />
+            android:background="@color/color_grey_100" />
 
         <!--<View-->
         <!--android:layout_width="match_parent"-->

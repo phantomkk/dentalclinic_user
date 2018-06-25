@@ -14,7 +14,7 @@ public class User implements Serializable {
     private String phone;
     @SerializedName("patients")
     private List<Patient> patients;
-
+    private Patient currentPatient;
 
     public List<Patient> getPatients() {
         return patients;
@@ -32,6 +32,11 @@ public class User implements Serializable {
         this.phone = phone;
     }
 
+    public Patient getCurrentPatient() {
+        return currentPatient;
+    }
 
-
+    public void setCurrentPatient(Patient currentPatient) {
+        this.currentPatient = currentPatient;
+    }
 }

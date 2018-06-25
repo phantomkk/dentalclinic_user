@@ -15,7 +15,7 @@ public class AppConst {
     public final static String DEBUG_CORE_TAG = "DEBUG_CORE_TAG";
 
     public final static String GENDER_MALE = "MALE";
-    public final static String GENDER_FEMALE = "FEMALe";
+    public final static String GENDER_FEMALE = "FEMALE";
     public final static String GENDER_OTHER = "OTHER";
 
 

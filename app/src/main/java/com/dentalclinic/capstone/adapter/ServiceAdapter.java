@@ -15,6 +15,7 @@ import com.dentalclinic.capstone.animation.AnimatedExpandableListView;
 import com.dentalclinic.capstone.models.Treatment;
 import com.dentalclinic.capstone.models.TreatmentCategory;
 import com.dentalclinic.capstone.models.TreatmentDetail;
+import com.dentalclinic.capstone.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -91,7 +92,7 @@ public class ServiceAdapter extends BaseExpandableListAdapter {
         TextView mName = convertView.findViewById(R.id.txt_name);
         mName.setText(treatment.getName());
         TextView mPrice = convertView.findViewById(R.id.txt_price);
-        mPrice.setText(treatment.getMinPrice() + "-" + treatment.getMaxPrice() + context.getResources().getString(R.string.current_unit));
+        mPrice.setText(Utils.formatMoney(treatment.getMinPrice()) + "-" + Utils.formatMoney(treatment.getMaxPrice()) + context.getResources().getString(R.string.current_unit));
         TextView mDescription = convertView.findViewById(R.id.txt_description);
         if (treatment.getDescription() != null) {
             mDescription.setVisibility(View.VISIBLE);
@@ -157,9 +158,6 @@ public class ServiceAdapter extends BaseExpandableListAdapter {
 
     public void filterData(String query) {
         query = query.toLowerCase();
-        Log.v("ServiceAdapter", String.valueOf(listDataHeader.size()));
-        Log.v("original", String.valueOf(listDataHeaderOriginal.size()));
-        Log.v("query", query);
         listDataHeader.clear();
         if (query.isEmpty()) {
             listDataHeader.addAll(listDataHeaderOriginal);

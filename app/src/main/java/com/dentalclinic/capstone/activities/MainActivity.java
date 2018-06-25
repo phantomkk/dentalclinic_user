@@ -2,6 +2,7 @@ package com.dentalclinic.capstone.activities;
 
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -81,7 +82,7 @@ public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     FragmentManager fragmentManager = getSupportFragmentManager();
     private CardDrawerLayout drawer;
-    private AccountHeader headerResult = null;
+    public static AccountHeader headerResult = null;
     private Drawer result = null;
     private TextView currentDate;
     private static final int PROFILE_SETTING = 100000;
@@ -91,6 +92,9 @@ public class MainActivity extends BaseActivity
     private Handler handler;
     private FirebaseDatabase firebaseDbInstance;
     private ListView listView;
+    private User user;
+    private List<IProfile> listIprofile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,7 +109,7 @@ public class MainActivity extends BaseActivity
             @Override
             public void onClick(View view) {
                 TreatmentDetail detail = new TreatmentDetail();
-                detail.setDentist(new Staff("Vo Quoc Trinh","https://thumbs.dreamstime.com/b/dentist-avatar-flat-icon-isolated-white-series-caucasian-blue-coat-background-eps-file-available-95672861.jpg"));
+                detail.setDentist(new Staff("Vo Quoc Trinh", "https://thumbs.dreamstime.com/b/dentist-avatar-flat-icon-isolated-white-series-caucasian-blue-coat-background-eps-file-available-95672861.jpg"));
                 detail.setCreatedDate(new Date());
                 detail.setTreatment(new Treatment("Tram Rang"));
                 showFeedbackDialog(detail);
@@ -123,25 +127,17 @@ public class MainActivity extends BaseActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-//
-//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-//        navigationView.setNavigationItemSelectedListener(this);
-////        drawer.setViewScale(Gravity.START, 0.9f);
-////        drawer.setRadius(Gravity.START, 35);
-////        drawer.setViewElevation(Gravity.START, 20);
-//        navigationView.getMenu().getItem(0).setChecked(true);
 
-//        NavigationView rightNavigationView = (NavigationView) findViewById(R.id.nav_right_view);
 
-        //new code
-        User user = CoreManager.getUser(this);
-        List<IProfile> listIprofile = new ArrayList<>();
+        user = CoreManager.getUser(this);
+        listIprofile = new ArrayList<>();
         if (user != null) {
             List<Patient> patients = user.getPatients();
             if (patients != null && patients.size() > 0) {
                 IProfile profile = null;
                 for (Patient p : patients) {
                     profile = new ProfileDrawerItem()
+//                            .withNameShown(true)
                             .withName(p.getName())
                             .withSelectedBackgroundAnimated(true)
                             .withEmail(p.getPhone())
@@ -150,10 +146,10 @@ public class MainActivity extends BaseActivity
                     listIprofile.add(profile);
                 }
             }
+        } else {
+            listIprofile.add(new ProfileSettingDrawerItem().withName("Đăng Nhập").withDescription("Đăng Nhập Tài Khoản").withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_add).actionBar().paddingDp(5).colorRes(R.color.material_drawer_primary_text)).withIdentifier(PROFILE_SETTING));
         }
-        listIprofile.add(new ProfileSettingDrawerItem().withName("Thêm Bệnh Nhân").withDescription("Tạo Mới Một Bệnh Nhân").withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_add).actionBar().paddingDp(5).colorRes(R.color.material_drawer_primary_text)).withIdentifier(PROFILE_SETTING));
-
-        listIprofile.add(new ProfileSettingDrawerItem().withName("Quản Lý Bệnh Nhân").withIcon(GoogleMaterial.Icon.gmd_settings).withIdentifier(100001));
+//        listIprofile.add(new ProfileSettingDrawerItem().withName("Quản Lý Bệnh Nhân").withIcon(GoogleMaterial.Icon.gmd_settings).withIdentifier(100001));
         IProfile[] arrayIProfile = new IProfile[listIprofile.size()];
         listIprofile.toArray(arrayIProfile);
         // Create the AccountHeader
@@ -163,20 +159,40 @@ public class MainActivity extends BaseActivity
                 .withHeaderBackground(R.drawable.header2)
 //                .addProfiles((IProfile) (listIprofile.toArray()))
                 .addProfiles(arrayIProfile)
+                .withOnAccountHeaderProfileImageListener(new AccountHeader.OnAccountHeaderProfileImageListener() {
+                    @Override
+                    public boolean onProfileImageClick(View view, IProfile profile, boolean current) {
+                        CoreManager.setCurrentPatient((int)profile.getIdentifier(),MainActivity.this);
+//                        NewsFragment newFragment = new NewsFragment();
+//                        fragmentManager.beginTransaction().replace(R.id.main_fragment, newFragment).commit();
+                        result.setSelectionAtPosition(1,true);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onProfileImageLongClick(View view, IProfile profile, boolean current) {
+                        return false;
+                    }
+                })
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean current) {
                         //sample usage of the onProfileChanged listener
                         //if the clicked item has the identifier 1 add a new profile ;)
                         if (profile instanceof IDrawerItem && profile.getIdentifier() == PROFILE_SETTING) {
-                            int count = 100 + headerResult.getProfiles().size() + 1;
-                            IProfile newProfile = new ProfileDrawerItem().withNameShown(true).withName("Batman" + count).withEmail("batman" + count + "@gmail.com").withIcon("https://avatars3.githubusercontent.com/u/1476232?v=3&s=460").withIdentifier(count);
-                            if (headerResult.getProfiles() != null) {
-                                //we know that there are 2 setting elements. set the new profile above them ;)
-                                headerResult.addProfile(newProfile, headerResult.getProfiles().size() - 2);
-                            } else {
-                                headerResult.addProfiles(newProfile);
+//                            int count = 100 + headerResult.getProfiles().size() + 1;
+//                            IProfile newProfile = new ProfileDrawerItem().withNameShown(true).withName("Batman" + count).withEmail("batman" + count + "@gmail.com").withIcon("https://avatars3.githubusercontent.com/u/1476232?v=3&s=460").withIdentifier(count);
+//                            if (headerResult.getProfiles() != null) {
+//                                //we know that there are 2 setting elements. set the new profile above them ;)
+//                                headerResult.addProfile(newProfile, headerResult.getProfiles().size() - 1);
+//                            } else {
+//                                headerResult.addProfiles(newProfile);
+//                            }
+                            if (user == null) {
+                                Intent intent1 = new Intent(MainActivity.this, LoginActivity.class);
+                                startActivity(intent1);
                             }
+
                         }
 
                         //false if you have not consumed the event and it should close the drawer
@@ -185,7 +201,6 @@ public class MainActivity extends BaseActivity
                 })
                 .withSavedInstance(savedInstanceState)
                 .build();
-
         //Create the drawer
         result = new DrawerBuilder()
                 .withActivity(this)
@@ -200,38 +215,11 @@ public class MainActivity extends BaseActivity
                         new SectionDrawerItem().withName(R.string.account_nav_bar_title),
                         new PrimaryDrawerItem().withName(R.string.my_accout_fragment_title).withIcon(R.drawable.ic_account_circle_black_24dp).withIdentifier(4).withSelectable(true),
                         new PrimaryDrawerItem().withName(R.string.histrory_fragment_title).withIcon(R.drawable.ic_history_black_24dp).withIdentifier(5).withSelectable(true).withBadgeStyle(new BadgeStyle().withTextColor(Color.WHITE).withColorRes(R.color.md_red_700)),
-//                        new PrimaryDrawerItem().withName(R.string.history_treatment_fragment_title).withIcon(R.drawable.ic_history_black_24dp).withIdentifier(6).withSelectable(true),
-//                        new PrimaryDrawerItem().withName(R.string.history_payment_fragment_title).withIcon(R.drawable.ic_payment_black_24dp).withIdentifier(7).withSelectable(true),
                         new PrimaryDrawerItem().withName(R.string.logout_titile).withIcon(R.drawable.ic_power_settings_new_black_24dp).withIdentifier(8).withSelectable(false)
-//                        new PrimaryDrawerItem().withName(R.string.drawer_item_custom_container_drawer).withDescription(R.string.drawer_item_custom_container_drawer_desc).withIcon(R.drawable.dental_icon).withIdentifier(9).withSelectable(false),
-//                        new PrimaryDrawerItem().withName(R.string.drawer_item_menu_drawer).withDescription(R.string.drawer_item_menu_drawer_desc).withIcon(R.drawable.dental_icon).withIdentifier(10).withSelectable(false),
-//                        new PrimaryDrawerItem().withName(R.string.drawer_item_mini_drawer).withDescription(R.string.drawer_item_mini_drawer_desc).withIcon(R.drawable.dental_icon).withIdentifier(11).withSelectable(false),
-//                        new PrimaryDrawerItem().withName(R.string.drawer_item_fragment_drawer).withDescription(R.string.drawer_item_fragment_drawer_desc).withIcon(R.drawable.dental_icon).withIdentifier(12).withSelectable(false),
-//                        new PrimaryDrawerItem().withName(R.string.drawer_item_collapsing_toolbar_drawer).withDescription(R.string.drawer_item_collapsing_toolbar_drawer_desc).withIcon(R.drawable.dental_icon).withIdentifier(13).withSelectable(false),
-//                        new PrimaryDrawerItem().withName(R.string.drawer_item_persistent_compact_header).withDescription(R.string.drawer_item_persistent_compact_header_desc).withIcon(R.drawable.dental_icon).withIdentifier(14).withSelectable(false),
-//                        new PrimaryDrawerItem().withName(R.string.drawer_item_crossfade_drawer_layout_drawer).withDescription(R.string.drawer_item_crossfade_drawer_layout_drawer_desc).withIcon(R.drawable.dental_icon).withIdentifier(15).withSelectable(false),
-//
-//                        new ExpandableBadgeDrawerItem().withName("Collapsable Badge").withIcon(R.drawable.dental_icon).withIdentifier(18).withSelectable(false).withBadgeStyle(new BadgeStyle().withTextColor(Color.WHITE).withColorRes(R.color.md_red_700)).withBadge("100").withSubItems(
-//                                new SecondaryDrawerItem().withName("CollapsableItem").withLevel(2).withIcon(R.drawable.dental_icon).withIdentifier(2000),
-//                                new SecondaryDrawerItem().withName("CollapsableItem 2").withLevel(2).withIcon(R.drawable.dental_icon).withIdentifier(2001)
-//                        ),
-//                        new ExpandableDrawerItem().withName("Collapsable").withIcon(R.drawable.dental_icon).withIdentifier(19).withSelectable(false).withSubItems(
-//                                new SecondaryDrawerItem().withName("CollapsableItem").withLevel(2).withIcon(R.drawable.dental_icon).withIdentifier(2002),
-//                                new SecondaryDrawerItem().withName("CollapsableItem 2").withLevel(2).withIcon(R.drawable.dental_icon).withIdentifier(2003)
-//                        ),
-//                        new SectionDrawerItem().withName(R.string.drawer_item_section_header),
-//                        new SecondaryDrawerItem().withName(R.string.drawer_item_open_source).withIcon(R.drawable.dental_icon).withIdentifier(20).withSelectable(false),
-//                        new SecondaryDrawerItem().withName(R.string.drawer_item_contact).withIcon(R.drawable.dental_icon).withIdentifier(21).withTag("Bullhorn")
                 ) // add the items we want to use with our Drawer
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        //check if the drawerItem is set.
-                        //there are different reasons for the drawerItem to be null
-                        //--> click on the header
-                        //--> click on the footer
-                        //those items don't contain a drawerItem
-
                         if (drawerItem != null) {
                             if (drawer.isDrawerOpen(GravityCompat.END)) {
                                 drawer.closeDrawer(GravityCompat.END);
@@ -250,24 +238,40 @@ public class MainActivity extends BaseActivity
                                 startActivity(intent);
                             } else if (drawerItem.getIdentifier() == 4) {
                                 setTitle(getResources().getString(R.string.my_accout_fragment_title));
-                                MyAccoutFragment myAccoutFragment = new MyAccoutFragment();
-                                fragmentManager.beginTransaction().replace(R.id.main_fragment, myAccoutFragment).commit();
+                                if (user == null) {
+                                    Intent intent1 = new Intent(MainActivity.this, LoginActivity.class);
+                                    startActivity(intent1);
+                                } else {
+                                    MyAccoutFragment myAccoutFragment = new MyAccoutFragment();
+                                    fragmentManager.beginTransaction().replace(R.id.main_fragment, myAccoutFragment).commit();
+                                }
                             } else if (drawerItem.getIdentifier() == 5) {
-
                                 setTitle(getResources().getString(R.string.histrory_fragment_title));
-                                HistoryFragment dentalFragment = new HistoryFragment();
-                                fragmentManager.beginTransaction().replace(R.id.main_fragment, dentalFragment).commit();
-                            } else if (drawerItem.getIdentifier() == 6) {
-                                setTitle(getResources().getString(R.string.history_treatment_fragment_title));
-                                HistoryTreatmentFragment dentalFragment = new HistoryTreatmentFragment();
-                                fragmentManager.beginTransaction().replace(R.id.main_fragment, dentalFragment).commit();
-                            } else if (drawerItem.getIdentifier() == 7) {
-                                setTitle(getResources().getString(R.string.history_payment_fragment_title));
-                                HistoryPaymentFragment historyPaymentFragment = new HistoryPaymentFragment();
-                                fragmentManager.beginTransaction().replace(R.id.main_fragment, historyPaymentFragment).commit();
-                            } else {
+                                if (user == null) {
+                                    Intent intent1 = new Intent(MainActivity.this, LoginActivity.class);
+                                    startActivity(intent1);
+                                } else {
+                                    HistoryFragment dentalFragment = new HistoryFragment();
+                                    fragmentManager.beginTransaction().replace(R.id.main_fragment, dentalFragment).commit();
+                                }
+                            }
+//                            else if(drawerItem.getIdentifier() == PROFILE_SETTING){
+//                                if (user == null) {
+//                                    Intent intent1 = new Intent(MainActivity.this, LoginActivity.class);
+//                                    startActivity(intent1);
+//                                }
+//                            }
+                            else {
                                 showMessage("Đăng xuất");
                                 CoreManager.clearUser(MainActivity.this);
+                                user = null;
+                                result.setSelectionAtPosition(1,true);
+                                listIprofile = new ArrayList<>();
+                                listIprofile.add(new ProfileSettingDrawerItem().withName("Đăng Nhập").withIcon(new IconicsDrawable(MainActivity.this, GoogleMaterial.Icon.gmd_add).actionBar().paddingDp(5).colorRes(R.color.material_drawer_primary_text)).withIdentifier(PROFILE_SETTING));
+                                headerResult.clear();
+                                headerResult.setProfiles(listIprofile);
+                                headerResult.setActiveProfile(listIprofile.get(0));
+//                                result.resetDrawerContent();
                             }
                         }
 //
@@ -278,16 +282,25 @@ public class MainActivity extends BaseActivity
                 .withShowDrawerOnFirstLaunch(true)
 //              .withShowDrawerUntilDraggedOpened(true)
                 .build();
-
         //only set the active selection or active profile if we do not recreate the activity
         if (savedInstanceState == null) {
             // set the selection to the item with the identifier 11
             result.setSelection(21, false);
 
             //set the active profile
-            headerResult.setActiveProfile(arrayIProfile[0]);
+            User user = CoreManager.getUser(this);
+            if(user!=null){
+                if(user.getCurrentPatient()!=null){
+                    for (int i =0;i<arrayIProfile.length;i++){
+                        if(arrayIProfile[i].getIdentifier() == user.getCurrentPatient().getId()){
+                            headerResult.setActiveProfile(arrayIProfile[i]);
+                            break;
+                        }
+                    }
+                }
+            }else{
+            headerResult.setActiveProfile(arrayIProfile[0]);}
         }
-
         result.setOnDrawerNavigationListener(new Drawer.OnDrawerNavigationListener() {
             @Override
             public boolean onNavigationClickListener(View clickedView) {
@@ -301,7 +314,7 @@ public class MainActivity extends BaseActivity
         result.setSelectionAtPosition(1);
 
         listenOrderNumber();
-
+        logError("Active",headerResult.getActiveProfile().getName().toString());
     }
     ///End oncreated
 
@@ -315,6 +328,45 @@ public class MainActivity extends BaseActivity
 
     }
 
+    public static void resetHeader(Context context){
+        headerResult.clear();
+        User user=CoreManager.getUser(context);
+        List<IProfile> listIprofile = new ArrayList<>();
+        if (user != null) {
+            List<Patient> patients = user.getPatients();
+            if (patients != null && patients.size() > 0) {
+                IProfile profile = null;
+                for (Patient p : patients) {
+                    profile = new ProfileDrawerItem()
+//                            .withNameShown(true)
+                            .withName(p.getName())
+                            .withSelectedBackgroundAnimated(true)
+                            .withEmail(p.getPhone())
+                            .withIcon(p.getAvatar())
+                            .withIdentifier(p.getId());
+                    listIprofile.add(profile);
+                }
+            }
+        } else {
+            listIprofile.add(new ProfileSettingDrawerItem().withName("Đăng Nhập").withDescription("Đăng Nhập Tài Khoản").withIcon(new IconicsDrawable(context, GoogleMaterial.Icon.gmd_add).actionBar().paddingDp(5).colorRes(R.color.material_drawer_primary_text)).withIdentifier(PROFILE_SETTING));
+        }
+        headerResult.setProfiles(listIprofile);
+        if(user!=null){
+            if(user.getCurrentPatient()!=null){
+                for (int i =0;i<listIprofile.size();i++){
+                    if(listIprofile.get(i).getIdentifier() == user.getCurrentPatient().getId()){
+                        headerResult.setActiveProfile(listIprofile.get(i));
+                        break;
+                    }
+                }
+            }
+        }else {
+            headerResult.setActiveProfile(listIprofile.get(0));
+        }
+    }
+    public void createSlideBar() {
+
+    }
 
     protected void showFeedbackDialog(TreatmentDetail treatmentDetail) {
         // TODO Auto-generated method stub
@@ -325,7 +377,7 @@ public class MainActivity extends BaseActivity
         CircleImageView imgAvatar = dialog.findViewById(R.id.img_dentist_avatar);
         TextView txtTreatmentContent = dialog.findViewById(R.id.treatment_content_feedback);
         RatingBar ratingBar = dialog.findViewById(R.id.rate_bar);
-        AutoCompleteTextView  contentFeedback = dialog.findViewById(R.id.edit_content);
+        AutoCompleteTextView contentFeedback = dialog.findViewById(R.id.edit_content);
         Button button = dialog.findViewById(R.id.btn_submit_feedback);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -333,20 +385,20 @@ public class MainActivity extends BaseActivity
                 dialog.dismiss();
             }
         });
-        if(treatmentDetail.getDentist().getName()!=null){
+        if (treatmentDetail.getDentist().getName() != null) {
             txtName.setText(treatmentDetail.getDentist().getName());
         }
         String result = "";
-        if(treatmentDetail.getTreatment().getName()!=null){
+        if (treatmentDetail.getTreatment().getName() != null) {
             result += treatmentDetail.getTreatment().getName();
         }
-        if(treatmentDetail.getCreatedDate()!=null){
-            result+=treatmentDetail.getCreatedDate();
+        if (treatmentDetail.getCreatedDate() != null) {
+            result += treatmentDetail.getCreatedDate();
         }
-        if(!result.isEmpty()){
+        if (!result.isEmpty()) {
             txtTreatmentContent.setText(result);
         }
-        if(treatmentDetail.getDentist().getAvatar()!=null){
+        if (treatmentDetail.getDentist().getAvatar() != null) {
             Picasso.get().load("https://thumbs.dreamstime.com/b/dentist-avatar-flat-icon-isolated-white-series-caucasian-blue-coat-background-eps-file-available-95672861.jpg").into(imgAvatar);
         }
 

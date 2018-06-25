@@ -2,6 +2,8 @@ package com.dentalclinic.capstone.fragment;
 
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -11,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +25,20 @@ import android.widget.Toast;
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.activities.EditAccoutActivity;
 import com.dentalclinic.capstone.activities.EditPasswordActivity;
+import com.dentalclinic.capstone.activities.MainActivity;
 import com.dentalclinic.capstone.adapter.PatientProfileAdapter;
+import com.dentalclinic.capstone.api.APIServiceManager;
+import com.dentalclinic.capstone.api.responseobject.SuccessResponse;
+import com.dentalclinic.capstone.api.services.UserService;
 import com.dentalclinic.capstone.models.City;
 import com.dentalclinic.capstone.models.District;
 import com.dentalclinic.capstone.models.Patient;
 import com.dentalclinic.capstone.utils.AppConst;
+import com.dentalclinic.capstone.utils.CoreManager;
 import com.dentalclinic.capstone.utils.DateTimeFormat;
 import com.dentalclinic.capstone.utils.DateUtils;
+import com.dentalclinic.capstone.utils.Utils;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -40,12 +50,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MyAccoutFragment extends BaseFragment implements View.OnClickListener {
-
+    public static int REQUEST_CHANGE_PASSWORD = 10000;
     Button btnChangeAvatar, btnEdit, btnChangePhone, btnChangePassword;
     CircleImageView cvAvatar;
     TextView txtName, txtGender, txtPhone, txtAddress, txtDateOfBirth;
@@ -75,8 +95,8 @@ public class MyAccoutFragment extends BaseFragment implements View.OnClickListen
         txtGender = v.findViewById(R.id.txt_gender);
         txtPhone = v.findViewById(R.id.txt_phone);
         txtAddress = v.findViewById(R.id.txt_address);
-        prepareData();
-        setData(patient);
+//        prepareData();
+        setData(CoreManager.getCurrentPatient(getContext()));
 
         return v;
     }
@@ -84,13 +104,14 @@ public class MyAccoutFragment extends BaseFragment implements View.OnClickListen
     private void setData(Patient patient) {
         if (patient != null) {
             if (patient.getAvatar() != null) {
+//                Picasso.get().invalidate(patient.getAvatar());
                 Picasso.get().load(patient.getAvatar()).into(cvAvatar);
             }
             if (patient.getName() != null) {
                 txtName.setText(patient.getName());
             }
             if (patient.getDateOfBirth() != null) {
-                txtDateOfBirth.setText(DateUtils.changeDateFormat(patient.getDateOfBirth(), DateTimeFormat.DATE_TIME_DB, DateTimeFormat.DATE_APP));
+                txtDateOfBirth.setText(DateUtils.changeDateFormat(patient.getDateOfBirth(), DateTimeFormat.DATE_TIME_DB_2, DateTimeFormat.DATE_APP));
             }
             if (patient.getGender() != null) {
                 txtGender.setText(patient.getGender());
@@ -100,10 +121,10 @@ public class MyAccoutFragment extends BaseFragment implements View.OnClickListen
             }
             if (patient.getAddress() != null) {
                 String address = patient.getAddress();
-                if (patient.getDistrict().getName() != null) {
-                    address += ", " + getResources().getString(R.string.my_acc_district_text) + " " + patient.getDistrict().getName();
-                    if (patient.getDistrict().getCity().getName() != null) {
-                        address += ", " + getResources().getString(R.string.my_acc_city_text) + " " + patient.getDistrict().getCity().getName();
+                if (patient.getDistrict() != null) {
+                    address += ", " + patient.getDistrict().getName();
+                    if (patient.getCity() != null) {
+                        address += ", " + patient.getCity().getName();
                     }
                 }
                 txtAddress.setText(address);
@@ -122,6 +143,7 @@ public class MyAccoutFragment extends BaseFragment implements View.OnClickListen
 
 
     }
+
     public byte[] getBytes(InputStream is) throws IOException {
         ByteArrayOutputStream byteBuff = new ByteArrayOutputStream();
 
@@ -136,39 +158,75 @@ public class MyAccoutFragment extends BaseFragment implements View.OnClickListen
         return byteBuff.toByteArray();
     }
 
+    private UserService userService = APIServiceManager.getService(UserService.class);
+    private Disposable userServiceDisposable;
+
+    private void uploadImage(byte[] imageBytes) {
+
+        RequestBody requestFile = RequestBody.create(MediaType.parse("image/jpeg"), imageBytes);
+        MultipartBody.Part image = MultipartBody.Part.createFormData("image", "image.jpg", requestFile);
+        MultipartBody.Part id = MultipartBody.Part.createFormData("id", CoreManager.getCurrentPatient(getContext()).getId() + "");
+        //cột username đang bị null hết chỉ có 2 record dc add vào: luc2, luc12345678
+        userService.changeAvatar(image, id).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<Response<SuccessResponse>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        userServiceDisposable = d;
+                    }
+
+                    @Override
+                    public void onSuccess(Response<SuccessResponse> response) {
+                        if (response.isSuccessful()) {
+                            if (response.body() != null) {
+                                CoreManager.saveAvatar(getContext(), (String) response.body().getData());
+                                MainActivity.resetHeader(getContext());
+                                showMessage(getResources().getString(R.string.success_message_api));
+                            }
+                        } else {
+                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
+                                    .setMessage(getResources().getString(R.string.error_message_api))
+                                    .setPositiveButton("Thử lại", (DialogInterface dialogInterface, int i) -> {
+                                    });
+                            alertDialog.show();
+                        }
+                        hideLoading();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        hideLoading();
+                        e.printStackTrace();
+                        Toast.makeText(getContext(), getResources().getString(R.string.error_on_error_when_call_api), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+
     @Override
     public void onClick(View view) {
         Intent intent = null;
+        Bundle bundle = null;
         switch (view.getId()) {
             case R.id.btn_change_avatar:
-                    CropImage.activity()
-                            .setGuidelines(CropImageView.Guidelines.ON).setAspectRatio(1, 1)
-                            .start(getContext(), this);
-                    break;
+                CropImage.activity()
+                        .setGuidelines(CropImageView.Guidelines.ON).setAspectRatio(1, 1)
+                        .start(getContext(), this);
+                break;
             case R.id.btn_edit_accout:
                 intent = new Intent(getActivity(), EditAccoutActivity.class);
-                Patient patient = new Patient();
-                patient.setId(1);
-                patient.setName("vo quoc trinh");
-                patient.setGender(AppConst.GENDER_OTHER);
-                patient.setDateOfBirth("1996-30-06");
-                patient.setAddress("Go Vap");
-                patient.setDistrict(new District(2, "bảo lộc", new City(2, "Lam Dong")));
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(AppConst.PATIENT_OBJ, patient);
-                intent.putExtra("Bunder", bundle);
-//                intent.putExtra(AppConst.PATIENT_OBJ,patient); //Optional parameters
-                startActivity(intent);
+                bundle = new Bundle();
+                bundle.putSerializable(AppConst.PATIENT_OBJ, CoreManager.getCurrentPatient(getContext()));
+                intent.putExtra(AppConst.BUNDLE, bundle);
+                startActivityForResult(intent, REQUEST_CHANGE_PASSWORD);
                 break;
             case R.id.btn_edit_password:
                 intent = new Intent(getActivity(), EditPasswordActivity.class);
-                intent.putExtra(AppConst.PATIENT_OBJ, new Patient()); //Optional parameters
+                bundle = new Bundle();
+                bundle.putSerializable(AppConst.PATIENT_OBJ, CoreManager.getCurrentPatient(getContext()));
+                intent.putExtra(AppConst.BUNDLE, bundle);
                 startActivity(intent);
-                showMessage("Edit Password");
                 break;
-//            case R.id.btn_edit_phone:
-//                showMessage("Edit Phone");
-//                break;
         }
     }
 
@@ -181,8 +239,9 @@ public class MyAccoutFragment extends BaseFragment implements View.OnClickListen
                 Uri resultUri = result.getUri();
                 try {
                     InputStream is = getActivity().getContentResolver().openInputStream(resultUri);
-//                    uploadImage(getBytes(is));
-                    showMessage("update success!");
+                    showLoading();
+                    uploadImage(getBytes(is));
+//                    showMessage("update success!");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -191,6 +250,10 @@ public class MyAccoutFragment extends BaseFragment implements View.OnClickListen
                 Exception error = result.getError();
                 Toast.makeText(getActivity(), error.getMessage(),
                         Toast.LENGTH_LONG).show();
+            }
+        } else if (requestCode == REQUEST_CHANGE_PASSWORD) {
+            if (resultCode == getActivity().RESULT_OK) {
+                setData(CoreManager.getCurrentPatient(getContext()));
             }
         }
     }

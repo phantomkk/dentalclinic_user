@@ -8,14 +8,14 @@ import java.util.Date;
 public class News implements Serializable{
     @SerializedName("id")
     private int id;
-    @SerializedName("news_image")
+    @SerializedName("image_header")
     private String newsImage;
     @SerializedName("title")
     private String title;
     @SerializedName("content")
     private String content;
-    @SerializedName("created_date")
-    private Date createDate;
+    @SerializedName("create_date")
+    private String createDate;
     @SerializedName("staff")
     private Staff author;
 
@@ -51,11 +51,11 @@ public class News implements Serializable{
         this.newsImage = newsImage;
     }
 
-    public Date getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
 

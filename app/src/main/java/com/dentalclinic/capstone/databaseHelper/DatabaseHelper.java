@@ -96,6 +96,67 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cities;
     }
 
+    public int getPositionCityById(int id) {
+        // Log.i(TAG, "MyDatabaseHelper.getAllNotes ... " );
+
+        ArrayList<City> cities = getAllCity();
+        // Select All Query
+       for (int i = 0; i<cities.size();i++){
+           if(cities.get(i).getId()==id){
+               return i;
+           }
+       }
+        // return note list
+        return -1;
+    }
+
+
+    public int getPositionDistrictById(District district) {
+        // Log.i(TAG, "MyDatabaseHelper.getAllNotes ... " );
+
+        ArrayList<District> districts = getDistrictOfCity(district.getCityId());
+        // Select All Query
+        for (int i = 0; i<districts.size();i++){
+            if(districts.get(i).getId()==district.getId()){
+                return i;
+            }
+        }
+        // return note list
+        return -1;
+    }
+
+    public District getDistrictFromId(int id) {
+        String selectQuery = "SELECT  * FROM " + TABLE_DISTRICT + " WHERE "+ COLUMN_DISTRICT_ID + "= "+id;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        District district = new District();
+        if (cursor.moveToFirst()) {
+            do {
+                district.setId(cursor.getInt(0));
+                district.setName(cursor.getString(1));
+                district.setCityId(cursor.getInt(2));
+                // Thêm vào danh sách.
+            } while (cursor.moveToNext());
+        }
+        // return note list
+        return district;
+    }
+
+    public City getCityFromId(int id) {
+        String selectQuery = "SELECT  * FROM " + TABLE_CITY + " WHERE "+ COLUMN_CITY_ID + "= "+id;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        City city = new City();
+        if (cursor.moveToFirst()) {
+            do {
+                city.setId(cursor.getInt(0));
+                city.setName(cursor.getString(1));
+                // Thêm vào danh sách.
+            } while (cursor.moveToNext());
+        }
+        // return note list
+        return city;
+    }
 
     public ArrayList<District> getAllDistrict() {
         // Log.i(TAG, "MyDatabaseHelper.getAllNotes ... " );

@@ -1,7 +1,9 @@
 package com.dentalclinic.capstone.fragment;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -31,6 +33,13 @@ public class BaseFragment extends Fragment {
         }
     }
 
+    public void showDialog(String message){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext())
+                .setMessage(message)
+                .setPositiveButton("Thử lại", (DialogInterface dialogInterface, int i) -> {
+                });
+        alertDialog.show();
+    }
     public void logError(Class t, String method, String message) {
         Log.e(AppConst.DEBUG_TAG, t.getSimpleName() + "." + method + "(): " + message);
     }

@@ -242,7 +242,7 @@ public class ProfileDrawerItem extends AbstractDrawerItem<ProfileDrawerItem, Pro
         if (!nameShown && this.getEmail() == null && this.getName() != null) {
             StringHolder.applyTo(this.getName(), viewHolder.email);
         } else {
-            StringHolder.applyTo(this.getEmail(), viewHolder.email);
+            StringHolder.applyTo(this.getName(), viewHolder.email);
         }
 
         if (getTypeface() != null) {

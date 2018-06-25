@@ -157,11 +157,13 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
 
     @Override
     public boolean onMenuItemActionExpand(MenuItem menuItem) {
+//        colpanlAll();
         return true;
     }
 
     @Override
     public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+//        colpanlAll();
         return true;
     }
     private TreatmentCategoryService treatmentCategory = APIServiceManager.getService(TreatmentCategoryService.class);
