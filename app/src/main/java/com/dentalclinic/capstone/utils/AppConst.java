@@ -24,14 +24,11 @@ public class AppConst {
     public final static String PATIENT_OBJ = "PATIENT_OBJ";
     public final static String IMAGE_OBJ = "IMAGE_OBJ";
     public final static String BUNDLE = "BUNDLE";
+    public final static String TREATMENT_DETAIL_BUNDLE = "TREATMENT_DETAIL_BUNDLE";
 
-    public final static String PRODUCT_PARAM = "PRODUCT_PARAM";
-    public final static String CATEGORY_PARAM = "CATEGORY_PARAM";
-    public final static int CATEGORY_MOBILE = 1;
-    public final static int CATEGORY_ELECTRIC = 2;
-    public final static int CATEGORY_BEVERAGE = 3;
-    public final static int CATEGORY_HOMEPRODUCT = 4;
-    public final static int CATEGORY_LEANING = 5;
-    public final static int CATEGORY_SPORT = 6;
-    public final static int CATEGORY_JEWELRY = 7;
+    //firebase
+    public final static String  CHANNEL_FEEDBACK = "CHANNEL_FEEDBACK";
+    public final static String RESPONSE_FEEDBACK = "RESPONSE_FEEDBACK";
+    public final static String RESPONSE_APPOINTMENT_REMINDER = "RESPONSE_APPOINTMENT_REMINDER";
+
 }

@@ -10,6 +10,7 @@ import com.dentalclinic.capstone.models.Patient;
 import com.dentalclinic.capstone.models.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -112,7 +113,7 @@ public class Utils {
         return (String.format("%,d", money)).replace(',', '.');
     }
 
-    public static <T> T parseJson(String source, Class<T> c) {
+    public static <T> T parseJson(String source, Class<T> c) throws JsonSyntaxException {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
         return gson.fromJson(source, c);
