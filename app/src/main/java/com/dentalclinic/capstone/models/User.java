@@ -12,7 +12,7 @@ import java.util.List;
 public class User implements Serializable {
     @SerializedName("phone")
     private String phone;
-    @SerializedName("notif_token")
+    @SerializedName("noti_token")
     private String notifToken;
     @SerializedName("patients")
     private List<Patient> patients;

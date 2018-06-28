@@ -9,7 +9,7 @@ public class LoginRequest implements Serializable {
     private String phone;
     @SerializedName("password")
     private String password;
-    @SerializedName("notif_token")
+    @SerializedName("noti_token")
     private String notifToken;
 
     public String getPhone() {
