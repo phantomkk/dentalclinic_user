@@ -12,6 +12,8 @@ import java.util.List;
 public class User implements Serializable {
     @SerializedName("phone")
     private String phone;
+    @SerializedName("notif_token")
+    private String notifToken;
     @SerializedName("patients")
     private List<Patient> patients;
     private Patient currentPatient;
@@ -38,5 +40,13 @@ public class User implements Serializable {
 
     public void setCurrentPatient(Patient currentPatient) {
         this.currentPatient = currentPatient;
+    }
+
+    public String getNotifToken() {
+        return notifToken;
+    }
+
+    public void setNotifToken(String notifToken) {
+        this.notifToken = notifToken;
     }
 }

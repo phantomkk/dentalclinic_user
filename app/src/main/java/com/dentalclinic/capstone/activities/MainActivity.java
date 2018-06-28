@@ -2,6 +2,9 @@ package com.dentalclinic.capstone.activities;
 
 
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -9,11 +12,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +45,7 @@ import com.dentalclinic.capstone.models.Staff;
 import com.dentalclinic.capstone.models.Treatment;
 import com.dentalclinic.capstone.models.TreatmentDetail;
 import com.dentalclinic.capstone.models.User;
+import com.dentalclinic.capstone.utils.AppConst;
 import com.dentalclinic.capstone.utils.CoreManager;
 import com.dentalclinic.capstone.utils.DateTimeFormat;
 import com.dentalclinic.capstone.utils.DateUtils;
@@ -48,6 +54,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.mikepenz.crossfader.Crossfader;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -314,10 +321,8 @@ public class MainActivity extends BaseActivity
         result.setSelectionAtPosition(1);
 
         listenOrderNumber();
-        logError("Active",headerResult.getActiveProfile().getName().toString());
+//        logError("Active",headerResult.getActiveProfile().getName().toString());
     }
-    ///End oncreated
-
     @Override
     public String getMainTitle() {
         return null;

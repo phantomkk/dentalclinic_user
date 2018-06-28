@@ -1,10 +1,16 @@
 package com.dentalclinic.capstone.api.requestobject;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 public class LoginRequest implements Serializable {
+    @SerializedName("phone")
     private String phone;
+    @SerializedName("password")
     private String password;
+    @SerializedName("notif_token")
+    private String notifToken;
 
     public String getPhone() {
         return phone;
@@ -20,5 +26,14 @@ public class LoginRequest implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+
+    public String getNotifToken() {
+        return notifToken;
+    }
+
+    public void setNotifToken(String notifToken) {
+        this.notifToken = notifToken;
     }
 }

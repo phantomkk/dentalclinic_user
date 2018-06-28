@@ -54,6 +54,10 @@ public class DateUtils {
         Calendar c = Calendar.getInstance();
         return getDate(c.getTime(),DateTimeFormat.DATE_APP);
     }
+  public static String getCurrentDate(DateTimeFormat format){
+        Calendar c = Calendar.getInstance();
+        return getDate(c.getTime(),format );
+    }
 
     public static String getCurrentDateFormat(){
         Calendar c = Calendar.getInstance();

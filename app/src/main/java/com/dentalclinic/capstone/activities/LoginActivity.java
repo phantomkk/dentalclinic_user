@@ -16,13 +16,16 @@ import android.widget.Toast;
 
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.api.APIServiceManager;
+import com.dentalclinic.capstone.api.requestobject.LoginRequest;
 import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
 import com.dentalclinic.capstone.api.services.PatientService;
 import com.dentalclinic.capstone.api.services.UserService;
+//import com.dentalclinic.capstone.firebase.FirebaseDataReceiver;
 import com.dentalclinic.capstone.models.Patient;
 import com.dentalclinic.capstone.models.User;
 import com.dentalclinic.capstone.utils.CoreManager;
 import com.dentalclinic.capstone.utils.Utils;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.IOException;
 import java.util.List;
@@ -110,6 +113,11 @@ public class LoginActivity extends BaseActivity {
         linearLayout.requestFocus();
         txtPassword.clearFocus();
         txtPhone.clearFocus();
+        User user = CoreManager.getUser(this);
+        if(user!=null){
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 
 
@@ -167,8 +175,12 @@ public class LoginActivity extends BaseActivity {
     }
     public void callApiLogin(String phone, String password) {
         showLoading();
+        LoginRequest request  = new LoginRequest();
+        request.setPassword(password);
+        request.setPhone(phone);
+        request.setNotifToken(FirebaseInstanceId.getInstance().getToken());
         UserService userService = APIServiceManager.getService(UserService.class);
-        userService.login(phone, password)
+        userService.login(request)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Response<User>>() {
@@ -183,6 +195,7 @@ public class LoginActivity extends BaseActivity {
 //                            Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_SHORT).show();
                             //////donothing
                             CoreManager.setUser(LoginActivity.this, userResponse.body());
+
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         } else {
                             if (userResponse.errorBody() != null) {
@@ -206,7 +219,6 @@ public class LoginActivity extends BaseActivity {
                     public void onError(Throwable e) {
                         logError(LoginActivity.class, "attemptLogin", e.getMessage());
                         hideLoading();
-
                     }
                 });
 
