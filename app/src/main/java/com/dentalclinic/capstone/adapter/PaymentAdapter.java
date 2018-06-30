@@ -80,10 +80,8 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
 
             if (paymentDetail.getReceivedMoney() != null) {
                 Staff staff = paymentDetail.getReceptionist();
-                if (staff.getName() != null) {
+                if (staff != null) {
                     txtStaffName.setText(staff.getName());
-                }
-                if (staff.getAvatar() != null) {
                     Picasso.get().load(staff.getAvatar()).into(imgStaffAvatar);
                 }
             }
@@ -151,10 +149,14 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
         } else {
             viewHolder.imgExpIcon.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp);
         }
-        if (payment.getTreatmentHistories() != null) {
+        if (payment.getTreatmentNames() != null) {
             String treatmentName = "";
-            for (TreatmentHistory treatmentHistory : payment.getTreatmentHistories()) {
-                treatmentName += treatmentHistory.getTreatment().getName() + "\n";
+            for (int i = 0; i< payment.getTreatmentNames().size();i++){
+                if (i==payment.getTreatmentNames().size()-1){
+                    treatmentName+=payment.getTreatmentNames().get(i);
+                }else{
+                    treatmentName+=payment.getTreatmentNames().get(i)+", ";
+                }
             }
             viewHolder.txtTreatmentName.setText(treatmentName);
         }
@@ -167,7 +169,7 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
         if (payment.getPrepaid() != null) {
             viewHolder.txtNotePayable.setText(Utils.formatMoney(payment.getNotePayable()) + context.getResources().getString(R.string.current_unit));
         }
-        if (payment.isDone()) {
+        if (payment.isDone() == 1) {
             viewHolder.txtStatus.setText(context.getResources().getString(R.string.status_done));
             viewHolder.txtStatus.setTextColor(context.getResources().getColor(R.color.color_green_500));
         } else {

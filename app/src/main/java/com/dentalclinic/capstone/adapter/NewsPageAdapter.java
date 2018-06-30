@@ -9,12 +9,17 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.fragment.NewsPageViewFragment;
 
-public class NewsPageAdapter extends FragmentPagerAdapter {
-    private Context mContext;
+import java.util.ArrayList;
+import java.util.List;
 
+public class NewsPageAdapter extends FragmentPagerAdapter {
+//    private Context mContext;
+
+    private final List<Fragment> mFragmentList = new ArrayList<>();
+    private final List<String> mFragmentTitleList = new ArrayList<>();
     public NewsPageAdapter(Context context, FragmentManager fm) {
         super(fm);
-        mContext = context;
+//        mContext = context;
     }
 
     // This determines the fragment for each tab
@@ -38,20 +43,17 @@ public class NewsPageAdapter extends FragmentPagerAdapter {
     // This determines the number of tabs
     @Override
     public int getCount() {
-        return 2;
+        return mFragmentList.size();
     }
 
+    public void addFragment(Fragment fragment, String title) {
+        mFragmentList.add(fragment);
+        mFragmentTitleList.add(title);
+    }
     // This determines the title for each tab
     @Override
     public CharSequence getPageTitle(int position) {
-        // Generate title based on item position
-        switch (position) {
-            case 0:
-                return mContext.getString(R.string.news_tab_title);
-            case 1:
-                return mContext.getString(R.string.promotion_tab_titile);
-            default:
-                return null;
-        }
+        return mFragmentTitleList.get(position);
     }
+
 }

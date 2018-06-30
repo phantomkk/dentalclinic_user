@@ -18,6 +18,7 @@ import java.util.List;
 
 public class TreatmentHistoryAdapter extends ArrayAdapter<TreatmentHistory> {
     private List<TreatmentHistory> treatmentHistoryList;
+
     public TreatmentHistoryAdapter(Context context, List<TreatmentHistory> treatmentHistoryList) {
         super(context, 0, treatmentHistoryList);
         this.treatmentHistoryList = treatmentHistoryList;
@@ -50,28 +51,32 @@ public class TreatmentHistoryAdapter extends ArrayAdapter<TreatmentHistory> {
         TreatmentHistory treatmentHistory = treatmentHistoryList.get(position);
         if (treatmentHistory != null) {
 //            SimpleDateFormat dateFormat = new SimpleDateFormat(DateTimeFormat.valueOf());
-            if(treatmentHistory.getTreatment().getName()!=null){
+            if (treatmentHistory.getTreatment() != null) {
                 viewHolder.txtName.setText(treatmentHistory.getTreatment().getName());
             }
-            if(treatmentHistory.getPrice()!=null){
-                viewHolder.txtPrice.setText(Utils.formatMoney(treatmentHistory.getPrice())+getContext().getResources().getString(R.string.current_unit));
+            if (treatmentHistory.getPrice() != null) {
+                viewHolder.txtPrice.setText(Utils.formatMoney(treatmentHistory.getPrice()) + getContext().getResources().getString(R.string.current_unit));
             }
-            if(treatmentHistory.getCreateDate()!=null){
-                viewHolder.txtStartDate.setText(DateUtils.changeDateFormat(treatmentHistory.getCreateDate(),DateTimeFormat.DATE_TIME_DB,
+            if (treatmentHistory.getCreateDate() != null) {
+                viewHolder.txtStartDate.setText(DateUtils.changeDateFormat(treatmentHistory.getCreateDate(), DateTimeFormat.DATE_TIME_DB,
                         DateTimeFormat.DATE_FOTMAT));
             }
-            if(treatmentHistory.getFinishDate()!=null){
+            if (treatmentHistory.getFinishDate() != null) {
                 viewHolder.txtFinishDate.setText(DateUtils.changeDateFormat(treatmentHistory.getFinishDate(), DateTimeFormat.DATE_TIME_DB,
                         DateTimeFormat.DATE_FOTMAT));
             }
-            if(treatmentHistory.getTooth().getToothName()!=null){
+            if (treatmentHistory.getTooth() != null) {
                 viewHolder.txtToothName.setText(treatmentHistory.getTooth().getToothName());
             }
-            if(treatmentHistory.getTreatment().getEvent().getDiscount()!=0){
-                viewHolder.txtDiscount.setText(treatmentHistory.getTreatment().getEvent().getDiscount()+getContext().getResources().getString(R.string.percent));
+            if (treatmentHistory.getTreatment() != null) {
+                if (treatmentHistory.getTreatment().getEvent() != null) {
+                    viewHolder.txtDiscount.setText(treatmentHistory.getTreatment().getEvent().getDiscount() + getContext().getResources().getString(R.string.percent));
+                }else{
+                    viewHolder.txtDiscount.setText("0" + getContext().getResources().getString(R.string.percent));
+                }
             }
-            if(treatmentHistory.getTotalPrice()!=null){
-                viewHolder.txtTotal.setText(Utils.formatMoney(treatmentHistory.getTotalPrice()));
+            if (treatmentHistory.getTotalPrice() != null) {
+                viewHolder.txtTotal.setText(Utils.formatMoney(treatmentHistory.getTotalPrice())+ getContext().getResources().getString(R.string.current_unit));
             }
         }
         return convertView;

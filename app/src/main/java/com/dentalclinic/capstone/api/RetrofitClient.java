@@ -35,7 +35,7 @@ public class RetrofitClient {
 //        );
         //add log for retrofit
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        interceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
         clientBuilder.addInterceptor(interceptor);
         OkHttpClient client = clientBuilder.build();
         //Gson builder

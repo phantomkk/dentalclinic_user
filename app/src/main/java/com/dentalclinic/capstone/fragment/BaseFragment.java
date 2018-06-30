@@ -23,7 +23,7 @@ public class BaseFragment extends Fragment {
     }
 
     protected void showMessage(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
     }
 
     protected void hideLoading() {
@@ -45,6 +45,7 @@ public class BaseFragment extends Fragment {
     }
 
     public void logError(String method, String message) {
-        Log.e(AppConst.DEBUG_TAG, this.getClass().getSimpleName() + "." + method + "(): " + message);
+//        Log.e(AppConst.DEBUG_TAG, this.getClass().getSimpleName() + "." + method + "(): " + message);
+        Log.e(AppConst.DEBUG_TAG, "Fragment" + "." + method + "(): " + message);
     }
 }

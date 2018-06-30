@@ -20,11 +20,14 @@ import com.dentalclinic.capstone.adapter.TreatmentHistoryAdapter;
 import com.dentalclinic.capstone.api.APIServiceManager;
 import com.dentalclinic.capstone.api.services.HistoryTreatmentService;
 import com.dentalclinic.capstone.models.Event;
+import com.dentalclinic.capstone.models.News;
 import com.dentalclinic.capstone.models.Patient;
 import com.dentalclinic.capstone.models.Tooth;
 import com.dentalclinic.capstone.models.Treatment;
+import com.dentalclinic.capstone.models.TreatmentDetail;
 import com.dentalclinic.capstone.models.TreatmentHistory;
 import com.dentalclinic.capstone.models.User;
+import com.dentalclinic.capstone.utils.AppConst;
 import com.dentalclinic.capstone.utils.CoreManager;
 import com.dentalclinic.capstone.utils.DateTimeFormat;
 import com.dentalclinic.capstone.utils.DateUtils;
@@ -47,11 +50,9 @@ import retrofit2.Response;
  * A simple {@link Fragment} subclass.
  */
 public class HistoryTreatmentFragment extends BaseFragment {
-    ListView listView;
-    //    User user = new User();
-    TreatmentHistoryAdapter adapter;
-//    Patient patient1 = new Patient("trinh vo", "go vap");
-    List<TreatmentHistory> treatmentHistories;
+    public ListView listView;
+    public TreatmentHistoryAdapter adapter;
+    private List<TreatmentHistory> treatmentHistories = new ArrayList<TreatmentHistory>();
     private static HistoryTreatmentFragment instance = new HistoryTreatmentFragment();
 
     public static HistoryTreatmentFragment newInstance() {
@@ -66,7 +67,10 @@ public class HistoryTreatmentFragment extends BaseFragment {
     public HistoryTreatmentFragment() {
         // Required empty public constructor
     }
-
+    public void notificationAdapter(List<TreatmentHistory> treatmentHistories){
+        this.treatmentHistories.addAll(treatmentHistories);
+        adapter.notifyDataSetChanged();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,14 +78,24 @@ public class HistoryTreatmentFragment extends BaseFragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_history_treatment, container, false);
         listView = (ListView) v.findViewById(R.id.list_profile);
-        prepareListData();
+//        prepareListData();
         adapter = new TreatmentHistoryAdapter(getContext(), treatmentHistories);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getContext(), TreatmentDetailActivity.class);
-                startActivity(intent);
+
+                List<TreatmentDetail> details = treatmentHistories.get(i).getTreatmentDetails();
+                if(details!=null){
+                    if(!details.isEmpty()){
+                        Intent intent = new Intent(getContext(), TreatmentDetailActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable(AppConst.TREATMENT_HISTORY_OBJ,treatmentHistories.get(i));
+                        intent.putExtra(AppConst.BUNDLE,bundle);
+                        startActivity(intent);
+                    }
+                }
+
             }
         });
 
@@ -135,7 +149,6 @@ public class HistoryTreatmentFragment extends BaseFragment {
 //        patient2.setAvatar("https://scontent.fsgn5-5.fna.fbcdn.net/v/t1.0-9/21106763_661579387371492_6919408620920338286_n.jpg?_nc_cat=0&_nc_eui2=AeFS24o42DjWOdszwhxK3fB8ztBLi1_14lzqdUPhz2P8iesHrofix5GpCo4bNdwV1f7W3cfkRM4k0TqlcNvwqWzUPhy4yKMlJ_gOD0adW4C5-g&oh=d3b2103d7ec405372c1f7518676e00f7&oe=5BB82FD4");
 
         // Adding child data
-        treatmentHistories = new ArrayList<TreatmentHistory>();
         TreatmentHistory treatmentHistory = new TreatmentHistory();
         treatmentHistory.setTreatment(new Treatment("Trám Răng", new Event(10)));
         treatmentHistory.setTooth(new Tooth("răng cửa"));
@@ -180,7 +193,7 @@ public class HistoryTreatmentFragment extends BaseFragment {
                         } else {
                             try {
                                 String error = listResponse.errorBody().string();
-                                logError("CallAPI", error);
+//                                logError("CallAPI", error);
 
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -190,7 +203,8 @@ public class HistoryTreatmentFragment extends BaseFragment {
 
                     @Override
                     public void onError(Throwable e) {
-                        logError("CallAPI", e.getMessage());
+
+//                        logError("CallAPI", e.getMessage());
                     }
                 });
     }

@@ -22,7 +22,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="5"
+                android:layout_weight="7"
                 android:orientation="vertical">
 
                 <TextView
@@ -47,15 +47,14 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginLeft="10dp"
-                        android:textColor="@color/color_black"
-                        android:text="Vo Quoc Trinh" />
+                        android:textColor="@color/color_black" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="5"
+                android:layout_weight="3"
                 android:orientation="vertical">
 
                 <TextView
@@ -70,7 +69,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginTop="5dp"
-                    android:text="30/06/1996"
                     android:textColor="@color/color_black"
                     android:textSize="15dp" />
             </LinearLayout>
@@ -99,8 +97,8 @@
                 android:id="@+id/txt_prepaid_money"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:textAlignment="textEnd"
                 android:layout_weight="5"
-                android:text="200.000.000đ"
                 android:textColor="@color/color_red_500" />
         </LinearLayout>
     </LinearLayout>

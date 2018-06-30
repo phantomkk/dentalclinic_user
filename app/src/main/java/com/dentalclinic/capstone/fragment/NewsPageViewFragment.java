@@ -22,12 +22,15 @@ import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.activities.NewsDetailActivity;
 import com.dentalclinic.capstone.adapter.NewsAdapter;
 import com.dentalclinic.capstone.api.APIServiceManager;
+import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
 import com.dentalclinic.capstone.api.services.NewsService;
 import com.dentalclinic.capstone.models.News;
 import com.dentalclinic.capstone.utils.AppConst;
 import com.dentalclinic.capstone.utils.OnLoadMoreListener;
 import com.dentalclinic.capstone.utils.Utils;
+import com.google.gson.JsonSyntaxException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,8 +44,8 @@ import retrofit2.Response;
  * A simple {@link Fragment} subclass.
  */
 public class NewsPageViewFragment extends BaseFragment {
-    List<News> listNews = new ArrayList<>();
-    private NewsAdapter adapter;
+    public  List<News> listNews = new ArrayList<>();
+    public  NewsAdapter adapter;
     private NewsService newsService = APIServiceManager.getService(NewsService.class);
     private Disposable newsServiceDisposable;
     private final int NUMBER_PAGE_LOAD = 3;
@@ -60,7 +63,6 @@ public class NewsPageViewFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         Log.d(AppConst.DEBUG_TAG, "onCreateView");
-
         return inflater.inflate(R.layout.item_news_page_view, container, false);
     }
 
@@ -71,6 +73,7 @@ public class NewsPageViewFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         type = args.getInt("TYPE");
+        logError("onCreate", "newsssssss");
     }
 
     @Override
@@ -97,13 +100,13 @@ public class NewsPageViewFragment extends BaseFragment {
         });
         rcvNews.setAdapter(adapter);
 //        preparedData();
-        callApiGetNews(0, NUMBER_PAGE_LOAD, type);
+//        callApiGetNews(0, NUMBER_PAGE_LOAD, type);
         adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
 //                if (listNews.size() <= 200) {
                     listNews.add(null);
-                    if (listNews.size() >= 1) {
+                    if (listNews.size() >= 0) {
                         adapter.notifyItemInserted(listNews.size() - 1);
                     }
                 listNews.remove(listNews.size() - 1);
@@ -137,8 +140,7 @@ public class NewsPageViewFragment extends BaseFragment {
 //                }
             }
         });
-//        showMessage("TYPE"+ type);
-        Log.d(AppConst.DEBUG_TAG, "onViewCreated");
+
     }
 
     public void callApiGetNews(int currentIndex, int numItem, int typeId) {
@@ -158,16 +160,10 @@ public class NewsPageViewFragment extends BaseFragment {
                             if (listResponse.body() != null) {
                                 listNews.addAll(listResponse.body());
                                 adapter.notifyDataSetChanged();
-//                                adapter.setLoaded();
                                 logError("news", String.valueOf(listResponse.body().size()));
                             }
                         } else {
-                            String erroMsg = Utils.getErrorMsg(listResponse.errorBody());
-                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
-                                    .setMessage(erroMsg)
-                                    .setPositiveButton("Thử lại", (DialogInterface dialogInterface, int i) -> {
-                                    });
-                            alertDialog.show();
+                            showDialog(getResources().getString(R.string.error_message_api));
                         }
 
                     }
@@ -202,12 +198,7 @@ public class NewsPageViewFragment extends BaseFragment {
                                 logError("news", String.valueOf(listResponse.body().size()));
                             }
                         } else {
-                            String erroMsg = Utils.getErrorMsg(listResponse.errorBody());
-                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
-                                    .setMessage(erroMsg)
-                                    .setPositiveButton("Thử lại", (DialogInterface dialogInterface, int i) -> {
-                                    });
-                            alertDialog.show();
+                            showDialog(getResources().getString(R.string.error_message_api));
                         }
 
                     }
@@ -221,6 +212,11 @@ public class NewsPageViewFragment extends BaseFragment {
                 });
     }
 
+
+    public void notificationAdapter(List<News> news){
+        listNews.addAll(news);
+        adapter.notifyDataSetChanged();
+    }
     public void preparedData() {
 //        showLoading();
 //        callApiGetNews(0, NUMBER_PAGE_LOAD);

@@ -10,25 +10,33 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.activities.PhotoViewActivity;
 import com.dentalclinic.capstone.animation.MyGridView;
+import com.dentalclinic.capstone.models.Medicine;
 import com.dentalclinic.capstone.models.Prescription;
+import com.dentalclinic.capstone.models.Step;
 import com.dentalclinic.capstone.models.TreatmentDetail;
 import com.dentalclinic.capstone.models.TreatmentDetailStep;
 import com.dentalclinic.capstone.models.TreatmentImage;
 import com.dentalclinic.capstone.models.TreatmentStep;
 import com.dentalclinic.capstone.utils.AppConst;
+import com.dentalclinic.capstone.utils.DateTimeFormat;
+import com.dentalclinic.capstone.utils.DateUtils;
 import com.dentalclinic.capstone.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class TreatmentDetailAdapter extends ArrayAdapter<TreatmentDetail> {
     private List<TreatmentDetail> treatmentDetails;
@@ -41,6 +49,8 @@ public class TreatmentDetailAdapter extends ArrayAdapter<TreatmentDetail> {
     private static class ViewHolder {
         TextView mDentistName, mDate, mTreatmentStep, mNote, mPrescription;
         MyGridView gridViewListimage;
+        LinearLayout llSteps, llPresctiption, llImages;
+        CircleImageView imgDentistAvatar;
     }
 
     @Override
@@ -52,6 +62,10 @@ public class TreatmentDetailAdapter extends ArrayAdapter<TreatmentDetail> {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.item_treatment_detail, parent, false);
 //            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_image, parent, false);
+            viewHolder.llSteps = convertView.findViewById(R.id.ll_stetps);
+            viewHolder.llPresctiption = convertView.findViewById(R.id.ll_preciptions);
+            viewHolder.llImages = convertView.findViewById(R.id.ll_images);
+            viewHolder.imgDentistAvatar = convertView.findViewById(R.id.img_dentist_avatar);
             viewHolder.mDentistName = convertView.findViewById(R.id.txt_dentist);
             viewHolder.mDate = convertView.findViewById(R.id.txt_date);
             viewHolder.mTreatmentStep = convertView.findViewById(R.id.txt_treatment_step);
@@ -65,34 +79,73 @@ public class TreatmentDetailAdapter extends ArrayAdapter<TreatmentDetail> {
 
         TreatmentDetail treatmentDetail = treatmentDetails.get(position);
         if (treatmentDetail != null) {
-//            ImageView iv = (ImageView) convertView.findViewById(R.id.img_image_treatment);
-//            Picasso.get().load(image.getImageLink()).into(viewHolder.imageView);
-            viewHolder.mDentistName.setText(treatmentDetail.getDentist().getName());
-            SimpleDateFormat dateFormat = new SimpleDateFormat(Utils.PATTERN_DATE);
-            viewHolder.mDate.setText(dateFormat.format(treatmentDetail.getCreatedDate()));
+            if (treatmentDetail.getDentist() != null) {
+                viewHolder.mDentistName.setText(treatmentDetail.getDentist().getName());
+                Picasso.get().load(treatmentDetail.getDentist().getAvatar()).into(viewHolder.imgDentistAvatar);
+            }
+            viewHolder.mDate.setText(DateUtils.changeDateFormat(treatmentDetail.getCreatedDate(), DateTimeFormat.DATE_TIME_DB, DateTimeFormat.DATE_FOTMAT));
             String step = "";
-            for (TreatmentDetailStep stepObj : treatmentDetail.getTreatmentDetailSteps()) {
-                step += "- "+stepObj.getTreatmentStep().getName() + "\n";
+            if (treatmentDetail.getSteps() != null) {
+                if (treatmentDetail.getSteps().isEmpty()) {
+                    viewHolder.llSteps.setVisibility(View.GONE);
+                } else {
+                    for (int i = 0; i < treatmentDetail.getSteps().size(); i++) {
+                        if (treatmentDetail.getSteps().get(i).getStep() != null) {
+                            Step step1 = treatmentDetail.getSteps().get(i).getStep();
+                            if (i == treatmentDetail.getSteps().size() - 1) {
+                                step += "- " + step1.getName();
+                            } else {
+                                step += "- " + step1.getName() + "\n";
+                            }
+                        }
+                    }
+                }
+            } else {
+                viewHolder.llSteps.setVisibility(View.GONE);
             }
             viewHolder.mTreatmentStep.setText(step);
             viewHolder.mNote.setText(treatmentDetail.getNote());
             String prescription = "";
-            for (Prescription prescriptionObj : treatmentDetail.getPrescriptions()) {
-                prescription += Utils.getMedicineLine(prescriptionObj.getMedicine().getName(), prescriptionObj.getQualtity(), 50) + "\n";
+            if (treatmentDetail.getPrescriptions() != null) {
+                if (treatmentDetail.getPrescriptions().isEmpty()) {
+                    viewHolder.llPresctiption.setVisibility(View.GONE);
+                } else {
+                    for (int i = 0; i < treatmentDetail.getPrescriptions().size(); i++) {
+                        if (treatmentDetail.getPrescriptions().get(i).getMedicine() != null) {
+                            Medicine medicine = treatmentDetail.getPrescriptions().get(i).getMedicine();
+                            if (i == treatmentDetail.getPrescriptions().size() - 1) {
+                                prescription += "- " + Utils.getMedicineLine(medicine.getName(), treatmentDetail.getPrescriptions().get(i).getQualtity(), 40);
+                            } else {
+                                prescription += "- " + Utils.getMedicineLine(medicine.getName(), treatmentDetail.getPrescriptions().get(i).getQualtity(), 40) + "\n";
+                            }
+                        }
+                    }
+                }
+            } else {
+                viewHolder.llPresctiption.setVisibility(View.GONE);
             }
             viewHolder.mPrescription.setText(prescription);
-            ImageAdapter imageAdapter = new ImageAdapter(getContext(), treatmentDetail.getTreatmentImages());
-            viewHolder.gridViewListimage.setAdapter(imageAdapter);
-            viewHolder.gridViewListimage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Intent intent = new Intent(getContext(), PhotoViewActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(AppConst.IMAGE_OBJ, treatmentDetail.getTreatmentImages().get(i));
-                    intent.putExtra(AppConst.BUNDLE, bundle);
-                    getContext().startActivity(intent);
+            if (treatmentDetail.getImages() != null) {
+                if (treatmentDetail.getImages().isEmpty()) {
+                    viewHolder.llImages.setVisibility(View.GONE);
+                } else {
+                    ImageAdapter imageAdapter = new ImageAdapter(getContext(), treatmentDetail.getImages());
+                    viewHolder.gridViewListimage.setAdapter(imageAdapter);
+                    viewHolder.gridViewListimage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            Intent intent = new Intent(getContext(), PhotoViewActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable(AppConst.IMAGE_OBJ, treatmentDetail.getImages().get(i));
+                            intent.putExtra(AppConst.BUNDLE, bundle);
+                            getContext().startActivity(intent);
+                        }
+                    });
                 }
-            });
+            } else {
+                viewHolder.llImages.setVisibility(View.GONE);
+            }
+
         }
         return convertView;
     }

@@ -2,9 +2,12 @@ package com.dentalclinic.capstone.activities;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +20,8 @@ import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
 import com.dentalclinic.capstone.utils.AppConst;
 import com.dentalclinic.capstone.utils.Utils;
 
+import java.net.InetAddress;
+
 public abstract class BaseActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
 
@@ -24,6 +29,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(getMainTitle());
+        showMessNetword();
     }
 
     public void showMessage(String message) {
@@ -71,8 +77,35 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void logError(String method, String message) {
-        Log.e(AppConst.DEBUG_TAG, this.getClass().getSimpleName() + "." + method + "(): " + message);
+        Log.e(AppConst.DEBUG_TAG,  "Activity"+"." + method + "(): " + message);
+//        Log.e(AppConst.DEBUG_TAG, this.getClass().getSimpleName() + "." + method + "(): " + message);
     }
+    public boolean isInternetAvailable() {
+        try {
+            InetAddress ipAddr = InetAddress.getByName("google.com");
+            //You can replace it with your name
+            return !ipAddr.equals("");
 
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    public void showMessNetword(){
+        ConnectivityManager manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+
+//For 3G check
+        boolean is3g = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
+                .isConnectedOrConnecting();
+//For WiFi Check
+        boolean isWifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+                .isConnectedOrConnecting();
+
+        System.out.println(is3g + " net " + isWifi);
+
+        if (!is3g && !isWifi)
+        {
+           showMessage("Vui lòng kiểm tra kết nối mạng của bạn đã được bật.");
+        }
+    }
 
 }

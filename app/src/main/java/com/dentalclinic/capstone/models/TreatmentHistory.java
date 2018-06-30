@@ -23,7 +23,7 @@ public class TreatmentHistory implements Serializable {
     private Long totalPrice;
     @SerializedName("treatment")
     private Treatment treatment;
-    @SerializedName("treatment_details")
+    @SerializedName("details")
     private List<TreatmentDetail> treatmentDetails;
     @SerializedName("tooth")
     private Tooth tooth;

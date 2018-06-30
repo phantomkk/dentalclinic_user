@@ -7,8 +7,8 @@ import java.io.Serializable;
 public class TreatmentDetailStep implements Serializable {
     @SerializedName("treatment_detail")
     private TreatmentDetail treatmentDetail;
-    @SerializedName("treatment_step")
-    private TreatmentStep treatmentStep;
+    @SerializedName("step")
+    private  Step step;
     @SerializedName("description")
     private String description;
 
@@ -20,12 +20,12 @@ public class TreatmentDetailStep implements Serializable {
         this.treatmentDetail = treatmentDetail;
     }
 
-    public TreatmentStep getTreatmentStep() {
-        return treatmentStep;
+    public Step getStep() {
+        return step;
     }
 
-    public void setTreatmentStep(TreatmentStep treatmentStep) {
-        this.treatmentStep = treatmentStep;
+    public void setStep(Step step) {
+        this.step = step;
     }
 
     public String getDescription() {

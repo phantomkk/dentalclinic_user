@@ -15,29 +15,32 @@ public class TreatmentDetail implements Serializable {
     private String note;
     @SerializedName("dentist")
     private Staff dentist;
-    @SerializedName("created_date")
-    private Date createdDate;
+    @SerializedName("create_date")
+    private String createdDate;
     @SerializedName("payment")
     private Payment payment;
     @SerializedName("treatment_detail_steps")
-    private List<TreatmentDetailStep> treatmentDetailSteps;
+    private List<TreatmentDetailStep> steps;
     @SerializedName("treatment_images")
-    private List<TreatmentImage> treatmentImages;
+    private List<TreatmentImage> images;
     @SerializedName("treatment")
     private Treatment treatment;
-    @SerializedName("prescription")
+    @SerializedName("prescriptions")
     private List<Prescription> prescriptions;
 
     public TreatmentDetail() {
     }
 
-    public TreatmentDetail(TreatmentHistory treatmentHistory, String note, Staff dentist, Date createdDate, List<TreatmentDetailStep> treatmentDetailSteps, List<TreatmentImage> treatmentImages, List<Prescription> prescriptions) {
+    public TreatmentDetail(int id, TreatmentHistory treatmentHistory, String note, Staff dentist, String createdDate, Payment payment, List<TreatmentDetailStep> steps, List<TreatmentImage> images, Treatment treatment, List<Prescription> prescriptions) {
+        this.id = id;
         this.treatmentHistory = treatmentHistory;
         this.note = note;
         this.dentist = dentist;
         this.createdDate = createdDate;
-        this.treatmentDetailSteps = treatmentDetailSteps;
-        this.treatmentImages = treatmentImages;
+        this.payment = payment;
+        this.steps = steps;
+        this.images = images;
+        this.treatment = treatment;
         this.prescriptions = prescriptions;
     }
 
@@ -85,11 +88,11 @@ public class TreatmentDetail implements Serializable {
         this.dentist = dentist;
     }
 
-    public Date getCreatedDate() {
+    public String getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
     }
 
@@ -101,20 +104,20 @@ public class TreatmentDetail implements Serializable {
         this.payment = payment;
     }
 
-    public List<TreatmentDetailStep> getTreatmentDetailSteps() {
-        return treatmentDetailSteps;
+    public List<TreatmentDetailStep> getSteps() {
+        return steps;
     }
 
-    public void setTreatmentDetailSteps(List<TreatmentDetailStep> treatmentDetailSteps) {
-        this.treatmentDetailSteps = treatmentDetailSteps;
+    public void setSteps(List<TreatmentDetailStep> steps) {
+        this.steps = steps;
     }
 
-    public List<TreatmentImage> getTreatmentImages() {
-        return treatmentImages;
+    public List<TreatmentImage> getImages() {
+        return images;
     }
 
-    public void setTreatmentImages(List<TreatmentImage> treatmentImages) {
-        this.treatmentImages = treatmentImages;
+    public void setImages(List<TreatmentImage> images) {
+        this.images = images;
     }
 
     public Treatment getTreatment() {

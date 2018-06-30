@@ -21,6 +21,7 @@ import com.dentalclinic.capstone.models.Patient;
 import com.dentalclinic.capstone.models.Payment;
 import com.dentalclinic.capstone.models.PaymentDetail;
 import com.dentalclinic.capstone.models.Staff;
+import com.dentalclinic.capstone.models.TreatmentHistory;
 import com.dentalclinic.capstone.utils.CoreManager;
 import com.dentalclinic.capstone.utils.Utils;
 
@@ -47,10 +48,10 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
         // Required empty public constructor
     }
 
-    List<Payment> payments = new ArrayList<>();
+    private List<Payment> payments = new ArrayList<>();
 
     ExpandableListView expandableListView;
-    PaymentAdapter adapter;
+    private PaymentAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,7 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
 //        callApiGetAllTreatmentCategories();
         expandableListView = v.findViewById(R.id.eplv_list_payment);
         if (payments.isEmpty()) {
-            prepareData();
+//            prepareData();
         }
         adapter = new PaymentAdapter(getContext(), payments);
         expandableListView.setAdapter(adapter);
@@ -88,7 +89,10 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
             expandableListView.collapseGroup(i);
         }
     }
-
+    public void notificationAdapter(List<Payment> payments){
+        this.payments.addAll(payments);
+        adapter.notifyDataSetChanged();
+    }
     @Override
     public boolean onQueryTextSubmit(String s) {
         adapter.filterData(s);
@@ -112,11 +116,11 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.search_menu, menu);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
-        searchView.setOnQueryTextListener(this);
-        searchView.setQueryHint("Tìm Ngày");
+//        inflater.inflate(R.menu.search_menu, menu);
+//        MenuItem searchItem = menu.findItem(R.id.action_search);
+//        SearchView searchView = (SearchView) searchItem.getActionView();
+//        searchView.setOnQueryTextListener(this);
+//        searchView.setQueryHint("Tìm Ngày");
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -133,52 +137,52 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
         paymentDetails.add(paymentDetail);
         paymentDetails.add(paymentDetail);
         payment.setPaymentDetails(paymentDetails);
-        payment.setDone(true);
+        payment.setDone(1);
         payments.add(payment);
         payments.add(payment);
         payments.add(payment);
 
 
-//        Patient currentPatient = CoreManager.getCurrentPatient();
-//        if (currentPatient != null) {
-//            PaymentService paymentService = APIServiceManager.getService(PaymentService.class);
-//            paymentService.getByPhone(currentPatient.getPhone())
-//                    .subscribeOn(Schedulers.newThread())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(new SingleObserver<Response<List<Payment>>>() {
-//                        @Override
-//                        public void onSubscribe(Disposable d) {
-//                            paymentDisposable = d;
-//                        }
-//
-//                        @Override
-//                        public void onSuccess(Response<List<Payment>> paymentResponse) {
-//                            if (paymentResponse.isSuccessful()) {
-//                                List<Payment> list = paymentResponse.body();
-//                                if (list != null && list.size() > 0) {
-//                                    payments.addAll(list);
-//                                    adapter.notifyDataSetChanged();
-//                                }else{
-//
-//                                }
-//                            } else {
-//                                try {
-//                                    String error = paymentResponse.errorBody().string();
+        Patient currentPatient = CoreManager.getCurrentPatient(getContext());
+        if (currentPatient != null) {
+            PaymentService paymentService = APIServiceManager.getService(PaymentService.class);
+            paymentService.getByPhone(currentPatient.getPhone())
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new SingleObserver<Response<List<Payment>>>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            paymentDisposable = d;
+                        }
+
+                        @Override
+                        public void onSuccess(Response<List<Payment>> paymentResponse) {
+                            if (paymentResponse.isSuccessful()) {
+                                List<Payment> list = paymentResponse.body();
+                                if (list != null && list.size() > 0) {
+                                    payments.addAll(list);
+                                    adapter.notifyDataSetChanged();
+                                }else{
+
+                                }
+                            } else {
+                                try {
+                                    String error = paymentResponse.errorBody().string();
 //                                    logError("CallApi",
 //                                            "success but fail: " + error);
-//                                } catch (IOException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onError(Throwable e) {
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
 //                            logError(HistoryPaymentFragment.class.getSimpleName(), e.getMessage());
-//                        }
-//                    });
-//
-//        }
+                        }
+                    });
+
+        }
     }
 
     @Override

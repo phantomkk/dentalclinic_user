@@ -15,24 +15,35 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
+            android:orientation="vertical">
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
                 android:text="Nha Sĩ:" />
-
-            <TextView
-                android:id="@+id/txt_dentist"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="7"
-                android:text="Vo Quoc Trinh"
-                android:textColor="@color/color_black"
-                android:textSize="15dp" />
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/input_margin_top"
+                android:weightSum="10">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/img_dentist_avatar"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/avatar"/>
+
+
+                <TextView
+                    android:id="@+id/txt_dentist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/color_black"
+                    android:textSize="15dp" />
+            </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -49,10 +60,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_black"
-                android:textSize="15dp"
-                android:text="30-06-1996" />
+                android:textSize="15dp" />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/ll_stetps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -68,8 +79,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="10"
                 android:textSize="15dp"
-                android:textColor="@color/color_black"
-                android:text="giảm đau..........30 viên\nchống sưng......30 viên" />
+                android:textColor="@color/color_black" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -91,10 +101,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="7"
-                android:textSize="15dp"
-                android:text="Huyết áp cao" />
+                android:textSize="15dp" />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/ll_preciptions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -114,10 +124,10 @@
                 android:layout_weight="7"
                 android:maxLines="10"
                 android:textSize="15dp"
-                android:textColor="@color/color_black"
-                android:text="giảm đau..........30 viên\nchống sưng......30 viên" />
+                android:textColor="@color/color_black" />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/ll_images"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardUseCompatPadding="true">
 
     <LinearLayout
@@ -18,24 +18,35 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Thanh Toán"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textSize="20dp"
-                android:textColor="@color/color_black" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/txt_treatment_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Trám Răng"
-                android:textColor="@color/color_black"
-                android:textSize="15dp" />
+                <TextView
+                    android:id="@+id/txt_treatment_name"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text=""
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/color_black" />
+
+                <ImageView
+                    android:id="@+id/img_expand_icon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center|top"
+                    android:src="@drawable/ic_keyboard_arrow_up_black_24dp" />
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:textColor="@color/color_black"-->
+                    <!--android:textSize="15dp" />-->
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -55,17 +66,17 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="4"
-                    android:text="Tổng Tiền"/>
+                    android:text="Tổng Tiền" />
 
                 <TextView
                     android:id="@+id/txt_total"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
-                    android:text="200.000đ"
                     android:textAlignment="textEnd"
                     android:textColor="@color/color_red_400" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -78,17 +89,17 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="4"
-                    android:text="Đã Trả"/>
+                    android:text="Đã Trả" />
 
                 <TextView
                     android:id="@+id/txt_prepaid"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
-                    android:text="200.000đ"
                     android:textAlignment="textEnd"
                     android:textColor="@color/color_red_400" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -108,15 +119,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
-                    android:text="0đ"
                     android:textAlignment="textEnd"
                     android:textColor="@color/color_red_400" />
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/color_grey_200" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -136,17 +148,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
-                    android:text="Hoàn Thành"
                     android:textAlignment="textEnd"
                     android:textColor="@color/color_green_500" />
             </LinearLayout>
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/img_expand_icon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center|top"
-            android:src="@drawable/ic_keyboard_arrow_up_black_24dp" />
     </LinearLayout>
 </android.support.v7.widget.CardView>

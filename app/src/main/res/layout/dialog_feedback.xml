@@ -77,6 +77,7 @@
                 android:maxLength="2000"
                 android:maxLines="4"
                 android:minLines="1"
+                android:textColor="@color/color_black"
                 android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
@@ -94,7 +95,6 @@
             android:background="@color/color_transparent"
             android:layout_marginEnd="20dp"
             android:text="Lúc khác"
-            android:textSize="10sp"
             android:textColor="@color/color_blue_800" />
 
         <Button
@@ -103,7 +103,6 @@
             android:layout_height="wrap_content"
             android:background="@color/color_transparent"
             android:text="Xác nhận"
-            android:textSize="10sp"
             android:textColor="@color/color_blue_800" />
     </LinearLayout>
 

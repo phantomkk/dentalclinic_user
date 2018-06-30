@@ -109,26 +109,26 @@ public class MainActivity extends BaseActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(getResources().getString(R.string.new_fragment_title));
-        NewsFragment newFragment = new NewsFragment();
-        fragmentManager.beginTransaction().replace(R.id.main_fragment, newFragment).commit();
-        button = findViewById(R.id.btn_test);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TreatmentDetail detail = new TreatmentDetail();
-                detail.setDentist(new Staff("Vo Quoc Trinh", "https://thumbs.dreamstime.com/b/dentist-avatar-flat-icon-isolated-white-series-caucasian-blue-coat-background-eps-file-available-95672861.jpg"));
-                detail.setCreatedDate(new Date());
-                detail.setTreatment(new Treatment("Tram Rang"));
-                showFeedbackDialog(detail);
-            }
-        });
+//        NewsFragment newFragment = new NewsFragment();
+//        fragmentManager.beginTransaction().replace(R.id.main_fragment, newFragment).commit();
+//        button = findViewById(R.id.btn_test);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                TreatmentDetail detail = new TreatmentDetail();
+//                detail.setDentist(new Staff("Vo Quoc Trinh", "https://thumbs.dreamstime.com/b/dentist-avatar-flat-icon-isolated-white-series-caucasian-blue-coat-background-eps-file-available-95672861.jpg"));
+//                detail.setCreatedDate(new Date());
+//                detail.setTreatment(new Treatment("Tram Rang"));
+//                showFeedbackDialog(detail);
+//            }
+//        });
 
         digitalView = findViewById(R.id.digital);
         currentDate = findViewById(R.id.txt_date);
 //        Date currentTime = Calendar.getInstance().getTime();
 //        logError("Date",currentTime.toString());
         currentDate.setText(DateUtils.getCurrentDateFormat());
-        listView = findViewById(R.id.lv_appointment_list);
+//        listView = findViewById(R.id.lv_appointment_list);
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -187,19 +187,13 @@ public class MainActivity extends BaseActivity
                         //sample usage of the onProfileChanged listener
                         //if the clicked item has the identifier 1 add a new profile ;)
                         if (profile instanceof IDrawerItem && profile.getIdentifier() == PROFILE_SETTING) {
-//                            int count = 100 + headerResult.getProfiles().size() + 1;
-//                            IProfile newProfile = new ProfileDrawerItem().withNameShown(true).withName("Batman" + count).withEmail("batman" + count + "@gmail.com").withIcon("https://avatars3.githubusercontent.com/u/1476232?v=3&s=460").withIdentifier(count);
-//                            if (headerResult.getProfiles() != null) {
-//                                //we know that there are 2 setting elements. set the new profile above them ;)
-//                                headerResult.addProfile(newProfile, headerResult.getProfiles().size() - 1);
-//                            } else {
-//                                headerResult.addProfiles(newProfile);
-//                            }
                             if (user == null) {
                                 Intent intent1 = new Intent(MainActivity.this, LoginActivity.class);
                                 startActivity(intent1);
                             }
-
+                        }else{
+                            CoreManager.setCurrentPatient((int)profile.getIdentifier(),MainActivity.this);
+//                            result.setSelectionAtPosition(1,true);
                         }
 
                         //false if you have not consumed the event and it should close the drawer
@@ -317,7 +311,7 @@ public class MainActivity extends BaseActivity
                 return true;
             }
         });
-        result.updateBadge(5, new StringHolder(1 + ""));
+//        result.updateBadge(5, new StringHolder(1 + ""));
         result.setSelectionAtPosition(1);
 
         listenOrderNumber();

@@ -18,12 +18,29 @@ public class Payment implements Serializable {
     @SerializedName("user")
     private User user;
     @SerializedName("is_done")
-    private boolean isDone;
+    private int isDone;
     @SerializedName("treatment_histories")
     private List<TreatmentHistory> treatmentHistories;
     @SerializedName("payment_details")
     private List<PaymentDetail> paymentDetails;
+    @SerializedName("treatment_names")
+    private List<String> treatmentNames;
 
+    public int getIsDone() {
+        return isDone;
+    }
+
+    public void setIsDone(int isDone) {
+        this.isDone = isDone;
+    }
+
+    public List<String> getTreatmentNames() {
+        return treatmentNames;
+    }
+
+    public void setTreatmentNames(List<String> treatmentNames) {
+        this.treatmentNames = treatmentNames;
+    }
 
     public int getId() {
         return id;
@@ -65,11 +82,11 @@ public class Payment implements Serializable {
         this.user = user;
     }
 
-    public boolean isDone() {
+    public int isDone() {
         return isDone;
     }
 
-    public void setDone(boolean done) {
+    public void setDone(int done) {
         isDone = done;
     }
 
