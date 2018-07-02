@@ -96,39 +96,39 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public void showMessNetword() {
         ConnectivityManager manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        if (manager != null) {
-            NetworkInfo activeNetwork = manager.getActiveNetworkInfo();
-            if (activeNetwork != null) { // connected to the internet
-                if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
-                    // connected to wifi
-                    Toast.makeText(this, activeNetwork.getTypeName(), Toast.LENGTH_SHORT).show();
-                    if (!activeNetwork.isAvailable()) {
-                        showMessage("Vui lòng kiểm tra kết nối mạng của bạn đã được bật.");
-                    }
-                } else if ( activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
-                    if (!activeNetwork.isAvailable()) {
-                        showMessage("Vui lòng kiểm tra kết nối mạng của bạn đã được bật.");
-                    }
-                }
-            } else {
-                // not connected to the internet
-                logError("CHECK Network Base Activity","ot connected to the internet");
-                     showMessage("Vui lòng kiểm tra kết nối mạng của bạn đã được bật.");
-            }
-        }
-////For 3G check
-//        boolean is3g = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
-//                .isConnectedOrConnecting();
-////For WiFi Check
-//        boolean isWifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-//                .isConnectedOrConnecting();
-//
-//        System.out.println(is3g + " net " + isWifi);
-//
-//        if (!is3g && !isWifi)
-//        {
-//           showMessage("Vui lòng kiểm tra kết nối mạng của bạn đã được bật.");
+//        if (manager != null) {
+//            NetworkInfo activeNetwork = manager.getActiveNetworkInfo();
+//            if (activeNetwork != null) { // connected to the internet
+//                if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
+//                    // connected to wifi
+//                    Toast.makeText(this, activeNetwork.getTypeName(), Toast.LENGTH_SHORT).show();
+//                    if (!activeNetwork.isAvailable()) {
+//                        showMessage("Vui lòng kiểm tra kết nối mạng của bạn đã được bật.");
+//                    }
+//                } else if ( activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+//                    if (!activeNetwork.isAvailable()) {
+//                        showMessage("Vui lòng kiểm tra kết nối mạng của bạn đã được bật.");
+//                    }
+//                }
+//            } else {
+//                // not connected to the internet
+//                logError("CHECK Network Base Activity","ot connected to the internet")
+//                     showMessage("Vui lòng kiểm tra kết nối mạng của bạn đã được bật.");
+//            }
 //        }
+//For 3G check
+        boolean is3g = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
+                .isConnectedOrConnecting();
+//For WiFi Check
+        boolean isWifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+                .isConnectedOrConnecting();
+
+        System.out.println(is3g + " net " + isWifi);
+
+        if (!is3g && !isWifi)
+        {
+           showMessage("Vui lòng kiểm tra kết nối mạng của bạn đã được bật.");
+        }
     }
 
 }
