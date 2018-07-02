@@ -134,7 +134,17 @@ public class EditPasswordActivity extends BaseActivity implements View.OnClickLi
 
                             showMessage(getResources().getString(R.string.success_message_api));
                             finish();
-                        } else {
+                        }
+                        else if(response.code()==500){
+                            try {
+                                String error = response.errorBody().string();
+                                showMessage(getString(R.string.error_server));
+                                logError("CallAPI",error);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else {
                             try {
                                 ErrorResponse errorResponse = Utils.parseJson(response.errorBody().string(), ErrorResponse.class);
                                 showDialog(errorResponse.getErrorMessage());
@@ -158,6 +168,7 @@ public class EditPasswordActivity extends BaseActivity implements View.OnClickLi
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
+                        showMessage(e.getMessage());
                         logError("CallApiRegister", e.getMessage());
                         hideLoading();
                     }

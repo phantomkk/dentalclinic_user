@@ -18,6 +18,7 @@ import com.dentalclinic.capstone.activities.TreatmentDetailActivity;
 import com.dentalclinic.capstone.adapter.PatientAdapter;
 import com.dentalclinic.capstone.adapter.TreatmentHistoryAdapter;
 import com.dentalclinic.capstone.api.APIServiceManager;
+import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
 import com.dentalclinic.capstone.api.services.HistoryTreatmentService;
 import com.dentalclinic.capstone.models.Event;
 import com.dentalclinic.capstone.models.News;
@@ -31,6 +32,7 @@ import com.dentalclinic.capstone.utils.AppConst;
 import com.dentalclinic.capstone.utils.CoreManager;
 import com.dentalclinic.capstone.utils.DateTimeFormat;
 import com.dentalclinic.capstone.utils.DateUtils;
+import com.dentalclinic.capstone.utils.Utils;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -44,6 +46,7 @@ import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.internal.Util;
 import retrofit2.Response;
 
 /**
@@ -67,7 +70,8 @@ public class HistoryTreatmentFragment extends BaseFragment {
     public HistoryTreatmentFragment() {
         // Required empty public constructor
     }
-    public void notificationAdapter(List<TreatmentHistory> treatmentHistories){
+
+    public void notificationAdapter(List<TreatmentHistory> treatmentHistories) {
         this.treatmentHistories.addAll(treatmentHistories);
         adapter.notifyDataSetChanged();
     }
@@ -86,12 +90,12 @@ public class HistoryTreatmentFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 List<TreatmentDetail> details = treatmentHistories.get(i).getTreatmentDetails();
-                if(details!=null){
-                    if(!details.isEmpty()){
+                if (details != null) {
+                    if (!details.isEmpty()) {
                         Intent intent = new Intent(getContext(), TreatmentDetailActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable(AppConst.TREATMENT_HISTORY_OBJ,treatmentHistories.get(i));
-                        intent.putExtra(AppConst.BUNDLE,bundle);
+                        bundle.putSerializable(AppConst.TREATMENT_HISTORY_OBJ, treatmentHistories.get(i));
+                        intent.putExtra(AppConst.BUNDLE, bundle);
                         startActivity(intent);
                     }
                 }
@@ -190,11 +194,21 @@ public class HistoryTreatmentFragment extends BaseFragment {
                                     adapter.notifyDataSetChanged();
                                 }
                             }
-                        } else {
+                        } else if (listResponse.code() == 500) {
                             try {
                                 String error = listResponse.errorBody().string();
-//                                logError("CallAPI", error);
-
+                                logError("CallAPI", error);
+showMessage(getString(R.string.error_server));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            ErrorResponse errorResponse = null;
+                            try {
+                                errorResponse = Utils.parseJson(listResponse.errorBody().string(),
+                                        ErrorResponse.class);
+                                showMessage(errorResponse.getErrorMessage());
+                                logError("CallAPI HISTORY TREATMENT", errorResponse.getExceptionMessage());
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -203,7 +217,8 @@ public class HistoryTreatmentFragment extends BaseFragment {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        e.printStackTrace();
+                        showMessage(e.getMessage());
 //                        logError("CallAPI", e.getMessage());
                     }
                 });

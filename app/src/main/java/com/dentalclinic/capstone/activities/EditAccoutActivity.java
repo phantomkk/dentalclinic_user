@@ -23,6 +23,7 @@ import com.dentalclinic.capstone.adapter.DistrictSpinnerAdapter;
 import com.dentalclinic.capstone.api.APIServiceManager;
 import com.dentalclinic.capstone.api.requestobject.RegisterRequest;
 import com.dentalclinic.capstone.api.requestobject.UpdatePatientRequest;
+import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
 import com.dentalclinic.capstone.api.responseobject.SuccessResponse;
 import com.dentalclinic.capstone.api.services.AddressService;
 import com.dentalclinic.capstone.api.services.GuestService;
@@ -39,6 +40,7 @@ import com.dentalclinic.capstone.utils.CoreManager;
 import com.dentalclinic.capstone.utils.Utils;
 import com.dentalclinic.capstone.utils.Validation;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -64,6 +66,7 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
     private DistrictDatabaseHelper districtDatabaseHelper = new DistrictDatabaseHelper(EditAccoutActivity.this);
     private DatabaseHelper cityDatabaseHelper = new DatabaseHelper(EditAccoutActivity.this);
     private DistrictSpinnerAdapter districtSpinnerAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,10 +100,10 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
         }
 
 //        setEvenForCityDistrict();
-        if(cityDatabaseHelper.getAllCity().isEmpty()){
+        if (cityDatabaseHelper.getAllCity().isEmpty()) {
             cityDatabaseHelper.insertDataCity();
         }
-        if(cityDatabaseHelper.getAllDistrict().isEmpty()){
+        if (cityDatabaseHelper.getAllDistrict().isEmpty()) {
             cityDatabaseHelper.insertDataDistrict();
         }
         spCity.setAdapter(new CitySpinnerAdapter(
@@ -112,10 +115,11 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
                 City city = (City) spCity.getSelectedItem();
                 if (city != null) {
                     spDistrict.setAdapter(new DistrictSpinnerAdapter(EditAccoutActivity.this,
-                            android.R.layout.simple_spinner_item,cityDatabaseHelper.getDistrictOfCity(city.getId())));
+                            android.R.layout.simple_spinner_item, cityDatabaseHelper.getDistrictOfCity(city.getId())));
                     spDistrict.setSelection(cityDatabaseHelper.getPositionDistrictById(patient.getDistrict()));
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
@@ -271,7 +275,15 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
                                     }
                                 }
                             }
+                        } else if (listResponse.code() == 500) {
+                            try {
+                                showMessage(getString(R.string.error_server));
+                                logError("Call API", listResponse.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         } else {
+                            showMessage("Có lỗi xảy ra");
                             logError("callDistrictAPI", "Success but on failed");
                         }
                     }
@@ -279,6 +291,7 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
+                        showMessage(e.getMessage());
                         logError("callDistrictAPI", "onError" + e.getMessage());
                     }
                 });
@@ -397,25 +410,40 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
                     public void onSuccess(Response<SuccessResponse> response) {
                         if (response.isSuccessful()) {
 //                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(EditAccoutActivity.this)
-////                                    .setMessage("Đăng kí tài khoản thành công")
-////                                    .setPositiveButton("Đăng nhập", (DialogInterface dialogInterface, int i) -> {
-////                                        Intent intent = new Intent(EditAccoutActivity.this, LoginActivity.class);
-////                                        startActivity(intent);
-////                                    });
-////                            alertDialog.show();
-                            CoreManager.savePatient(EditAccoutActivity.this,requestObj);
+//                                    .setMessage("Đăng kí tài khoản thành công")
+//                                    .setPositiveButton("Đăng nhập", (DialogInterface dialogInterface, int i) -> {
+//                                        Intent intent = new Intent(EditAccoutActivity.this, LoginActivity.class);
+//                                        startActivity(intent);
+//                                    });
+//                            alertDialog.show();
+                            CoreManager.savePatient(EditAccoutActivity.this, requestObj);
                             MainActivity.resetHeader(EditAccoutActivity.this);
                             showMessage(getResources().getString(R.string.success_message_api));
                             setResult(RESULT_OK);
                             finish();
+                        } else if (response.code() == 500) {
+                            try {
+                                String error = response.errorBody().string();
+                                showMessage(getString(R.string.error_server));
+                                logError("Call API", error);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         } else {
 //                            String erroMsg = Utils.getErrorMsg(response.errorBody());
-                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(EditAccoutActivity.this)
-                                    .setMessage(getResources().getString(R.string.error_message_api))
-                                    .setPositiveButton("Thử lại", (DialogInterface dialogInterface, int i) -> {
-                                    });
-                            alertDialog.show();
-//                            logError("CallApiRegister", "SuccessBut on Failed");
+                            try {
+                                String error = response.errorBody().string();
+                                ErrorResponse errorResponse = Utils.parseJson(error, ErrorResponse.class);
+
+                                AlertDialog.Builder alertDialog = new AlertDialog.Builder(EditAccoutActivity.this)
+                                        .setMessage(errorResponse.getErrorMessage())
+                                        .setPositiveButton("Thử lại", (DialogInterface dialogInterface, int i) -> {
+                                        });
+                                alertDialog.show();
+                                logError("CallApiRegister", "SuccessBut on Failed" + errorResponse.getExceptionMessage());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
 
                         hideLoading();
@@ -424,13 +452,12 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
+                        showMessage(e.getMessage());
                         logError("CallApiRegister", e.getMessage());
                         hideLoading();
                     }
                 });
     }
-
-
 
 
 }

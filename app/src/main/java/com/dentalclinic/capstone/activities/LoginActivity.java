@@ -198,18 +198,24 @@ public class LoginActivity extends BaseActivity {
 
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         } else {
-                            if (userResponse.errorBody() != null) {
+                            if (userResponse.errorBody() != null && userResponse.code()!=500) {
                                 try {
                                     String errorMsgJson = userResponse.errorBody().string();
                                     ErrorResponse errorResponse = Utils.parseJson(errorMsgJson, ErrorResponse.class);
                                     if(errorMsgJson!=null) {
-                                        Toast.makeText(LoginActivity.this, errorResponse.getErrorMessage(), Toast.LENGTH_SHORT).show();
+//                                        showMessage(errorResponse.getErrorMessage());
                                         logError( "onSuccess", errorResponse.getExceptionMessage());
                                         txtErrorServer.setText(errorResponse.getErrorMessage());
-
                                     }
                                 } catch (IOException e) {
                                   logError(LoginActivity.class,"Login method", e.getMessage());
+                                }
+                            }else{
+                                try {
+                                    showMessage("Lỗi server");
+                                    logError("ELSE OF LOGIN", userResponse.errorBody().string());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
                             }
                             hideLoading();

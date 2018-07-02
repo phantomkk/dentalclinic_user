@@ -165,24 +165,46 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
                                 }else{
 
                                 }
-                            } else {
+                            } else if(paymentResponse.code() == 500) {
                                 try {
                                     String error = paymentResponse.errorBody().string();
-//                                    logError("CallApi",
-//                                            "success but fail: " + error);
+                                    showMessage(getString(R.string.error_server));
+                                    logError("CallApi",
+                                            "success but fail: " + error);
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
+                            }else{
+                                try {
+                                    String error = paymentResponse.errorBody().string();
+                                    ErrorResponse errorResponse = Utils.parseJson(error, ErrorResponse.class);
+                                    showMessage(errorResponse.getErrorMessage());
+                                    logError("CallApi",
+                                            "success but fail: " + error);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
                             }
                         }
 
                         @Override
                         public void onError(Throwable e) {
-//                            logError(HistoryPaymentFragment.class.getSimpleName(), e.getMessage());
+                            logError("Call API History payment", e.getMessage());
+                            showMessage(e.getMessage());
+
+
                         }
                     });
 
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(paymentDisposable!=null)
+        paymentDisposable.dispose();
     }
 
     @Override

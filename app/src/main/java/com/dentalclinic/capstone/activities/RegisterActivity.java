@@ -27,6 +27,7 @@ import com.dentalclinic.capstone.adapter.CitySpinnerAdapter;
 import com.dentalclinic.capstone.adapter.DistrictSpinnerAdapter;
 import com.dentalclinic.capstone.api.APIServiceManager;
 import com.dentalclinic.capstone.api.requestobject.RegisterRequest;
+import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
 import com.dentalclinic.capstone.api.services.AddressService;
 import com.dentalclinic.capstone.api.services.GuestService;
 import com.dentalclinic.capstone.api.services.PatientService;
@@ -40,6 +41,7 @@ import com.dentalclinic.capstone.utils.Utils;
 import com.dentalclinic.capstone.utils.Validation;
 
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -98,10 +100,10 @@ public class RegisterActivity extends BaseActivity {
         setEventForBirthday();
 //        setEvenForCityDistrict();
 
-        if(cityDatabaseHelper.getAllCity().isEmpty()){
+        if (cityDatabaseHelper.getAllCity().isEmpty()) {
             cityDatabaseHelper.insertDataCity();
         }
-        if(cityDatabaseHelper.getAllDistrict().isEmpty()){
+        if (cityDatabaseHelper.getAllDistrict().isEmpty()) {
             cityDatabaseHelper.insertDataDistrict();
         }
         spnCity.setAdapter(new CitySpinnerAdapter(
@@ -113,9 +115,10 @@ public class RegisterActivity extends BaseActivity {
                 City city = (City) spnCity.getSelectedItem();
                 if (city != null) {
                     spnDistrict.setAdapter(new DistrictSpinnerAdapter(RegisterActivity.this,
-                            android.R.layout.simple_spinner_item,cityDatabaseHelper.getDistrictOfCity(city.getId())));
+                            android.R.layout.simple_spinner_item, cityDatabaseHelper.getDistrictOfCity(city.getId())));
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
@@ -178,7 +181,12 @@ public class RegisterActivity extends BaseActivity {
 //                            listCityStrs.add(0,"Chọn thành phố");
                             }
                         } else {
-                            logError("setEvenForCityDistrict", "Success but failed");
+                            try {
+                                logError("setEvenForCityDistrict", "Success but failed" + listResponse.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
                         }
                     }
 
@@ -293,7 +301,7 @@ public class RegisterActivity extends BaseActivity {
             cancel = true;
             tvErrorBirthday.setText(getString(R.string.label_error_birthday));
             focusView = tvBirthday;
-        }else if(birthdayStr!=null && birthdayStr.equals(getString(R.string.label_birthday_register))){
+        } else if (birthdayStr != null && birthdayStr.equals(getString(R.string.label_birthday_register))) {
             cancel = true;
             tvErrorBirthday.setText(getString(R.string.label_error_birthday));
             focusView = tvBirthday;
@@ -353,19 +361,25 @@ public class RegisterActivity extends BaseActivity {
                                     .setPositiveButton("Đăng nhập", (DialogInterface dialogInterface, int i) -> {
                                         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                         startActivity(intent);
-                                    }) ;
+                                    });
                             alertDialog.show();
                         } else {
-                            String erroMsg = Utils.getErrorMsg(userResponse.errorBody());
 //                            edtPhone.setError(erroMsg);
 //                            edtPhone.requestFocus();
-                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(RegisterActivity.this)
-                                    .setMessage(erroMsg)
-                                    .setPositiveButton("Thử lại", (DialogInterface dialogInterface, int i) -> {
-                                    }) ;
-                            alertDialog.show();
+                            try {
+                                String errorMsgJson = userResponse.errorBody().string();
+                                logError("CallApiRegister", "SuccessBut on Failed" +errorMsgJson);
 
-                            logError("CallApiRegister", "SuccessBut on Failed");
+                                ErrorResponse erroMsg = Utils.parseJson(errorMsgJson, ErrorResponse.class);
+                                AlertDialog.Builder alertDialog = new AlertDialog.Builder(RegisterActivity.this)
+                                        .setMessage(erroMsg.getErrorMessage())
+                                        .setPositiveButton("Thử lại", (DialogInterface dialogInterface, int i) -> {
+                                        });
+                                alertDialog.show();
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
 
                         hideLoading();

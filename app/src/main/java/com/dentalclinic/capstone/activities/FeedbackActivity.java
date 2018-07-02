@@ -43,7 +43,8 @@ public class FeedbackActivity extends Activity {
     private Button btnOK;
     private Button btnCancel;
     private Disposable apiDisposable;
-private   FeedbackResponse response;
+    private FeedbackResponse response;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);  // Make us non-modal, so that others can receive touch events.
@@ -55,7 +56,7 @@ private   FeedbackResponse response;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_feedback);
         setTitle("Đánh giá dịch vụ");
-          response = (FeedbackResponse) getIntent().getExtras().get(AppConst.TREATMENT_DETAIL_BUNDLE);
+        response = (FeedbackResponse) getIntent().getExtras().get(AppConst.TREATMENT_DETAIL_BUNDLE);
         initDialog(response);
 
     }
@@ -74,7 +75,7 @@ private   FeedbackResponse response;
         return super.onTouchEvent(event);
     }
 
-    protected void initDialog(FeedbackResponse response) { 
+    protected void initDialog(FeedbackResponse response) {
 //        dialog = new Dialog(this);
 //        dialog.setContentView(R.layout.dialog_feedback);
         txtName = findViewById(R.id.txt_dentist_name);
@@ -138,8 +139,15 @@ private   FeedbackResponse response;
                                            String response = stringResponse.body();
                                            Toast.makeText(FeedbackActivity.this, response, Toast.LENGTH_SHORT).show();
                                            finish();
+                                       } else if (stringResponse.code() == 500) {
+
+                                           Toast.makeText(FeedbackActivity.this,
+                                                   "Lỗi server",
+                                                   Toast.LENGTH_SHORT).show();
                                        } else {
-                                           Toast.makeText(FeedbackActivity.this, "Có lỗi xảy ra", Toast.LENGTH_SHORT).show();
+                                           Toast.makeText(FeedbackActivity.this,
+                                                   "Có lỗi xảy ra",
+                                                   Toast.LENGTH_SHORT).show();
 
                                        }
                                    }
@@ -147,6 +155,9 @@ private   FeedbackResponse response;
                                    @Override
                                    public void onError(Throwable e) {
                                        e.printStackTrace();
+                                       Toast.makeText(FeedbackActivity.this,
+                                               "Không thể kết nối đến server",
+                                               Toast.LENGTH_SHORT).show();
                                    }
                                }
                     );
@@ -156,7 +167,7 @@ private   FeedbackResponse response;
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(apiDisposable!=null){
+        if (apiDisposable != null) {
             apiDisposable.dispose();
         }
     }
