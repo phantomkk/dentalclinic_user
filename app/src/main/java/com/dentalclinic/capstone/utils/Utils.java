@@ -2,7 +2,9 @@ package com.dentalclinic.capstone.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Build;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 
@@ -119,5 +121,13 @@ public class Utils {
         return gson.fromJson(source, c);
     }
 
-
+    public static void setVNLocale(Context context) {
+        Resources res = context.getResources();
+// Change locale settings in the app.
+        DisplayMetrics dm = res.getDisplayMetrics();
+        android.content.res.Configuration conf = res.getConfiguration();
+        conf.setLocale(new Locale("vi_VN")); // API 17+ only.
+// Use conf.locale = new Locale(...) if targeting lower versions
+        res.updateConfiguration(conf, dm);
+    }
 }

@@ -62,6 +62,7 @@
                     android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLines="1"
+                    android:textSize="@dimen/input_size_normal"
                     android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
@@ -81,6 +82,7 @@
                     android:imeActionId="6"
                     android:imeActionLabel="@string/action_sign_in_short"
                     android:imeOptions="actionDone"
+                    android:textSize="@dimen/input_size_normal"
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:singleLine="true" />
@@ -106,8 +108,7 @@
                     style="@style/custom_button_green"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/label_button_login"
-                    android:textStyle="bold" />
+                    android:text="@string/label_button_login"  />
 
                 <Button
                     android:id="@+id/link_book_appointment_loginact"

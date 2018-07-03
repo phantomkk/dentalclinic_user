@@ -84,6 +84,7 @@
     <string name="error_">Đăng kí</string>
     <string name="error_server">Lỗi server</string>
     <string name="label_error_birthday">Ngày sinh không hợp lệ</string>
+    <string name="label_error_appnt_date">Ngày đặt không hợp lệ</string>
 
 
     <string name="current_unit">đ</string>

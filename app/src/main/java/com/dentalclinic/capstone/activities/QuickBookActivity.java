@@ -5,7 +5,9 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.content.res.AppCompatResources;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -16,14 +18,20 @@ import android.widget.Toast;
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.api.APIServiceManager;
 import com.dentalclinic.capstone.api.requestobject.AppointmentRequest;
+import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
 import com.dentalclinic.capstone.api.services.AppointmentService;
 import com.dentalclinic.capstone.models.Appointment;
+import com.dentalclinic.capstone.utils.DateTimeFormat;
+import com.dentalclinic.capstone.utils.DateUtils;
+import com.dentalclinic.capstone.utils.Utils;
 import com.dentalclinic.capstone.utils.Validation;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import io.reactivex.SingleObserver;
@@ -35,11 +43,9 @@ import retrofit2.Response;
 public class QuickBookActivity extends BaseActivity {
     private AutoCompleteTextView tvPhone;
     private AutoCompleteTextView tvFullname;
-    private View edtPassword;
     private TextView tvDate;
     private TextView tvDateError;
     private AutoCompleteTextView comtvNote;
-    //    private TextView tvTime;
     private Button btnQuickBook;
     private Disposable appointmentDisposable;
 
@@ -50,7 +56,9 @@ public class QuickBookActivity extends BaseActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.side_nav_bar));
+            getSupportActionBar().setBackgroundDrawable(
+                    ContextCompat.getDrawable(QuickBookActivity.this, R.drawable.side_nav_bar)
+            );
         }
 //        ImageView img = findViewById(R.id.img_logo_quick_register);
         tvFullname = findViewById(R.id.tv_fullname_quickbook);
@@ -74,29 +82,21 @@ public class QuickBookActivity extends BaseActivity {
         {
             DatePickerDialog dialog = new DatePickerDialog(this,
                     (DatePicker datePicker, int iYear, int iMonth, int iDay) -> {
-                        String date = iDay + "/" + (iMonth+1) + "/" + iYear;
-                        c.set(iYear, iMonth, iDay);
+                        String date = iDay + "/" + (iMonth + 1) + "/" + iYear;
+                        c.set(iYear, iMonth, iDay,23,59);
                         Calendar currentDay = Calendar.getInstance();
                         if (currentDay.after(c)) {
-                            tvDateError.setText(getString(R.string.label_error_birthday));
+                            tvDateError.setText(getString(R.string.label_error_appnt_date));
                         } else {
                             tvDateError.setText("");
                         }
-                        tvDate.setText(date);
+                        tvDate.setText(DateUtils.getDate(c.getTime(), DateTimeFormat.DATE_APP));
+                        tvDate.setTextColor(
+                                ContextCompat.getColor(QuickBookActivity.this, R.color.color_black)
+                        );
                     }, year, month, day);
             dialog.show();
         });
-//        int hour = c.get(Calendar.HOUR_OF_DAY);
-//        int minute = c.get(Calendar.MINUTE);
-//        tvTime.setOnClickListener((view) ->
-//        {
-//            TimePickerDialog dialog = new TimePickerDialog(this,
-//                    (TimePicker timePicker, int tHour, int tMinute) ->{
-//                    tvTime.setText(tHour + ":" + tMinute);
-//            }, hour, minute, true);
-//            dialog.show();
-//        });
-
         btnQuickBook.setOnClickListener((view) -> {
             if (isValidateForm()) {
                 AppointmentRequest requestObj = getFormData();
@@ -132,14 +132,11 @@ public class QuickBookActivity extends BaseActivity {
         String phone = "01678589696";
         String dateBooking = tvDate.getText().toString().trim();
         String note = comtvNote.getText().toString().trim();
-        String name = tvFullname.getText().toString().trim();SimpleDateFormat smp = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-        SimpleDateFormat smp2 = new SimpleDateFormat("yyyy-MM-dd", Locale.US);Date d1 = new Date();
-        try {
-            d1= smp.parse(dateBooking);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        String bookingDate = smp2.format(d1);
+        String name = tvFullname.getText().toString().trim();
+        String bookingDate =DateUtils.changeDateFormat(
+                dateBooking,
+                DateTimeFormat.DATE_APP,
+                DateTimeFormat.DATE_TIME_DB);
         AppointmentRequest request = new AppointmentRequest();
         request.setDate(bookingDate);
         request.setNote(note);
@@ -154,37 +151,21 @@ public class QuickBookActivity extends BaseActivity {
         boolean isAllFieldValid = true;
         String phone = tvPhone.getText().toString().trim();
         String note = comtvNote.getText().toString().trim();
-        String tmpBirthday = tvDate.getText().toString().trim();
+        String txtDate = tvDate.getText().toString().trim();
         View viewFocus = null;
-        SimpleDateFormat smp = new SimpleDateFormat("dd/MM/yyyy");
-        SimpleDateFormat smp2 = new SimpleDateFormat("yyyy-MM-dd");Date d1 = new Date();
-        try {
-              d1= smp.parse(tmpBirthday);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        String birthday = smp2.format(d1);
-        if (!Validation.isPhoneValid(phone)) {
-
-        }
         if (!Validation.isPhoneValid(phone)) {
             viewFocus = tvPhone;
-//            tvPhone.requestFocus();
             tvPhone.setError(getString(R.string.error_invalid_phone));
-            isAllFieldValid= false;
-//        } else if (!Validation.isNullOrEmpty(note)) {
-//            comtvNote.setError("Vui lòng nhập ghi chu");
-//            isAllFieldValid= false;
-        } else if (Validation.isNullOrEmpty(birthday))
-        {
+            isAllFieldValid = false;
+        } else if (Validation.isNullOrEmpty(txtDate)
+                || (txtDate!=null && txtDate.equals(getString(R.string.label_date_quickbook)))) {
             viewFocus = tvDateError;
             tvDateError.setText("Vui lòng chọn ngày");
-//            tvDate.setError();
-            isAllFieldValid= false;
+            isAllFieldValid = false;
         }
-            if (!isAllFieldValid) {
-                viewFocus.requestFocus();
-            }
+        if (!isAllFieldValid) {
+            viewFocus.requestFocus();
+        }
         return isAllFieldValid;
     }
 
@@ -195,29 +176,52 @@ public class QuickBookActivity extends BaseActivity {
         appointmentService.bookAppointment(requestObj)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<Response<Appointment>>() {
+                .subscribe(new SingleObserver<Response<List<Appointment>>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         appointmentDisposable = d;
                     }
 
                     @Override
-                    public void onSuccess(Response<Appointment> appointmentResponse) {
+                    public void onSuccess(Response<List<Appointment>> appointmentResponse) {
                         if (appointmentResponse.isSuccessful()) {
                             Toast.makeText(QuickBookActivity.this, "Success", Toast.LENGTH_SHORT).show();
                             AlertDialog.Builder builder = new AlertDialog.Builder(QuickBookActivity.this)
                                     .setTitle("Đặt lịch thành công")
-                                    .setPositiveButton("Xác nhận",(DialogInterface var1, int var2)->{finish();});
+                                    .setPositiveButton("Xác nhận", (DialogInterface var1, int var2) -> {
+                                        finish();
+                                    });
                             builder.create().show();
+                        } else if (appointmentResponse.code() == 500) {
+                            try {
+                                String error = appointmentResponse.errorBody().string();
+                                logError("CALL API QUICK APPOINTMENT", error);
+                                showMessage("Lỗi server");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         } else {
-                            Toast.makeText(QuickBookActivity.this, "Failed", Toast.LENGTH_SHORT).show();
-                        }hideLoading();
+                            try {
+                                String error = appointmentResponse.errorBody().string();
+                                ErrorResponse errorResponse
+                                        = Utils.parseJson(error, ErrorResponse.class);
+                                logError("CALL API QUICKRESPONSE", errorResponse.getExceptionMessage());
+                                showLongMessage(errorResponse.getErrorMessage());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                        hideLoading();
                     }
 
                     @Override
                     public void onError(Throwable e) {
 //                        e.printStackTrace();
-                        logError(QuickBookActivity.class, "callApi", e.getMessage());hideLoading();
+                        showMessage(e.getMessage());
+                        logError(QuickBookActivity.class, "callApi", e.getMessage());
+                        hideLoading();
                     }
                 });
     }

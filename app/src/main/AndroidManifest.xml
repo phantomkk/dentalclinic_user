@@ -29,11 +29,9 @@
         </activity>
         <activity
             android:name=".activities.LoginActivity"
-            android:label="@string/title_activity_login"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
+            android:label="@string/title_activity_login"  />
         <activity
-            android:name=".activities.QuickBookActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
+            android:name=".activities.QuickBookActivity" />
         <activity android:name=".activities.Appointment" />
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.SelectDentistActivity" />

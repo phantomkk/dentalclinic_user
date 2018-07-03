@@ -22,11 +22,12 @@
                 android:id="@+id/edt_fullname_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_account_circle_black_24dp"
+                android:drawableStart="@drawable/ic_account_circle_black_24dp"
                 android:drawablePadding="@dimen/drawable_padding"
                 android:hint="@string/tv_promt_fullname"
                 android:imeOptions="actionNext"
                 android:inputType="text"
+                android:textSize="@dimen/input_size_normal"
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>
 
@@ -46,6 +47,7 @@
                 android:hint="@string/label_phone_quickbook"
                 android:imeOptions="actionNext"
                 android:inputType="text"
+                android:textSize="@dimen/input_size_normal"
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>
 
@@ -59,11 +61,12 @@
                 android:id="@+id/edt_password_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_lock_outline_black_24dp"
+                android:drawableStart="@drawable/ic_lock_outline_black_24dp"
                 android:drawablePadding="@dimen/drawable_padding"
                 android:hint="@string/label_password_promt"
                 android:imeOptions="actionNext"
                 android:inputType="textPassword"
+                android:textSize="@dimen/input_size_normal"
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>
 
@@ -77,11 +80,12 @@
                 android:id="@+id/edt_confirm_password_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_lock_outline_black_24dp"
+                android:drawableStart="@drawable/ic_lock_outline_black_24dp"
                 android:drawablePadding="@dimen/drawable_padding"
                 android:hint="@string/label_confirm_password_promt"
                 android:imeOptions="actionNext"
                 android:inputType="textPassword"
+                android:textSize="@dimen/input_size_normal"
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>
 
@@ -99,6 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="33"
+                android:textSize="@dimen/input_size_normal"
                 android:text="Nam" />
 
             <RadioButton
@@ -106,6 +111,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="33"
+                android:textSize="@dimen/input_size_normal"
                 android:text="Nữ" />
 
             <RadioButton
@@ -113,6 +119,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="33"
+                android:textSize="@dimen/input_size_normal"
                 android:text="Khác" />
         </RadioGroup>
 
@@ -133,9 +140,9 @@
                 android:drawableStart="@drawable/ic_date_range_black_24dp"
                 android:focusable="true"
                 android:paddingStart="5dp"
+                android:textSize="@dimen/input_size_normal"
                 android:text="@string/label_birthday_register"
-                android:textColor="@color/color_blue_grey_300"
-                android:textSize="18sp" />
+                android:textColor="@color/color_blue_grey_300"  />
 
             <TextView
                 android:id="@+id/txt_error_date_register"
@@ -144,33 +151,10 @@
                 android:layout_weight="60"
                 android:gravity="left"
                 android:paddingStart="9dp"
+                android:paddingEnd="1dp"
                 android:text=""
                 android:textColor="@color/error_label" />
         </LinearLayout>
-
-        <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:weightSum="100">-->
-
-            <!--<Spinner-->
-                <!--android:id="@+id/spinner_city_register"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_weight="50">-->
-
-            <!--</Spinner>-->
-
-            <!--<Spinner-->
-                <!--android:id="@+id/spinner_district_register"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_weight="50"-->
-
-                <!--&gt;-->
-
-            <!--</Spinner>-->
-        <!--</LinearLayout>-->
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -182,15 +166,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top|left"
-                android:drawableLeft="@drawable/ic_home_black_24dp"
+                android:drawableStart="@drawable/ic_home_black_24dp"
                 android:drawablePadding="9dp"
                 android:hint="@string/label_address_quickbook"
+                android:textSize="@dimen/input_size_normal"
                 android:imeOptions="actionNext"
                 android:inputType="textCapSentences|textMultiLine"
                 android:maxLength="2000"
                 android:maxLines="4"
                 android:minLines="3"
                 android:paddingStart="6dp"
+                android:paddingEnd="2dp"
                 android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
         <LinearLayout

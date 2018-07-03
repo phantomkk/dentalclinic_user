@@ -28,19 +28,20 @@
                 <!--android:focusableInTouchMode="true"-->
                 <!--android:src="@drawable/dental_icon" />-->
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/label_title_quickbook"
-                android:textSize="24sp"
-                android:textColor="@color/color_black"
-                android:layout_marginTop="20dp"
-                />
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:gravity="center"-->
+                <!--android:text="@string/label_title_quickbook"-->
+                <!--android:textSize="24sp"-->
+                <!--android:textColor="@color/color_black"-->
+                <!--android:layout_marginTop="20dp"-->
+                <!--/>-->
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="20dp"
                 android:layout_marginTop="@dimen/input_margin_top"
                 >
 
@@ -52,6 +53,8 @@
                     android:drawableStart="@drawable/ic_account_circle_black_24dp"
                     android:hint="@string/label_fullname_quickbook"
                     android:inputType="text"
+                    android:imeOptions="actionNext"
+                    android:textSize="@dimen/input_size_normal"
                     android:maxLines="1"
                     android:singleLine="true" />
 
@@ -70,7 +73,9 @@
                     android:drawablePadding="10dp"
                     android:hint="@string/label_phone_quickbook"
                     android:inputType="number"
+                    android:imeOptions="actionNext"
                     android:maxLines="1"
+                    android:textSize="@dimen/input_size_normal"
                     android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
@@ -78,9 +83,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/input_margin_top"
                 android:layoutDirection="ltr"
                 android:weightSum="100"
+                android:paddingTop="20dp"
                 android:orientation="horizontal">
                     <TextView
                         android:id="@+id/tv_date_quickbook"
@@ -89,12 +95,14 @@
                         android:layout_weight="30"
                         android:drawableStart="@drawable/ic_date_range_black_24dp"
                         android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
                         android:drawablePadding="9dp"
                         android:textColor="@color/color_blue_grey_300"
                         android:clickable="true"
                         android:focusable="true"
+                        android:textSize="@dimen/input_size_normal"
                         android:text="@string/label_date_quickbook"
-                        android:textSize="18sp" />
+                         />
 
                     <TextView
                         android:id="@+id/tv_date_error_quickbook"
@@ -105,12 +113,21 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:drawablePadding="9dp"
-                        android:textSize="18sp" />
+                        android:textSize="11sp" />
 
             </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="3dp"
+                android:background="@color/color_grey_600"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+                />
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="10dp"
                 android:layout_marginTop="@dimen/input_margin_top"
                 >
 
@@ -118,15 +135,19 @@
                     android:id="@+id/comtv_content_quickbook"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textCapSentences|textMultiLine"
+                    android:inputType="textMultiLine"
                     android:maxLength="2000"
                     android:maxLines="6"
+                    android:textSize="@dimen/input_size_normal"
+                    android:imeOptions="actionDone"
+                    android:imeActionLabel="@string/label_button_book_quickbook"
                     android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
                     android:hint="@string/label_content_quickbook"
                     android:minLines="4"
                     android:drawablePadding="9dp"
                     android:layout_gravity="top|left"
-                    android:drawableLeft="@drawable/ic_event_note_black_24dp"
+                    android:drawableStart="@drawable/ic_event_note_black_24dp"
                     android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>

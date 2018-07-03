@@ -14,7 +14,7 @@ import retrofit2.http.Path;
 
 public interface AppointmentService {
     @POST("api/appointment/book")
-    Single<Response<Appointment>> bookAppointment(@Body AppointmentRequest appointmentRequest);
+    Single<Response<List<Appointment>>> bookAppointment(@Body AppointmentRequest appointmentRequest);
 
     @GET("api/appointment/all")
     Single<Response<List<Appointment>>> getAll();

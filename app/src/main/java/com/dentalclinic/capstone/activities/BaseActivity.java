@@ -35,6 +35,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }public void showLongMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     public abstract String getMainTitle();
@@ -79,7 +81,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void logError(String method, String message) {
-        Log.e(AppConst.DEBUG_TAG, "Activity" + "." + method + "(): " + message);
+        Log.e(AppConst.DEBUG_TAG, "Activity" + this.getClass().getSimpleName() + method + "(): " + message);
 //        Log.e(AppConst.DEBUG_TAG, this.getClass().getSimpleName() + "." + method + "(): " + message);
     }
 
@@ -124,9 +126,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 .isConnectedOrConnecting();
 
         System.out.println(is3g + " net " + isWifi);
-
-        if (!is3g && !isWifi)
-        {
+        if (!is3g && !isWifi) {
            showMessage("Vui lòng kiểm tra kết nối mạng của bạn đã được bật.");
         }
     }

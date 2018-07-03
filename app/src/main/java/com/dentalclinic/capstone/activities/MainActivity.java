@@ -49,6 +49,7 @@ import com.dentalclinic.capstone.utils.AppConst;
 import com.dentalclinic.capstone.utils.CoreManager;
 import com.dentalclinic.capstone.utils.DateTimeFormat;
 import com.dentalclinic.capstone.utils.DateUtils;
+import com.dentalclinic.capstone.utils.Utils;
 import com.dentalclinic.capstone.view.DigitalView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -84,6 +85,7 @@ import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.internal.Util;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -109,6 +111,7 @@ public class MainActivity extends BaseActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(getResources().getString(R.string.new_fragment_title));
+        Utils.setVNLocale(this);
 //        NewsFragment newFragment = new NewsFragment();
 //        fragmentManager.beginTransaction().replace(R.id.main_fragment, newFragment).commit();
 //        button = findViewById(R.id.btn_test);

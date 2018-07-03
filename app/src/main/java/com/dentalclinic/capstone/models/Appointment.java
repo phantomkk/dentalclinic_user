@@ -10,6 +10,8 @@ import java.util.Date;
 public class Appointment implements Serializable {
     @SerializedName("id")
     private int id;
+    @SerializedName("staff_id")
+    private int staffId;
     @SerializedName("date_booking")
     private String dateBooking;
     @SerializedName("phone")
@@ -78,5 +80,13 @@ public class Appointment implements Serializable {
 
     public void setEstimatedTime(String estimatedTime) {
         this.estimatedTime = estimatedTime;
+    }
+
+    public int getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(int staffId) {
+        this.staffId = staffId;
     }
 }

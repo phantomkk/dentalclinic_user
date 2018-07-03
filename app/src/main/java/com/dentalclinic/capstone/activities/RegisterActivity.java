@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.DataSetObserver;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -92,13 +93,15 @@ public class RegisterActivity extends BaseActivity {
         btnRegister = findViewById(R.id.btn_register);
         spnCity = findViewById(R.id.spinner_city_register);
         spnDistrict = findViewById(R.id.spinner_district_register);
-
+        ActionBar actionBar =getSupportActionBar();
+        if(actionBar!=null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         btnRegister.setOnClickListener((view) -> {
             attemptRegister();
         });
 
         setEventForBirthday();
-//        setEvenForCityDistrict();
 
         if (cityDatabaseHelper.getAllCity().isEmpty()) {
             cityDatabaseHelper.insertDataCity();
@@ -149,6 +152,11 @@ public class RegisterActivity extends BaseActivity {
             dialog.show();
         });
 
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 
     public void setEvenForCityDistrict() {
@@ -212,7 +220,6 @@ public class RegisterActivity extends BaseActivity {
     }
 
     public void callDistrictAPI(int id) {
-//        List<String> listDistrictStrs = new ArrayList<>();
         addressService.getDistrictByCityID(id)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -230,9 +237,6 @@ public class RegisterActivity extends BaseActivity {
                                         RegisterActivity.this,
                                         android.R.layout.simple_spinner_item,
                                         listResponse.body()));
-//                                for (District d : listResponse.body()) {
-//                                    listDistrictStrs.add(d.getName());
-//                                }
                             }
                         } else {
                             logError("callDistrictAPI", "Success but on failed");
@@ -265,17 +269,6 @@ public class RegisterActivity extends BaseActivity {
         if (district != null) {
             districtID = district.getId();
         }
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.US);
-//        Date birthday = null;
-//        try {
-//            if (birthdayStr != null && birthdayStr.length() > 0) {
-//                birthday = simpleDateFormat.parse(birthdayStr);
-//                tvErrorBirthday.setText("");
-//            }
-//        } catch (ParseException e) {
-//            tvErrorBirthday.setText(getString(R.string.label_error_birthday));
-//            e.printStackTrace();
-//        }
         if (!Validation.isNameValid(name)) {
             cancel = true;
             edtFullname.setError(getString(R.string.error_invalid_name));
