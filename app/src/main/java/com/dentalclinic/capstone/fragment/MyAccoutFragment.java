@@ -28,6 +28,7 @@ import com.dentalclinic.capstone.activities.EditPasswordActivity;
 import com.dentalclinic.capstone.activities.MainActivity;
 import com.dentalclinic.capstone.adapter.PatientProfileAdapter;
 import com.dentalclinic.capstone.api.APIServiceManager;
+import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
 import com.dentalclinic.capstone.api.responseobject.SuccessResponse;
 import com.dentalclinic.capstone.api.services.UserService;
 import com.dentalclinic.capstone.models.City;
@@ -103,7 +104,7 @@ public class MyAccoutFragment extends BaseFragment implements View.OnClickListen
 
     private void setData(Patient patient) {
         if (patient != null) {
-            if (patient.getAvatar() != null) {
+            if (patient.getAvatar() != null && patient.getAvatar().trim().length() > 0) {
 //                Picasso.get().invalidate(patient.getAvatar());
                 Picasso.get().load(patient.getAvatar()).into(cvAvatar);
             }
@@ -183,12 +184,26 @@ public class MyAccoutFragment extends BaseFragment implements View.OnClickListen
                                 MainActivity.resetHeader(getContext());
                                 showMessage(getResources().getString(R.string.success_message_api));
                             }
+                        } else if (response.code() == 500) {
+                            try {
+                                String error = response.errorBody().string();
+                                showMessage(getString(R.string.error_server));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         } else {
-                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
-                                    .setMessage(getResources().getString(R.string.error_message_api))
-                                    .setPositiveButton("Thử lại", (DialogInterface dialogInterface, int i) -> {
-                                    });
-                            alertDialog.show();
+                            try {
+                                String error = response.errorBody().string();
+                                ErrorResponse errorResponse = Utils.parseJson(error, ErrorResponse.class);
+                                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
+                                        .setMessage(errorResponse.getErrorMessage())
+                                        .setPositiveButton("Thử lại", (DialogInterface dialogInterface, int i) -> {
+                                        });
+                                logError("Call API My ACCOUNT: ", errorResponse.getExceptionMessage());
+                                alertDialog.show();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                         hideLoading();
                     }

@@ -1,6 +1,7 @@
 package com.dentalclinic.capstone.activities;
 
 import android.content.DialogInterface;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -41,7 +42,9 @@ public class EditPasswordActivity extends BaseActivity implements View.OnClickLi
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.side_nav_bar));
+            getSupportActionBar().setBackgroundDrawable(
+                    ContextCompat.getDrawable(this, R.drawable.side_nav_bar)
+            );
         }
         Bundle bundle = getIntent().getBundleExtra(AppConst.BUNDLE);
         if (bundle.getSerializable(AppConst.PATIENT_OBJ) != null) {
@@ -134,25 +137,21 @@ public class EditPasswordActivity extends BaseActivity implements View.OnClickLi
 
                             showMessage(getResources().getString(R.string.success_message_api));
                             finish();
-                        }
-                        else if(response.code()==500){
+                        } else if (response.code() == 500) {
                             try {
                                 String error = response.errorBody().string();
                                 showMessage(getString(R.string.error_server));
-                                logError("CallAPI",error);
+                                logError("CallAPI", error);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                        }
-                        else {
+                        } else {
                             try {
                                 ErrorResponse errorResponse = Utils.parseJson(response.errorBody().string(), ErrorResponse.class);
                                 showDialog(errorResponse.getErrorMessage());
                             } catch (IOException e) {
-
                                 showDialog(getResources().getString(R.string.error_message_api));
-                            } catch (JsonSyntaxException e){
-//
+                            } catch (JsonSyntaxException e) {
                                 showDialog(getResources().getString(R.string.error_message_api));
 
                             }
