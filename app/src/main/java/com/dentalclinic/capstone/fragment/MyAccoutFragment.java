@@ -38,6 +38,7 @@ import com.dentalclinic.capstone.utils.AppConst;
 import com.dentalclinic.capstone.utils.CoreManager;
 import com.dentalclinic.capstone.utils.DateTimeFormat;
 import com.dentalclinic.capstone.utils.DateUtils;
+import com.dentalclinic.capstone.utils.GenderUtils;
 import com.dentalclinic.capstone.utils.Utils;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
@@ -115,7 +116,7 @@ public class MyAccoutFragment extends BaseFragment implements View.OnClickListen
                 txtDateOfBirth.setText(DateUtils.changeDateFormat(patient.getDateOfBirth(), DateTimeFormat.DATE_TIME_DB_2, DateTimeFormat.DATE_APP));
             }
             if (patient.getGender() != null) {
-                txtGender.setText(patient.getGender());
+                txtGender.setText(GenderUtils.toString(patient.getGender()));
             }
             if (patient.getPhone() != null) {
                 txtPhone.setText(patient.getPhone());

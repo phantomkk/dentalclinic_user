@@ -21,9 +21,13 @@ import com.dentalclinic.capstone.api.requestobject.AppointmentRequest;
 import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
 import com.dentalclinic.capstone.api.services.AppointmentService;
 import com.dentalclinic.capstone.models.Appointment;
+import com.dentalclinic.capstone.utils.CoreManager;
 import com.dentalclinic.capstone.utils.DateTimeFormat;
 import com.dentalclinic.capstone.utils.DateUtils;
 import com.dentalclinic.capstone.utils.Utils;
+import com.dentalclinic.capstone.models.Patient;
+import com.dentalclinic.capstone.models.User;
+import com.dentalclinic.capstone.utils.CoreManager;
 import com.dentalclinic.capstone.utils.Validation;
 
 import java.io.IOException;
@@ -48,7 +52,8 @@ public class QuickBookActivity extends BaseActivity {
     private AutoCompleteTextView comtvNote;
     private Button btnQuickBook;
     private Disposable appointmentDisposable;
-
+    private User user;
+    private Patient patient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +102,27 @@ public class QuickBookActivity extends BaseActivity {
                     }, year, month, day);
             dialog.show();
         });
+//        int hour = c.get(Calendar.HOUR_OF_DAY);
+//        int minute = c.get(Calendar.MINUTE);
+//        tvTime.setOnClickListener((view) ->
+//        {
+//            TimePickerDialog dialog = new TimePickerDialog(this,
+//                    (TimePicker timePicker, int tHour, int tMinute) ->{
+//                    tvTime.setText(tHour + ":" + tMinute);
+//            }, hour, minute, true);
+//            dialog.show();
+//        });
+        if(CoreManager.getCurrentPatient(QuickBookActivity.this)!=null){
+            patient= CoreManager.getCurrentPatient(QuickBookActivity.this);
+            if(patient.getPhone()!=null){
+                tvPhone.setText(patient.getPhone());
+            }
+            if(patient.getName()!=null){
+                tvFullname.setText(patient.getName());
+
+            }
+        }
+
         btnQuickBook.setOnClickListener((view) -> {
             if (isValidateForm()) {
                 AppointmentRequest requestObj = getFormData();
