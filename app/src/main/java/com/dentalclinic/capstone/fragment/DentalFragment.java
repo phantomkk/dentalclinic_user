@@ -188,15 +188,21 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
                                 adapter.notifyDataSetChanged();
                                 logError("treatmentCategories", String.valueOf(treatmentCategories.size()));
                             }
+                        }  else if (listResponse.code() == 500) {
+                            try {
+                                String error = listResponse.errorBody().string();
+                                showErrorMessage(getString(R.string.error_server));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         } else {
-//                            ErrorResponse erroMsg = null;
-//                            try {
-////                                erroMsg = Utils.parseJson(listResponse.errorBody().string(), ErrorResponse.class);
-////                                showMessage(erroMsg.getErrorMessage());
-////                                logError("CallAPI",erroMsg.getExceptionMessage());
-//                            } catch (IOException e) {
-//                                e.printStackTrace();
-//                            }
+                            try {
+                                String error = listResponse.errorBody().string();
+                                ErrorResponse errorResponse = Utils.parseJson(error, ErrorResponse.class);
+                                showErrorMessage(errorResponse.getErrorMessage());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
 
                     }
@@ -204,7 +210,7 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
                     public void onError(Throwable e) {
                         hideLoading();
                         e.printStackTrace();
-                        showMessage(getResources().getString(R.string.error_on_error_when_call_api));
+                        showWarningMessage(getResources().getString(R.string.error_on_error_when_call_api));
 //                        Toast.makeText(getContext(), getResources().getString(R.string.error_on_error_when_call_api), Toast.LENGTH_SHORT).show();
                     }
                 });

@@ -198,7 +198,7 @@ public class HistoryTreatmentFragment extends BaseFragment {
                             try {
                                 String error = listResponse.errorBody().string();
                                 logError("CallAPI", error);
-showMessage(getString(R.string.error_server));
+                                showErrorMessage(getString(R.string.error_server));
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -207,7 +207,7 @@ showMessage(getString(R.string.error_server));
                             try {
                                 errorResponse = Utils.parseJson(listResponse.errorBody().string(),
                                         ErrorResponse.class);
-                                showMessage(errorResponse.getErrorMessage());
+                                showErrorMessage(errorResponse.getErrorMessage());
                                 logError("CallAPI HISTORY TREATMENT", errorResponse.getExceptionMessage());
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -218,7 +218,7 @@ showMessage(getString(R.string.error_server));
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        showMessage(e.getMessage());
+                        showWarningMessage(getResources().getString(R.string.error_on_error_when_call_api));
 //                        logError("CallAPI", e.getMessage());
                     }
                 });

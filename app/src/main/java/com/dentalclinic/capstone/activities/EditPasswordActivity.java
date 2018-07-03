@@ -128,38 +128,29 @@ public class EditPasswordActivity extends BaseActivity implements View.OnClickLi
                     @Override
                     public void onSubscribe(Disposable d) {
                         userServiceDisposable = d;
-                        hideLoading();
                     }
 
                     @Override
                     public void onSuccess(Response<SuccessResponse> response) {
                         if (response.isSuccessful()) {
 
-                            showMessage(getResources().getString(R.string.success_message_api));
+                            showSuccessMessage(getResources().getString(R.string.success_message_api));
                             finish();
-                        } else if (response.code() == 500) {
+                        }else if (response.code() == 500) {
                             try {
                                 String error = response.errorBody().string();
-                                showMessage(getString(R.string.error_server));
-                                logError("CallAPI", error);
+                                showErrorMessage(getString(R.string.error_server));
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
                         } else {
                             try {
-                                ErrorResponse errorResponse = Utils.parseJson(response.errorBody().string(), ErrorResponse.class);
-                                showDialog(errorResponse.getErrorMessage());
+                                String error = response.errorBody().string();
+                                ErrorResponse errorResponse = Utils.parseJson(error, ErrorResponse.class);
+                                showErrorMessage(errorResponse.getErrorMessage());
                             } catch (IOException e) {
-                                showDialog(getResources().getString(R.string.error_message_api));
-                            } catch (JsonSyntaxException e) {
-                                showDialog(getResources().getString(R.string.error_message_api));
-
+                                e.printStackTrace();
                             }
-//                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(EditPasswordActivity.this)
-//                                    .setMessage(getResources().getString(R.string.error_message_api))
-//                                    .setPositiveButton("Thử lại", (DialogInterface dialogInterface, int i) -> {
-//                                    });
-//                            alertDialog.show();
                         }
                         hideLoading();
                     }
@@ -167,7 +158,7 @@ public class EditPasswordActivity extends BaseActivity implements View.OnClickLi
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        showMessage(e.getMessage());
+                        showWarningMessage(getResources().getString(R.string.error_on_error_when_call_api));
                         logError("CallApiRegister", e.getMessage());
                         hideLoading();
                     }

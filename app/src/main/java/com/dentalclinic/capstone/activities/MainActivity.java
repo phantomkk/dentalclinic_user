@@ -266,7 +266,7 @@ public class MainActivity extends BaseActivity
 //                                }
 //                            }
                             else {
-                                showMessage("Đăng xuất");
+                                showWarningMessage("Đăng xuất");
                                 CoreManager.clearUser(MainActivity.this);
                                 user = null;
                                 result.setSelectionAtPosition(1,true);
@@ -498,7 +498,7 @@ public class MainActivity extends BaseActivity
             HistoryPaymentFragment historyPaymentFragment = new HistoryPaymentFragment();
             fragmentManager.beginTransaction().replace(R.id.main_fragment, historyPaymentFragment).commit();
         } else if (id == R.id.nav_log_out) {
-            showMessage("Đăng xuất");
+            showWarningMessage("Đăng xuất");
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

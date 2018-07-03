@@ -277,21 +277,27 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
                             }
                         } else if (listResponse.code() == 500) {
                             try {
-                                showMessage(getString(R.string.error_server));
-                                logError("Call API", listResponse.errorBody().string());
+                                String error = listResponse.errorBody().string();
+                                showErrorMessage(getString(R.string.error_server));
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
                         } else {
-                            showMessage("Có lỗi xảy ra");
-                            logError("callDistrictAPI", "Success but on failed");
+                            try {
+                                String error = listResponse.errorBody().string();
+                                ErrorResponse errorResponse = Utils.parseJson(error, ErrorResponse.class);
+                                showErrorMessage(errorResponse.getErrorMessage());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        hideLoading();
                         e.printStackTrace();
-                        showMessage(e.getMessage());
+                        showWarningMessage(getResources().getString(R.string.error_on_error_when_call_api));
                         logError("callDistrictAPI", "onError" + e.getMessage());
                     }
                 });
@@ -339,7 +345,6 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
             request.setDistrictId(districtID);
             request.setBirthday(birthdayStr);
             callApiUpdate(request);
-
         }
     }
 
@@ -403,7 +408,6 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
                     @Override
                     public void onSubscribe(Disposable d) {
                         registerServiceDisposable = d;
-                        hideLoading();
                     }
 
                     @Override
@@ -418,41 +422,32 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
 //                            alertDialog.show();
                             CoreManager.savePatient(EditAccoutActivity.this, requestObj);
                             MainActivity.resetHeader(EditAccoutActivity.this);
-                            showMessage(getResources().getString(R.string.success_message_api));
+                            showSuccessMessage(getResources().getString(R.string.success_message_api));
                             setResult(RESULT_OK);
                             finish();
                         } else if (response.code() == 500) {
                             try {
                                 String error = response.errorBody().string();
-                                showMessage(getString(R.string.error_server));
-                                logError("Call API", error);
+                                showErrorMessage(getString(R.string.error_server));
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
                         } else {
-//                            String erroMsg = Utils.getErrorMsg(response.errorBody());
                             try {
                                 String error = response.errorBody().string();
                                 ErrorResponse errorResponse = Utils.parseJson(error, ErrorResponse.class);
-
-                                AlertDialog.Builder alertDialog = new AlertDialog.Builder(EditAccoutActivity.this)
-                                        .setMessage(errorResponse.getErrorMessage())
-                                        .setPositiveButton("Thử lại", (DialogInterface dialogInterface, int i) -> {
-                                        });
-                                alertDialog.show();
-                                logError("CallApiRegister", "SuccessBut on Failed" + errorResponse.getExceptionMessage());
+                                showErrorMessage(errorResponse.getErrorMessage());
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
                         }
-
                         hideLoading();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        showMessage(e.getMessage());
+                        showWarningMessage(getResources().getString(R.string.error_on_error_when_call_api));
                         logError("CallApiRegister", e.getMessage());
                         hideLoading();
                     }

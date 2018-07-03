@@ -168,7 +168,7 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
                             } else if(paymentResponse.code() == 500) {
                                 try {
                                     String error = paymentResponse.errorBody().string();
-                                    showMessage(getString(R.string.error_server));
+                                    showErrorMessage(getString(R.string.error_server));
                                     logError("CallApi",
                                             "success but fail: " + error);
                                 } catch (IOException e) {
@@ -178,7 +178,7 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
                                 try {
                                     String error = paymentResponse.errorBody().string();
                                     ErrorResponse errorResponse = Utils.parseJson(error, ErrorResponse.class);
-                                    showMessage(errorResponse.getErrorMessage());
+                                    showErrorMessage(errorResponse.getErrorMessage());
                                     logError("CallApi",
                                             "success but fail: " + error);
                                 } catch (IOException e) {
@@ -191,8 +191,7 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
                         @Override
                         public void onError(Throwable e) {
                             logError("Call API History payment", e.getMessage());
-                            showMessage(e.getMessage());
-
+                            showWarningMessage(getResources().getString(R.string.error_on_error_when_call_api));
 
                         }
                     });

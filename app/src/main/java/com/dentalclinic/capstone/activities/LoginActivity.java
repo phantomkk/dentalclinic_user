@@ -114,7 +114,7 @@ public class LoginActivity extends BaseActivity {
         txtPassword.clearFocus();
         txtPhone.clearFocus();
         User user = CoreManager.getUser(this);
-        if(user!=null){
+        if (user != null) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
@@ -173,9 +173,10 @@ public class LoginActivity extends BaseActivity {
         finish();
         return true;
     }
+
     public void callApiLogin(String phone, String password) {
         showLoading();
-        LoginRequest request  = new LoginRequest();
+        LoginRequest request = new LoginRequest();
         request.setPassword(password);
         request.setPhone(phone);
         request.setNotifToken(FirebaseInstanceId.getInstance().getToken());
@@ -197,32 +198,28 @@ public class LoginActivity extends BaseActivity {
                             CoreManager.setUser(LoginActivity.this, userResponse.body());
 
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                        } else {
-                            if (userResponse.errorBody() != null && userResponse.code()!=500) {
-                                try {
-                                    String errorMsgJson = userResponse.errorBody().string();
-                                    ErrorResponse errorResponse = Utils.parseJson(errorMsgJson, ErrorResponse.class);
-                                    if(errorMsgJson!=null) {
-//                                        showMessage(errorResponse.getErrorMessage());
-                                        logError( "onSuccess", errorResponse.getExceptionMessage());
-                                        txtErrorServer.setText(errorResponse.getErrorMessage());
-                                    }
-                                } catch (IOException e) {
-                                  logError(LoginActivity.class,"Login method", e.getMessage());
-                                }
-                            }else{
-                                try {
-                                    showMessage("Lỗi server");
-                                    logError("ELSE OF LOGIN", userResponse.errorBody().string());
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
+                        } else if (userResponse.code() == 500) {
+                            try {
+                                String error = userResponse.errorBody().string();
+                                showErrorMessage(getString(R.string.error_server));
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
-                            hideLoading();
+                        } else {
+                            try {
+                                String error = userResponse.errorBody().string();
+                                ErrorResponse errorResponse = Utils.parseJson(error, ErrorResponse.class);
+                                showErrorMessage(errorResponse.getErrorMessage());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
+                        hideLoading();
                     }
+
                     @Override
                     public void onError(Throwable e) {
+                        showWarningMessage(getResources().getString(R.string.error_on_error_when_call_api));
                         logError(LoginActivity.class, "attemptLogin", e.getMessage());
                         hideLoading();
                     }

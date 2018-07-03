@@ -132,14 +132,14 @@ public class NewsFragment extends BaseFragment {
                     if (combineClass.getListNews().isSuccessful()) {
                         newsPageViewFragment.notificationAdapter(combineClass.getListNews().body());
                     } else {
-                        showDialog(getResources().getString(R.string.error_message_api));
+                        showErrorMessage(getResources().getString(R.string.error_message_api));
                     }
                 }
                 if (combineClass.getListPromotion() != null) {
                     if (combineClass.getListPromotion().isSuccessful()) {
                         promotionPageViewFragment.notificationAdapter(combineClass.getListPromotion().body());
                     } else {
-                        showDialog(getResources().getString(R.string.error_message_api));
+                        showErrorMessage(getResources().getString(R.string.error_message_api));
                     }
                 }
                 hideLoading();
@@ -149,7 +149,8 @@ public class NewsFragment extends BaseFragment {
             public void onError(Throwable e) {
                 hideLoading();
                 e.printStackTrace();
-                Toast.makeText(getContext(), getResources().getString(R.string.error_on_error_when_call_api), Toast.LENGTH_SHORT).show();
+                showWarningMessage(getResources().getString(R.string.error_on_error_when_call_api));
+//                Toast.makeText(getContext(), ), Toast.LENGTH_SHORT).show();
             }
         });
 

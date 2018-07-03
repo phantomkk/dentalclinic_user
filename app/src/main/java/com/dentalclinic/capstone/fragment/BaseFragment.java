@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.utils.AppConst;
+import com.muddzdev.styleabletoastlibrary.StyleableToast;
 
 public class BaseFragment extends Fragment {
     private ProgressDialog mProgressDialog;
@@ -25,6 +26,16 @@ public class BaseFragment extends Fragment {
     protected void showMessage(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
     }
+    public void showSuccessMessage(String message) {
+        StyleableToast.makeText(getContext(), message, Toast.LENGTH_LONG, R.style.succeToast).show();
+    }
+    public void showErrorMessage(String message) {
+        StyleableToast.makeText(getContext(), message, Toast.LENGTH_LONG, R.style.errorToast).show();
+    }
+    public void showWarningMessage(String message) {
+        StyleableToast.makeText(getContext(), message, Toast.LENGTH_LONG, R.style.warningToast).show();
+    }
+
 
     protected void hideLoading() {
         if(mProgressDialog!=null) {

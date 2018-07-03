@@ -147,14 +147,20 @@ public class HistoryAppointmentFragment extends BaseFragment implements View.OnC
                             }
                             appointments.addAll(listResponse.body());
                             adapter.notifyDataSetChanged();
+                        }  else if (listResponse.code() == 500) {
+                            try {
+                                String error = listResponse.errorBody().string();
+                                showErrorMessage(getString(R.string.error_server));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         } else {
                             try {
-                                ErrorResponse errorResponse = Utils.parseJson(listResponse.errorBody().string(), ErrorResponse.class);
-                                showDialog(errorResponse.getErrorMessage());
+                                String error = listResponse.errorBody().string();
+                                ErrorResponse errorResponse = Utils.parseJson(error, ErrorResponse.class);
+                                showErrorMessage(errorResponse.getErrorMessage());
                             } catch (IOException e) {
-                                showDialog(getResources().getString(R.string.error_message_api));
-                            } catch (JsonSyntaxException e) {
-                                showDialog(getResources().getString(R.string.error_message_api));
+                                e.printStackTrace();
                             }
                         }
                         hideLoading();
@@ -209,7 +215,7 @@ public class HistoryAppointmentFragment extends BaseFragment implements View.OnC
                     c.set(iYear, iMonth, iDay);
                     Calendar currentDay = Calendar.getInstance();
                     if (currentDay.after(c)) {
-                        showMessage("Chọn ngày không hợp lệ. Vui lòng chọn ngày khác.");
+                        showWarningMessage("Chọn ngày không hợp lệ. Vui lòng chọn ngày khác.");
                     } else {
                         //call api
 //                        tvDateError.setText("");

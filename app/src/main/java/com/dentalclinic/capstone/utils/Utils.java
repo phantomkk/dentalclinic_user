@@ -109,10 +109,10 @@ public class Utils {
     }
 
     public static String formatMoney(Long money) {
-//        NumberFormat formatter = new DecimalFormat("#,###");
-//        double myNumber = 1000000;
-//        String formattedNumber = formatter.format(myNumber);
-        return (String.format("%,d", money)).replace(',', '.');
+        NumberFormat formatter = new DecimalFormat("#,###");
+        String formattedNumber = formatter.format(money);
+//        return (String.format("%,d", money)).replace(',', '.');
+        return formattedNumber;
     }
 
     public static <T> T parseJson(String source, Class<T> c) throws JsonSyntaxException {

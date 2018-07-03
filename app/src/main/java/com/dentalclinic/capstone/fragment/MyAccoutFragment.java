@@ -183,12 +183,12 @@ public class MyAccoutFragment extends BaseFragment implements View.OnClickListen
                             if (response.body() != null) {
                                 CoreManager.saveAvatar(getContext(), (String) response.body().getData());
                                 MainActivity.resetHeader(getContext());
-                                showMessage(getResources().getString(R.string.success_message_api));
+                                showSuccessMessage(getResources().getString(R.string.success_message_api));
                             }
                         } else if (response.code() == 500) {
                             try {
                                 String error = response.errorBody().string();
-                                showMessage(getString(R.string.error_server));
+                                showErrorMessage(getString(R.string.error_server));
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -196,12 +196,14 @@ public class MyAccoutFragment extends BaseFragment implements View.OnClickListen
                             try {
                                 String error = response.errorBody().string();
                                 ErrorResponse errorResponse = Utils.parseJson(error, ErrorResponse.class);
-                                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
-                                        .setMessage(errorResponse.getErrorMessage())
-                                        .setPositiveButton("Thử lại", (DialogInterface dialogInterface, int i) -> {
-                                        });
-                                logError("Call API My ACCOUNT: ", errorResponse.getExceptionMessage());
-                                alertDialog.show();
+                                showErrorMessage(errorResponse.getErrorMessage());
+
+//                                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
+//                                        .setMessage(errorResponse.getErrorMessage())
+//                                        .setPositiveButton("Thử lại", (DialogInterface dialogInterface, int i) -> {
+//                                        });
+//                                logError("Call API My ACCOUNT: ", errorResponse.getExceptionMessage());
+//                                alertDialog.show();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -257,7 +259,6 @@ public class MyAccoutFragment extends BaseFragment implements View.OnClickListen
                     InputStream is = getActivity().getContentResolver().openInputStream(resultUri);
                     showLoading();
                     uploadImage(getBytes(is));
-//                    showMessage("update success!");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

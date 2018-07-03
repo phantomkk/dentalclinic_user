@@ -20,6 +20,7 @@ import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
 import com.dentalclinic.capstone.utils.AppConst;
 import com.dentalclinic.capstone.utils.Utils;
+import com.muddzdev.styleabletoastlibrary.StyleableToast;
 
 import java.net.InetAddress;
 
@@ -49,6 +50,16 @@ public abstract class BaseActivity extends AppCompatActivity {
                 });
         alertDialog.show();
     }
+    public void showSuccessMessage(String message) {
+        StyleableToast.makeText(this, message, Toast.LENGTH_LONG, R.style.succeToast).show();
+    }
+    public void showErrorMessage(String message) {
+        StyleableToast.makeText(this, message, Toast.LENGTH_LONG, R.style.errorToast).show();
+    }
+    public void showWarningMessage(String message) {
+        StyleableToast.makeText(this, message, Toast.LENGTH_LONG, R.style.warningToast).show();
+    }
+
 
     public void showLoading() {
         if (progressDialog == null) {
@@ -127,7 +138,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         System.out.println(is3g + " net " + isWifi);
         if (!is3g && !isWifi) {
-           showMessage("Vui lòng kiểm tra kết nối mạng của bạn đã được bật.");
+           showWarningMessage("Vui lòng kiểm tra kết nối mạng của bạn đã được bật.");
         }
     }
 

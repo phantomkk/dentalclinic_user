@@ -129,7 +129,7 @@ public class QuickBookActivity extends BaseActivity {
                 if (requestObj != null) {
                     callApi(requestObj);
                 } else {
-                    showMessage("Error null");
+                    showWarningMessage("Error null");
                 }
             }
 
@@ -222,7 +222,7 @@ public class QuickBookActivity extends BaseActivity {
                             try {
                                 String error = appointmentResponse.errorBody().string();
                                 logError("CALL API QUICK APPOINTMENT", error);
-                                showMessage("Lỗi server");
+                                showErrorMessage("Lỗi server");
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -232,7 +232,7 @@ public class QuickBookActivity extends BaseActivity {
                                 ErrorResponse errorResponse
                                         = Utils.parseJson(error, ErrorResponse.class);
                                 logError("CALL API QUICKRESPONSE", errorResponse.getExceptionMessage());
-                                showLongMessage(errorResponse.getErrorMessage());
+                                showErrorMessage(errorResponse.getErrorMessage());
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -245,7 +245,7 @@ public class QuickBookActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable e) {
 //                        e.printStackTrace();
-                        showMessage(e.getMessage());
+                        showWarningMessage(getResources().getString(R.string.error_on_error_when_call_api));
                         logError(QuickBookActivity.class, "callApi", e.getMessage());
                         hideLoading();
                     }
