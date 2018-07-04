@@ -54,6 +54,7 @@ public class QuickBookActivity extends BaseActivity {
     private Disposable appointmentDisposable;
     private User user;
     private Patient patient;
+    private boolean  isDateValid = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,8 +93,10 @@ public class QuickBookActivity extends BaseActivity {
                         Calendar currentDay = Calendar.getInstance();
                         if (currentDay.after(c)) {
                             tvDateError.setText(getString(R.string.label_error_appnt_date));
+                            isDateValid= false;
                         } else {
                             tvDateError.setText("");
+                            isDateValid=true;
                         }
                         tvDate.setText(DateUtils.getDate(c.getTime(), DateTimeFormat.DATE_APP));
                         tvDate.setTextColor(
@@ -192,7 +195,7 @@ public class QuickBookActivity extends BaseActivity {
         if (!isAllFieldValid) {
             viewFocus.requestFocus();
         }
-        return isAllFieldValid;
+        return isAllFieldValid && isDateValid;
     }
 
     public void callApi(AppointmentRequest requestObj) {
@@ -210,8 +213,7 @@ public class QuickBookActivity extends BaseActivity {
 
                     @Override
                     public void onSuccess(Response<List<Appointment>> appointmentResponse) {
-                        if (appointmentResponse.isSuccessful()) {
-                            Toast.makeText(QuickBookActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                        if (appointmentResponse.isSuccessful()) { 
                             AlertDialog.Builder builder = new AlertDialog.Builder(QuickBookActivity.this)
                                     .setTitle("Đặt lịch thành công")
                                     .setPositiveButton("Xác nhận", (DialogInterface var1, int var2) -> {
