@@ -212,33 +212,22 @@ public class QuickBookActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onSuccess(Response<List<Appointment>> appointmentResponse) {
-                        if (appointmentResponse.isSuccessful()) {
+                    public void onSuccess(Response<List<Appointment>> response) {
+                        if (response.isSuccessful()) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(QuickBookActivity.this)
                                     .setTitle("Đặt lịch thành công")
                                     .setPositiveButton("Xác nhận", (DialogInterface var1, int var2) -> {
                                         finish();
                                     });
                             builder.create().show();
-                        } else if (appointmentResponse.code() == 500) {
-                            try {
-                                String error = appointmentResponse.errorBody().string();
-                                logError("CALL API QUICK APPOINTMENT", error);
-                                showErrorMessage("Lỗi server");
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                        } else if (response.code() == 500) {
+                            showFatalError(response.errorBody(), "appointmentService");
+                        } else if (response.code() == 401) {
+                            showErrorUnAuth();
+                        } else if (response.code() == 400) {
+                            showBadRequestError(response.errorBody(), "appointmentService");
                         } else {
-                            try {
-                                String error = appointmentResponse.errorBody().string();
-                                ErrorResponse errorResponse
-                                        = Utils.parseJson(error, ErrorResponse.class);
-                                logError("CALL API QUICKRESPONSE", errorResponse.getExceptionMessage());
-                                showErrorMessage(errorResponse.getErrorMessage());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
+                            showErrorMessage(getString(R.string.error_on_error_when_call_api));
                         }
 
                         hideLoading();
