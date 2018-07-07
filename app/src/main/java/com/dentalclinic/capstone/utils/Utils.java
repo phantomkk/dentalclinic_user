@@ -18,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -113,6 +114,26 @@ public class Utils {
         String formattedNumber = formatter.format(money);
 //        return (String.format("%,d", money)).replace(',', '.');
         return formattedNumber;
+//         CurrencyConverter converter = new CurrencyConverterBuilder()
+//                .strategy(Strategy.YAHOO_FINANCE_FILESTORE)
+//                .buildConverter();
+//
+//        converter.setRefreshRateSeconds(86400);
+//        BigDecimal d = new BigDecimal(money);
+//        try {
+//            d = converter.convertCurrency(d, Currency.VND, Currency.USD);
+//        } catch (CurrencyNotSupportedException e) {
+//            e.printStackTrace();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        } catch (StorageException e) {
+//            e.printStackTrace();
+//        } catch (EndpointException e) {
+//            e.printStackTrace();
+//        } catch (ServiceException e) {
+//            e.printStackTrace();
+//        }
+//        return d.toString();
     }
 
     public static <T> T parseJson(String source, Class<T> c) throws JsonSyntaxException {
@@ -130,4 +151,5 @@ public class Utils {
 // Use conf.locale = new Locale(...) if targeting lower versions
         res.updateConfiguration(conf, dm);
     }
+
 }

@@ -26,9 +26,9 @@
                 <TextView
                     android:id="@+id/txt_treatment_name"
                     android:layout_width="match_parent"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_weight="1"
                     android:text=""
                     android:textAlignment="center"
                     android:textAllCaps="true"
@@ -41,11 +41,11 @@
                     android:layout_gravity="center|top"
                     android:src="@drawable/ic_keyboard_arrow_up_black_24dp" />
                 <!--<TextView-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_gravity="center"-->
-                    <!--android:textColor="@color/color_black"-->
-                    <!--android:textSize="15dp" />-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:textColor="@color/color_black"-->
+                <!--android:textSize="15dp" />-->
             </LinearLayout>
 
             <View
@@ -123,34 +123,70 @@
                     android:textColor="@color/color_red_400" />
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/color_grey_200" />
-
             <LinearLayout
+                android:id="@+id/ln_paypal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                android:weightSum="10">
+                android:gravity="end"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/color_grey_200" />
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="4"
-                    android:text="Trạng Thái" />
+                    android:layout_marginTop="@dimen/input_margin_top"
+                    android:text="Thanh toán" />
 
-                <TextView
-                    android:id="@+id/txt_status"
-                    android:layout_width="0dp"
+                <Button
+                    android:id="@+id/btn_check_out_paypal"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="6"
-                    android:textAlignment="textEnd"
-                    android:textColor="@color/color_green_500" />
+                    android:background="@drawable/paypalexpress" />
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ln_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/color_grey_200" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="4"
+                        android:text="Trạng Thái" />
+
+                    <TextView
+                        android:id="@+id/txt_status"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="6"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/color_green_500" />
+                </LinearLayout>
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
