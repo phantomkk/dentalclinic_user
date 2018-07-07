@@ -202,17 +202,18 @@ public class LoginActivity extends BaseActivity {
                                 CoreManager.setUser(LoginActivity.this, u);
                                 RetrofitClient.setAccessToken(u.getAccessToken());
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                            } else if (userResponse.code() == 500) {
-                                showFatalError(userResponse.errorBody(), "callApiLogin");
-                            } else if (userResponse.code() == 401) {
-                                showErrorUnAuth();
-                            } else if (userResponse.code() == 400) {
-                                showBadRequestError(userResponse.errorBody(), "callApiLogin");
-                            } else {
-                                showErrorMessage(getString(R.string.error_on_error_when_call_api));
                             }
-                            hideLoading();
+                        } else if (userResponse.code() == 500) {
+                            showFatalError(userResponse.errorBody(), "callApiLogin");
+                        } else if (userResponse.code() == 401) {
+                            showErrorUnAuth();
+                        } else if (userResponse.code() == 400) {
+                            showBadRequestError(userResponse.errorBody(), "callApiLogin");
+                        } else {
+                            showErrorMessage(getString(R.string.error_on_error_when_call_api));
                         }
+                        hideLoading();
+
                     }
 
                     @Override
