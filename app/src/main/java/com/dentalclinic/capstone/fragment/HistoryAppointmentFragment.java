@@ -139,29 +139,21 @@ public class HistoryAppointmentFragment extends BaseFragment implements View.OnC
 
                     @Override
                     public void onSuccess(Response<List<Appointment>> listResponse) {
-                        if (listResponse.body() != null) {
-                            if (listResponse.body().size() > 0) {
+                        List<Appointment> list = listResponse.body();
+                        if (list != null) {
+                            if (list.size() > 0) {
                                 txtEmptyList.setVisibility(View.GONE);
                             } else {
                                 txtEmptyList.setVisibility(View.VISIBLE);
                             }
-                            appointments.addAll(listResponse.body());
+                            appointments.addAll(list);
                             adapter.notifyDataSetChanged();
-                        }  else if (listResponse.code() == 500) {
-                            try {
-                                String error = listResponse.errorBody().string();
-                                showErrorMessage(getString(R.string.error_server));
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            try {
-                                String error = listResponse.errorBody().string();
-                                ErrorResponse errorResponse = Utils.parseJson(error, ErrorResponse.class);
-                                showErrorMessage(errorResponse.getErrorMessage());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                        } else if (listResponse.code() == 500) {
+                            showFatalError(listResponse.errorBody(), "prepareData");
+                        } else if (listResponse.code() == 401) {
+                            showErrorUnAuth();
+                        } else if (listResponse.code() == 400) {
+                            showBadRequestError(listResponse.errorBody(), "prepareData");
                         }
                         hideLoading();
                     }
@@ -204,14 +196,14 @@ public class HistoryAppointmentFragment extends BaseFragment implements View.OnC
                 .show();
     }
 
-    private void showDatePicker(){
+    private void showDatePicker() {
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
         DatePickerDialog dialog = new DatePickerDialog(getContext(),
                 (DatePicker datePicker, int iYear, int iMonth, int iDay) -> {
-                    String date = iDay + "/" + (iMonth+1) + "/" + iYear;
+                    String date = iDay + "/" + (iMonth + 1) + "/" + iYear;
                     c.set(iYear, iMonth, iDay);
                     Calendar currentDay = Calendar.getInstance();
                     if (currentDay.after(c)) {
@@ -225,7 +217,6 @@ public class HistoryAppointmentFragment extends BaseFragment implements View.OnC
         dialog.show();
 
     }
-
 
 
 }

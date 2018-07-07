@@ -157,26 +157,20 @@ public class NewsPageViewFragment extends BaseFragment {
                     public void onSuccess(Response<List<News>> listResponse) {
                         hideLoading();
                         if (listResponse.isSuccessful()) {
-                            if (listResponse.body() != null) {
-                                listNews.addAll(listResponse.body());
+                            List<News> list = listResponse.body();
+                            if (list != null) {
+                                listNews.addAll(list);
                                 adapter.notifyDataSetChanged();
-                                logError("news", String.valueOf(listResponse.body().size()));
+                                logError("news", String.valueOf(list.size()));
                             }
                         } else if (listResponse.code() == 500) {
-                            try {
-                                String error = listResponse.errorBody().string();
-                                showErrorMessage(getString(R.string.error_server));
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            showFatalError(listResponse.errorBody(), "callAPI.callApiGetNews");
+                        } else if (listResponse.code() == 401) {
+                            showErrorUnAuth();
+                        } else if (listResponse.code() == 400) {
+                            showBadRequestError(listResponse.errorBody(), "callAPI.callApiGetNews");
                         } else {
-                            try {
-                                String error = listResponse.errorBody().string();
-                                ErrorResponse errorResponse = Utils.parseJson(error, ErrorResponse.class);
-                                showErrorMessage(errorResponse.getErrorMessage());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            showDialog(getContext().getResources().getString(R.string.error_message_api));
                         }
 
                     }
@@ -205,27 +199,21 @@ public class NewsPageViewFragment extends BaseFragment {
                     public void onSuccess(Response<List<News>> listResponse) {
                         hideLoading();
                         if (listResponse.isSuccessful()) {
-                            if (listResponse.body() != null) {
-                                listNews.addAll(listResponse.body());
+                            List<News> list = listResponse.body();
+                            if (list != null) {
+                                listNews.addAll(list);
                                 adapter.notifyDataSetChanged();
                                 adapter.setLoaded();
-                                logError("news", String.valueOf(listResponse.body().size()));
+                                logError("news", String.valueOf(list.size()));
                             }
                         } else if (listResponse.code() == 500) {
-                            try {
-                                String error = listResponse.errorBody().string();
-                                showErrorMessage(getString(R.string.error_server));
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            showFatalError(listResponse.errorBody(), "callAPI.getAppointment");
+                        } else if (listResponse.code() == 401) {
+                            showErrorUnAuth();
+                        } else if ( listResponse.code() == 400) {
+                            showBadRequestError(listResponse.errorBody(), "callAPI.getAppointment");
                         } else {
-                            try {
-                                String error = listResponse.errorBody().string();
-                                ErrorResponse errorResponse = Utils.parseJson(error, ErrorResponse.class);
-                                showErrorMessage(errorResponse.getErrorMessage());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            showDialog(getString(R.string.error_message_api));
                         }
 
                     }

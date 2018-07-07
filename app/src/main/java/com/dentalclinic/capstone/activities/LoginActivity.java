@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.api.APIServiceManager;
+import com.dentalclinic.capstone.api.RetrofitClient;
 import com.dentalclinic.capstone.api.requestobject.LoginRequest;
 import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
 import com.dentalclinic.capstone.api.services.PatientService;
@@ -35,6 +36,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /**
  * A login screen that offers login via email/password.
@@ -195,26 +197,22 @@ public class LoginActivity extends BaseActivity {
                         if (userResponse.isSuccessful()) {
 //                            Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_SHORT).show();
                             //////donothing
-                            CoreManager.setUser(LoginActivity.this, userResponse.body());
-
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                        } else if (userResponse.code() == 500) {
-                            try {
-                                String error = userResponse.errorBody().string();
-                                showErrorMessage(getString(R.string.error_server));
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                            if (userResponse.body() != null) {
+                                User u = userResponse.body();
+                                CoreManager.setUser(LoginActivity.this, u);
+                                RetrofitClient.setAccessToken(u.getAccessToken());
+                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            } else if (userResponse.code() == 500) {
+                                showFatalError(userResponse.errorBody(), "callApiLogin");
+                            } else if (userResponse.code() == 401) {
+                                showErrorUnAuth();
+                            } else if (userResponse.code() == 400) {
+                                showBadRequestError(userResponse.errorBody(), "callApiLogin");
+                            } else {
+                                showErrorMessage(getString(R.string.error_on_error_when_call_api));
                             }
-                        } else {
-                            try {
-                                String error = userResponse.errorBody().string();
-                                ErrorResponse errorResponse = Utils.parseJson(error, ErrorResponse.class);
-                                showErrorMessage(errorResponse.getErrorMessage());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            hideLoading();
                         }
-                        hideLoading();
                     }
 
                     @Override
@@ -224,7 +222,6 @@ public class LoginActivity extends BaseActivity {
                         hideLoading();
                     }
                 });
-
     }
 
     @Override

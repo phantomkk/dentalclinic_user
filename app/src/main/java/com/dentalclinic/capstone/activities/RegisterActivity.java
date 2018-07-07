@@ -188,13 +188,14 @@ public class RegisterActivity extends BaseActivity {
 
 //                            listCityStrs.add(0,"Chọn thành phố");
                             }
+                        } else if (listResponse.code() == 500) {
+                            showFatalError(listResponse.errorBody(), "getAllCities");
+                        } else if (listResponse.code() == 401) {
+                            showErrorUnAuth();
+                        } else if (listResponse.code() == 400) {
+                            showBadRequestError(listResponse.errorBody(), "getAllCities");
                         } else {
-                            try {
-                                logError("setEvenForCityDistrict", "Success but failed" + listResponse.errorBody().string());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
+                            showErrorMessage(getString(R.string.error_on_error_when_call_api));
                         }
                     }
 
@@ -356,23 +357,14 @@ public class RegisterActivity extends BaseActivity {
                                         startActivity(intent);
                                     });
                             alertDialog.show();
+                        } else if (userResponse.code() == 500) {
+                            showFatalError(userResponse.errorBody(), "callApiRegister");
+                        } else if (userResponse.code() == 401) {
+                            showErrorUnAuth();
+                        } else if (userResponse.code() == 400) {
+                            showBadRequestError(userResponse.errorBody(), "callApiRegister");
                         } else {
-//                            edtPhone.setError(erroMsg);
-//                            edtPhone.requestFocus();
-                            try {
-                                String errorMsgJson = userResponse.errorBody().string();
-                                logError("CallApiRegister", "SuccessBut on Failed" +errorMsgJson);
-
-                                ErrorResponse erroMsg = Utils.parseJson(errorMsgJson, ErrorResponse.class);
-                                AlertDialog.Builder alertDialog = new AlertDialog.Builder(RegisterActivity.this)
-                                        .setMessage(erroMsg.getErrorMessage())
-                                        .setPositiveButton("Thử lại", (DialogInterface dialogInterface, int i) -> {
-                                        });
-                                alertDialog.show();
-
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            showErrorMessage(getString(R.string.error_on_error_when_call_api));
                         }
 
                         hideLoading();

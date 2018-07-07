@@ -186,27 +186,13 @@ public class MyAccoutFragment extends BaseFragment implements View.OnClickListen
                                 showSuccessMessage(getResources().getString(R.string.success_message_api));
                             }
                         } else if (response.code() == 500) {
-                            try {
-                                String error = response.errorBody().string();
-                                showErrorMessage(getString(R.string.error_server));
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            showFatalError(response.errorBody(), "uploadImage");
+                        } else if (response.code() == 401) {
+                            showErrorUnAuth();
+                        } else if (response.code() == 400) {
+                            showBadRequestError(response.errorBody(), "uploadImage");
                         } else {
-                            try {
-                                String error = response.errorBody().string();
-                                ErrorResponse errorResponse = Utils.parseJson(error, ErrorResponse.class);
-                                showErrorMessage(errorResponse.getErrorMessage());
-
-//                                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
-//                                        .setMessage(errorResponse.getErrorMessage())
-//                                        .setPositiveButton("Thử lại", (DialogInterface dialogInterface, int i) -> {
-//                                        });
-//                                logError("Call API My ACCOUNT: ", errorResponse.getExceptionMessage());
-//                                alertDialog.show();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            showDialog(getContext().getResources().getString(R.string.error_message_api));
                         }
                         hideLoading();
                     }

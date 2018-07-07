@@ -213,7 +213,7 @@ public class QuickBookActivity extends BaseActivity {
 
                     @Override
                     public void onSuccess(Response<List<Appointment>> appointmentResponse) {
-                        if (appointmentResponse.isSuccessful()) { 
+                        if (appointmentResponse.isSuccessful()) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(QuickBookActivity.this)
                                     .setTitle("Đặt lịch thành công")
                                     .setPositiveButton("Xác nhận", (DialogInterface var1, int var2) -> {

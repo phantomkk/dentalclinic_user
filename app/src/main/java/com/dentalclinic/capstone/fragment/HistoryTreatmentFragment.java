@@ -195,23 +195,13 @@ public class HistoryTreatmentFragment extends BaseFragment {
                                 }
                             }
                         } else if (listResponse.code() == 500) {
-                            try {
-                                String error = listResponse.errorBody().string();
-                                logError("CallAPI", error);
-                                showErrorMessage(getString(R.string.error_server));
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            showFatalError(listResponse.errorBody(), "callApi");
+                        } else if (listResponse.code() == 401) {
+                            showErrorUnAuth();
+                        } else if (listResponse.code() == 400) {
+                            showBadRequestError(listResponse.errorBody(), "callApi");
                         } else {
-                            ErrorResponse errorResponse = null;
-                            try {
-                                errorResponse = Utils.parseJson(listResponse.errorBody().string(),
-                                        ErrorResponse.class);
-                                showErrorMessage(errorResponse.getErrorMessage());
-                                logError("CallAPI HISTORY TREATMENT", errorResponse.getExceptionMessage());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            showDialog(getString(R.string.error_message_api));
                         }
                     }
 

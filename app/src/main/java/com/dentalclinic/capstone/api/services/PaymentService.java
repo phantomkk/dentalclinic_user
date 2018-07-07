@@ -8,10 +8,11 @@ import io.reactivex.Single;
 import retrofit2.Response;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface PaymentService {
-    @FormUrlEncoded
-    @POST("api/payment/getByPhone")
-    Single<Response<List<Payment>>> getByPhone(@Field("phone") String phone);
+    @GET("api/payment/getByPhone/{phone}")
+    Single<Response<List<Payment>>> getByPhone(@Path("phone") String phone);
 }

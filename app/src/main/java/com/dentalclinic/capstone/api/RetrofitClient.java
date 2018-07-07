@@ -1,5 +1,6 @@
 package com.dentalclinic.capstone.api;
 
+import com.dentalclinic.capstone.utils.CoreManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -19,20 +20,22 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
     private static Retrofit retrofit = null;
     private static String baseUrl = "http://150.95.104.237";
+    private static String accessToken = "null";
 //    private static String baseUrl = "http://10.0.2.2:8000";
     public static Retrofit getClient(){
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
                 .readTimeout(60, TimeUnit.SECONDS)
                 .connectTimeout(60, TimeUnit.SECONDS);//.addInterceptor(interceptor).build();
         //add header in case of authorization
-//        clientBuilder.addInterceptor((chain) -> {
-//                    Request original = chain.request();
-//                    Request.Builder reqBuilder = original.newBuilder()
-//                            .addHeader("Authorization", "token");
-//                    Request request = reqBuilder.build();
-//                    return chain.proceed(request);
-//                }
-//        );
+        clientBuilder.addInterceptor((chain) -> {
+                    Request original = chain.request();
+                    Request.Builder reqBuilder = original.newBuilder()
+                            .addHeader("Authorization","Bearer "+ accessToken)
+                            .addHeader("Accept", "application/json");
+                    Request request = reqBuilder.build();
+                    return chain.proceed(request);
+                }
+        );
         //add log for retrofit
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -52,5 +55,8 @@ public class RetrofitClient {
                     .build();
         }
         return retrofit;
+    }
+    public static void setAccessToken(String token){
+        accessToken = token;
     }
 }

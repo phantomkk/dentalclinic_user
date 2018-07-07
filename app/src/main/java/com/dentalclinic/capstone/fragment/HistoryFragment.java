@@ -42,6 +42,7 @@ public class HistoryFragment extends BaseFragment {
 
     public HistoryFragment() {
     }
+
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
@@ -57,9 +58,11 @@ public class HistoryFragment extends BaseFragment {
         callAPI();
         return v;
     }
+
     private HistoryAppointmentFragment historyAppointmentFragment = new HistoryAppointmentFragment();
     private HistoryTreatmentFragment historyTreatmentFragment = new HistoryTreatmentFragment();
     private HistoryPaymentFragment historyPaymentFragment = new HistoryPaymentFragment();
+
     private void setupViewPager(ViewPager viewPager) {
         PageAdapter adapter = new PageAdapter(getChildFragmentManager());
         adapter.addFragment(historyTreatmentFragment, getResources().getString(R.string.history_treatment_fragment_title));
@@ -67,7 +70,9 @@ public class HistoryFragment extends BaseFragment {
         adapter.addFragment(historyAppointmentFragment, getResources().getString(R.string.history_appointment_title));
         viewPager.setAdapter(adapter);
     }
+
     private Disposable disposable;
+
     private void callAPI() {
         showLoading();
         Single appointment = APIServiceManager.getService(AppointmentService.class)
@@ -95,25 +100,43 @@ public class HistoryFragment extends BaseFragment {
 
             @Override
             public void onSuccess(CombineHistoryClass combineClass) {
-                if(combineClass.getTreatmentHistories()!=null){
-                    if(combineClass.getTreatmentHistories().isSuccessful()){
+                if (combineClass.getTreatmentHistories() != null) {
+                    if (combineClass.getTreatmentHistories().isSuccessful()) {
                         historyTreatmentFragment.notificationAdapter(combineClass.getTreatmentHistories().body());
-                    }else{
+                    } else if (combineClass.getTreatmentHistories().code() == 500) {
+                        showFatalError(combineClass.getTreatmentHistories().errorBody(), "callAPI.getTreatmentHistories");
+                    } else if (combineClass.getTreatmentHistories().code() == 401) {
+                        showErrorUnAuth();
+                    } else if (combineClass.getTreatmentHistories().code() == 400) {
+                        showBadRequestError(combineClass.getTreatmentHistories().errorBody(), "callAPI.getTreatmentHistories");
+                    } else {
                         showDialog(getContext().getResources().getString(R.string.error_message_api));
                     }
                 }
-                if(combineClass.getPayments()!=null){
-                    if(combineClass.getPayments().isSuccessful()){
+                if (combineClass.getPayments() != null) {
+                    if (combineClass.getPayments().isSuccessful()) {
                         //
                         historyPaymentFragment.notificationAdapter(combineClass.getPayments().body());
-                    }else{
+                    } else if (combineClass.getPayments().code() == 500) {
+                        showFatalError(combineClass.getPayments().errorBody(), "callAPI.getPayments");
+                    } else if (combineClass.getPayments().code() == 401) {
+                        showErrorUnAuth();
+                    } else if (combineClass.getPayments().code() == 400) {
+                        showBadRequestError(combineClass.getPayments().errorBody(), "callAPI.getPayments");
+                    } else {
                         showDialog(getContext().getResources().getString(R.string.error_message_api));
                     }
                 }
-                if(combineClass.getAppointment()!=null){
-                    if(combineClass.getAppointment().isSuccessful()){
+                if (combineClass.getAppointment() != null) {
+                    if (combineClass.getAppointment().isSuccessful()) {
                         historyAppointmentFragment.notificationAdapter(combineClass.getAppointment().body());
-                    }else{
+                    } else if (combineClass.getAppointment().code() == 500) {
+                        showFatalError(combineClass.getAppointment().errorBody(), "callAPI.getAppointment");
+                    } else if (combineClass.getAppointment().code() == 401) {
+                        showErrorUnAuth();
+                    } else if (combineClass.getAppointment().code() == 400) {
+                        showBadRequestError(combineClass.getAppointment().errorBody(), "callAPI.getAppointment");
+                    } else {
                         showDialog(getContext().getResources().getString(R.string.error_message_api));
                     }
                 }

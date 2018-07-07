@@ -49,8 +49,7 @@ import retrofit2.Response;
  * A simple {@link Fragment} subclass.
  */
 public class DentalFragment extends BaseFragment implements MenuItem.OnActionExpandListener
-        ,SearchView.OnQueryTextListener,SearchView.OnCloseListener
-{
+        , SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
 
     public DentalFragment() {
@@ -62,11 +61,13 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
 
     ExpandableListView expandableListView;
     ServiceAdapter adapter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -74,7 +75,7 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
         View v = inflater.inflate(R.layout.fragment_dental, container, false);
 //        prepareData();
         expandableListView = v.findViewById(R.id.eplv_list_categories);
-        if(treatmentCategories==null){
+        if (treatmentCategories == null) {
 //            prepareData();
         }
         adapter = new ServiceAdapter(getContext(), treatmentCategories);
@@ -84,13 +85,14 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
 
     private void expandAll() {
         int count = adapter.getGroupCount();
-        for (int i = 0; i < count; i++){
+        for (int i = 0; i < count; i++) {
             expandableListView.expandGroup(i);
         }
     }
+
     private void colpanlAll() {
         int count = adapter.getGroupCount();
-        for (int i = 0; i < count; i++){
+        for (int i = 0; i < count; i++) {
             expandableListView.collapseGroup(i);
         }
     }
@@ -131,7 +133,8 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
         searchView.setQueryHint("Search");
         super.onCreateOptionsMenu(menu, inflater);
     }
-    public void prepareData(){
+
+    public void prepareData() {
 //        treatmentCategories = new ArrayList<>();
 //        TreatmentCategory treatmentCategory = new TreatmentCategory("NHA CHU","https://nhakhoakim.com/wp-content/themes/Themesnhakhoaandong/assets/img/igray/11.png");
 //        Treatment treatment = new Treatment("TRam RaNG COMPOSITE","tại nhà",Long.parseLong("40000"),Long.parseLong("40000"));
@@ -152,7 +155,6 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
 //        treatmentCategories.add(treatmentCategory);
 
 
-
     }
 
     @Override
@@ -166,6 +168,7 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
 //        colpanlAll();
         return true;
     }
+
     private TreatmentCategoryService treatmentCategory = APIServiceManager.getService(TreatmentCategoryService.class);
     private Disposable treatmentCategoriesServiceDisposable;
 
@@ -178,34 +181,26 @@ public class DentalFragment extends BaseFragment implements MenuItem.OnActionExp
                     public void onSubscribe(Disposable d) {
                         treatmentCategoriesServiceDisposable = d;
                     }
+
                     @Override
                     public void onSuccess(Response<List<TreatmentCategory>> listResponse) {
                         hideLoading();
                         if (listResponse.isSuccessful()) {
-                            if(listResponse.body()!=null) {
+                            if (listResponse.body() != null) {
                                 treatmentCategories.addAll(listResponse.body());
                                 adapter.getListDataHeaderOriginal().addAll(treatmentCategories);
                                 adapter.notifyDataSetChanged();
                                 logError("treatmentCategories", String.valueOf(treatmentCategories.size()));
                             }
-                        }  else if (listResponse.code() == 500) {
-                            try {
-                                String error = listResponse.errorBody().string();
-                                showErrorMessage(getString(R.string.error_server));
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            try {
-                                String error = listResponse.errorBody().string();
-                                ErrorResponse errorResponse = Utils.parseJson(error, ErrorResponse.class);
-                                showErrorMessage(errorResponse.getErrorMessage());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                        } else if (listResponse.code() == 500) {
+                            showFatalError(listResponse.errorBody(),"callApiGetAllTreatmentCategories");
+                        } else if (listResponse.code() == 401) {
+                            showErrorUnAuth();
+                        } else if (listResponse.code() == 400) {
+                            showBadRequestError(listResponse.errorBody(),"callApiGetAllTreatmentCategories");
                         }
-
                     }
+
                     @Override
                     public void onError(Throwable e) {
                         hideLoading();

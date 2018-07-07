@@ -136,21 +136,14 @@ public class EditPasswordActivity extends BaseActivity implements View.OnClickLi
 
                             showSuccessMessage(getResources().getString(R.string.success_message_api));
                             finish();
-                        }else if (response.code() == 500) {
-                            try {
-                                String error = response.errorBody().string();
-                                showErrorMessage(getString(R.string.error_server));
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                        } else if (response.code() == 500) {
+                            showFatalError(response.errorBody(), "changePassword");
+                        } else if (response.code() == 401) {
+                            showErrorUnAuth();
+                        } else if (response.code() == 400) {
+                            showBadRequestError(response.errorBody(), "changePassword");
                         } else {
-                            try {
-                                String error = response.errorBody().string();
-                                ErrorResponse errorResponse = Utils.parseJson(error, ErrorResponse.class);
-                                showErrorMessage(errorResponse.getErrorMessage());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            showErrorMessage(getString(R.string.error_on_error_when_call_api));
                         }
                         hideLoading();
                     }

@@ -63,6 +63,7 @@ dependencies {
     implementation group: 'com.github.chrisbanes.photoview', name: 'library', version: '1.2.4'
     implementation group: 'com.android.volley', name: 'volley', version: '1.1.0'
 
+    implementation 'com.muddzdev:styleabletoast:2.1.2'
     // RxJava
     // RxAndroid
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'

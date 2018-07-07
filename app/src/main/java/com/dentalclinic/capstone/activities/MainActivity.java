@@ -31,6 +31,10 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.dentalclinic.capstone.R;
+import com.dentalclinic.capstone.api.APIServiceManager;
+import com.dentalclinic.capstone.api.RetrofitClient;
+import com.dentalclinic.capstone.api.responseobject.SuccessResponse;
+import com.dentalclinic.capstone.api.services.UserService;
 import com.dentalclinic.capstone.fragment.AppointmentFragment;
 import com.dentalclinic.capstone.fragment.DentalFragment;
 import com.dentalclinic.capstone.fragment.HistoryAppointmentFragment;
@@ -85,7 +89,12 @@ import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.internal.Util;
+import retrofit2.Response;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -142,6 +151,7 @@ public class MainActivity extends BaseActivity
         user = CoreManager.getUser(this);
         listIprofile = new ArrayList<>();
         if (user != null) {
+            RetrofitClient.setAccessToken(user.getAccessToken());
             List<Patient> patients = user.getPatients();
             if (patients != null && patients.size() > 0) {
                 IProfile profile = null;
@@ -275,6 +285,7 @@ public class MainActivity extends BaseActivity
                                 headerResult.clear();
                                 headerResult.setProfiles(listIprofile);
                                 headerResult.setActiveProfile(listIprofile.get(0));
+                                logoutOnServer();
 //                                result.resetDrawerContent();
                             }
                         }
@@ -320,6 +331,7 @@ public class MainActivity extends BaseActivity
         listenOrderNumber();
 //        logError("Active",headerResult.getActiveProfile().getName().toString());
     }
+
     @Override
     public String getMainTitle() {
         return null;
@@ -330,9 +342,9 @@ public class MainActivity extends BaseActivity
 
     }
 
-    public static void resetHeader(Context context){
+    public static void resetHeader(Context context) {
         headerResult.clear();
-        User user=CoreManager.getUser(context);
+        User user = CoreManager.getUser(context);
         List<IProfile> listIprofile = new ArrayList<>();
         if (user != null) {
             List<Patient> patients = user.getPatients();
@@ -366,6 +378,7 @@ public class MainActivity extends BaseActivity
             headerResult.setActiveProfile(listIprofile.get(0));
         }
     }
+
     public void createSlideBar() {
 
     }
@@ -498,10 +511,34 @@ public class MainActivity extends BaseActivity
             HistoryPaymentFragment historyPaymentFragment = new HistoryPaymentFragment();
             fragmentManager.beginTransaction().replace(R.id.main_fragment, historyPaymentFragment).commit();
         } else if (id == R.id.nav_log_out) {
+//            logout();
             showWarningMessage("Đăng xuất");
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void logoutOnServer() {
+        UserService userService = APIServiceManager.getService(UserService.class);
+        userService.logout().subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<Response<SuccessResponse>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(Response<SuccessResponse> successResponseResponse) {
+                        showMessage("Đăng xuất");
+                        CoreManager.clearUser(MainActivity.this);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
     }
 
     private void listenOrderNumber() {

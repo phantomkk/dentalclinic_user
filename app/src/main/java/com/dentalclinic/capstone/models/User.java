@@ -16,6 +16,10 @@ public class User implements Serializable {
     private String notifToken;
     @SerializedName("patients")
     private List<Patient> patients;
+    @SerializedName("access_token")
+    private String accessToken;
+    @SerializedName("refresh_token")
+    private String refreshToken;
     private Patient currentPatient;
 
     public List<Patient> getPatients() {
@@ -48,5 +52,22 @@ public class User implements Serializable {
 
     public void setNotifToken(String notifToken) {
         this.notifToken = notifToken;
+    }
+
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }

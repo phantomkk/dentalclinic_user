@@ -62,4 +62,6 @@ public interface UserService {
     @POST("api/user/updateNotifToken")
     Single<Response<String>> updateNotifyFirebaseToken(@Field("notif_token") String token, @Field("phone") String phone);
 
+    @GET("api/user/logout")
+    Single<Response<SuccessResponse>> logout();
 }

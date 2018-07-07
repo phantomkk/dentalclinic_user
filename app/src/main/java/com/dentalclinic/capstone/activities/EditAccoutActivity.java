@@ -116,7 +116,10 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
                 if (city != null) {
                     spDistrict.setAdapter(new DistrictSpinnerAdapter(EditAccoutActivity.this,
                             android.R.layout.simple_spinner_item, cityDatabaseHelper.getDistrictOfCity(city.getId())));
-                    spDistrict.setSelection(cityDatabaseHelper.getPositionDistrictById(patient.getDistrict()));
+                    if (patient.getDistrict() != null) {
+                        spDistrict.setSelection(cityDatabaseHelper.getPositionDistrictById(patient.getDistrict()));
+
+                    }
                 }
             }
 
@@ -125,7 +128,7 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
 
             }
         });
-        spCity.setSelection(cityDatabaseHelper.getPositionCityById(patient.getCity().getId()));
+        if(patient.getCity()!=null){spCity.setSelection(cityDatabaseHelper.getPositionCityById(patient.getCity().getId()));}
 
     }
 
@@ -276,20 +279,13 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
                                 }
                             }
                         } else if (listResponse.code() == 500) {
-                            try {
-                                String error = listResponse.errorBody().string();
-                                showErrorMessage(getString(R.string.error_server));
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            showFatalError(listResponse.errorBody(), "getDistrictByCityID");
+                        } else if (listResponse.code() == 401) {
+                            showErrorUnAuth();
+                        } else if (listResponse.code() == 400) {
+                            showBadRequestError(listResponse.errorBody(), "getDistrictByCityID");
                         } else {
-                            try {
-                                String error = listResponse.errorBody().string();
-                                ErrorResponse errorResponse = Utils.parseJson(error, ErrorResponse.class);
-                                showErrorMessage(errorResponse.getErrorMessage());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            showErrorMessage(getString(R.string.error_on_error_when_call_api));
                         }
                     }
 
@@ -413,33 +409,19 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
                     @Override
                     public void onSuccess(Response<SuccessResponse> response) {
                         if (response.isSuccessful()) {
-//                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(EditAccoutActivity.this)
-//                                    .setMessage("Đăng kí tài khoản thành công")
-//                                    .setPositiveButton("Đăng nhập", (DialogInterface dialogInterface, int i) -> {
-//                                        Intent intent = new Intent(EditAccoutActivity.this, LoginActivity.class);
-//                                        startActivity(intent);
-//                                    });
-//                            alertDialog.show();
                             CoreManager.savePatient(EditAccoutActivity.this, requestObj);
                             MainActivity.resetHeader(EditAccoutActivity.this);
                             showSuccessMessage(getResources().getString(R.string.success_message_api));
                             setResult(RESULT_OK);
                             finish();
                         } else if (response.code() == 500) {
-                            try {
-                                String error = response.errorBody().string();
-                                showErrorMessage(getString(R.string.error_server));
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            showFatalError(response.errorBody(), "callApiUpdate");
+                        } else if (response.code() == 401) {
+                            showErrorUnAuth();
+                        } else if (response.code() == 400) {
+                            showBadRequestError(response.errorBody(), "callApiUpdate");
                         } else {
-                            try {
-                                String error = response.errorBody().string();
-                                ErrorResponse errorResponse = Utils.parseJson(error, ErrorResponse.class);
-                                showErrorMessage(errorResponse.getErrorMessage());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            showErrorMessage(getString(R.string.error_on_error_when_call_api));
                         }
                         hideLoading();
                     }
