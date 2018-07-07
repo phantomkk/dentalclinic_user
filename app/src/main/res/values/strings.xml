@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Dental Clinic User</string>
+    <string name="app_name">Phòng khám Capstone</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Tên Người Dùng</string>

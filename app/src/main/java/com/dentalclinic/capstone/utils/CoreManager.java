@@ -49,7 +49,11 @@ public class CoreManager {
 
     }
     public static Patient getCurrentPatient(Context context){
-        return  Utils.getUserInSharePref(context).getCurrentPatient();
+        User u = Utils.getUserInSharePref(context);
+        if(u!=null){
+            return u.getCurrentPatient();
+        }
+        return null;
     }
     public static void saveAvatar(Context context, String link){
         User user = CoreManager.getUser(context);

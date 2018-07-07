@@ -28,6 +28,7 @@
                 android:hint="@string/tv_promt_fullname"
                 android:imeOptions="actionNext"
                 android:inputType="text"
+                android:textSize="@dimen/input_size_normal"
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>
 
@@ -181,6 +182,7 @@
                 android:layout_gravity="top|left"
                 android:drawableLeft="@drawable/ic_home_black_24dp"
                 android:drawablePadding="9dp"
+                android:textSize="@dimen/input_size_normal"
                 android:hint="@string/label_address_quickbook"
                 android:imeOptions="actionNext"
                 android:inputType="textCapSentences|textMultiLine"
