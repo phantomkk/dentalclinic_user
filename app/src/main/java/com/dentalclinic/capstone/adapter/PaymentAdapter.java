@@ -3,6 +3,7 @@ package com.dentalclinic.capstone.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,18 +53,22 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
     private List<Payment> listDataHeaderOriginal = new ArrayList<>();
     private ExpandableListView listView;
     private Fragment fragment;
-
-//    private Fragment fragment;
+private BtnCheckoutListenter btnCheckOutClickListener;
+    //    private Fragment fragment;
     public PaymentAdapter(Context context, List<Payment> listDataHeader) {
         this.context = context;
         this.listDataHeader = listDataHeader;
         this.listDataHeaderOriginal.addAll(listDataHeader);
     }
 
-    public PaymentAdapter(Context context, List<Payment> listDataHeader, Fragment fragment) {
+    public PaymentAdapter(Context context,
+                          List<Payment> listDataHeader,
+                          Fragment fragment,
+                          BtnCheckoutListenter btnCheckOutClickListener) {
         this.context = context;
         this.listDataHeader = listDataHeader;
         this.fragment = fragment;
+          this.btnCheckOutClickListener = btnCheckOutClickListener;
     }
 
 //    public PaymentAdapter(Context context, List<Payment> listDataHeader, ExpandableListView listView, Fragment fragment) {
@@ -81,11 +86,16 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
         this.listDataHeaderOriginal = listDataHeaderOriginal;
     }
 
-    public PaymentAdapter(Context context, List<Payment> listDataHeader, ExpandableListView listView,Fragment  fragment) {
+    public PaymentAdapter(Context context,
+                          List<Payment> listDataHeader,
+                          ExpandableListView listView,
+                          Fragment fragment,
+                          BtnCheckoutListenter listener) {
         this.context = context;
         this.listDataHeader = listDataHeader;
         this.listView = listView;
         this.fragment = fragment;
+        this.btnCheckOutClickListener = listener;
     }
 
 
@@ -181,8 +191,8 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.item_payment, null);
             viewHolder.txtTreatmentName = convertView.findViewById(R.id.txt_treatment_name);
             viewHolder.txtTotal = convertView.findViewById(R.id.txt_total);
-            viewHolder.txtPrepaid = convertView.findViewById(R.id.txt_prepaid);
-            viewHolder.txtNotePayable = convertView.findViewById(R.id.txt_not_payable);
+            viewHolder.txtPaid = convertView.findViewById(R.id.txt_paid);
+            viewHolder.txtNotPayYet = convertView.findViewById(R.id.txt_not_pay_yet);
             viewHolder.txtStatus = convertView.findViewById(R.id.txt_status);
             viewHolder.imgExpIcon = convertView.findViewById(R.id.img_expand_icon);
             viewHolder.btnCheckOut = convertView.findViewById(R.id.btn_check_out_paypal);
@@ -207,38 +217,7 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
         viewHolder.btnCheckOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                launchPayPalPayment();
-                ConverseService service = APIServiceManager.getCurencyService(ConverseService.class);
-                Call<QuotesResponse> call = service.getConvers(Config.ACCESS_KEY);
-                call.enqueue(new Callback<QuotesResponse>() {
-                    @Override
-                    public void onResponse(Call<QuotesResponse> call, Response<QuotesResponse> response) {
-                        if (response.isSuccessful()) {
-                            QuotesResponse quotes = response.body();
-                            String dolaToVietNamDong = quotes == null ? "" : quotes.getQuotes().getVND();
-                            Double money = Double.valueOf(dolaToVietNamDong);
-                            Double dola =
-                                    new BigDecimal(
-                                            Double.parseDouble(
-                                                    payment.getNotePayable() == null ? "0" : payment.getNotePayable().toString()
-                                            ) / money)
-                                            .setScale(2, RoundingMode.UP).doubleValue();
-//                            PayPalItem item = new PayPalItem("payment", 1,
-//                                    new BigDecimal(dola), Config.DEFAULT_CURRENCY, "123");
-//                            productsInCart.add(item);
-//                            launchPayPalPayment(dola);
-                            launchPayPalPayment(payment.getId(),dola);
-                        } else {
-                            Toast.makeText(context, "Error", Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<QuotesResponse> call, Throwable t) {
-                        Toast.makeText(context, "Error", Toast.LENGTH_LONG).show();
-                    }
-                });
-
+                btnCheckOutClickListener.onClick(view,payment);
             }
         });
         if (isExpanded) {
@@ -260,11 +239,8 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
         if (payment.getTotalPrice() != null) {
             viewHolder.txtTotal.setText(Utils.formatMoney(payment.getTotalPrice()) + context.getResources().getString(R.string.current_unit));
         }
-        if (payment.getPrepaid() != null) {
-            viewHolder.txtPrepaid.setText(Utils.formatMoney(payment.getPrepaid()) + context.getResources().getString(R.string.current_unit));
-        }
-        if (payment.getPrepaid() != null) {
-            viewHolder.txtNotePayable.setText(Utils.formatMoney(payment.getNotePayable()) + context.getString(R.string.current_unit));
+        if (payment.getPaid() != null) {
+//            viewHolder.txtPrepaid.setText(Utils.formatMoney(payment.getPaid()) + context.getResources().getString(R.string.current_unit));
         }
         if (payment.isDone() == 1) {
             viewHolder.lnStatus.setVisibility(View.VISIBLE);
@@ -280,61 +256,15 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
 
     private static final int REQUEST_CODE_PAYMENT = 1;
 
-    public void clearPayPalList() {
-        productsInCart.clear();
-    }
 
-    private void launchPayPalPayment(int localPaymentId, Double money) {
 
-        PayPalPayment thingsToBuy = prepareFinalCart(money);
 
-        Intent intent = new Intent(context, PaymentActivity.class);
 
-        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, paypalConfig);
-        intent.putExtra(AppConst.EXTRA_LOCAL_PAYMENT_ID, localPaymentId);
-
-        intent.putExtra(PaymentActivity.EXTRA_PAYMENT, thingsToBuy);
-
-         this.fragment.startActivityForResult(intent, REQUEST_CODE_PAYMENT);
-    }
-
-    private List<PayPalItem> productsInCart = new ArrayList<PayPalItem>();
-
-    private PayPalPayment prepareFinalCart(Double money) {
-
-        PayPalItem[] items = new PayPalItem[productsInCart.size()];
-        items = productsInCart.toArray(items);
-
-        // Total amount
-        BigDecimal subtotal = new BigDecimal(money);
-
-        // If you have shipping cost, add it here
-        BigDecimal shipping = new BigDecimal("0.0");
-
-        // If you have tax, add it here
-        BigDecimal tax = new BigDecimal("0.0");
-
-        PayPalPaymentDetails paymentDetails = new PayPalPaymentDetails(
-                shipping, subtotal, tax);
-
-        BigDecimal amount = subtotal.add(shipping).add(tax);
-
-        PayPalPayment payment = new PayPalPayment(
-                amount,
-                Config.DEFAULT_CURRENCY,
-                "Số tiền bản phải trả là:",
-                Config.PAYMENT_INTENT);
-
-//        payment.items(items).paymentDetails(paymentDetails);
-
-        // Custom field like invoice_number etc.,
-//        payment.custom("This is text that will be associated with the payment that the app can use.");
-
-        return payment;
-    }
-
+public interface BtnCheckoutListenter{
+    void onClick(View v, Payment p);
+}
     public class GroupViewHolder {
-        TextView txtTreatmentName, txtTotal, txtPrepaid, txtNotePayable, txtStatus;
+        TextView txtTreatmentName, txtTotal, txtPaid, txtNotPayYet, txtStatus;
         ImageView imgExpIcon;
         Button btnCheckOut;
         LinearLayout lnPayPal, lnStatus;
@@ -371,31 +301,31 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
                         newPaymentDetails.add(paymentDetail);
                     }
                 }
-                if (newPaymentDetails.size() > 0) {
-                    Log.v("newPaymentDetails", String.valueOf(newPaymentDetails.size()));
-                    Payment tPayment = new Payment();
-                    if (payment.getId() != -1) {
-                        tPayment.setId(payment.getId());
-                    }
-                    if (payment.getUser() != null) {
-                        tPayment.setUser(payment.getUser());
-                    }
-                    if (payment.getPrepaid() != null) {
-                        tPayment.setPrepaid(payment.getPrepaid());
-                    }
-                    if (payment.getTotalPrice() != null) {
-                        tPayment.setTotalPrice(payment.getTotalPrice());
-                    }
-                    if (payment.getTreatmentHistories() != null) {
-                        tPayment.setTreatmentHistories(payment.getTreatmentHistories());
-                    }
-                    if (payment.getNotePayable() != null) {
-                        tPayment.setNotePayable(payment.getNotePayable());
-                    }
-
-                    tPayment.setPaymentDetails(newPaymentDetails);
-                    listDataHeader.add(tPayment);
-                }
+//                if (newPaymentDetails.size() > 0) {
+//                    Log.v("newPaymentDetails", String.valueOf(newPaymentDetails.size()));
+//                    Payment tPayment = new Payment();
+//                    if (payment.getId() != -1) {
+//                        tPayment.setId(payment.getId());
+//                    }
+//                    if (payment.getUser() != null) {
+//                        tPayment.setUser(payment.getUser());
+//                    }
+//                    if (payment.getPaid() != null) {
+//                        tPayment.setPaid(payment.getPaid());
+//                    }
+//                    if (payment.getTotalPrice() != null) {
+//                        tPayment.setTotalPrice(payment.getTotalPrice());
+//                    }
+//                    if (payment.getTreatmentHistories() != null) {
+//                        tPayment.setTreatmentHistories(payment.getTreatmentHistories());
+//                    }
+//                    if (payment.getNotePayable() != null) {
+//                        tPayment.setNotePayable(payment.getNotePayable());
+//                    }
+//
+//                    tPayment.setPaymentDetails(newPaymentDetails);
+//                    listDataHeader.add(tPayment);
+//                }
             }
         }
 

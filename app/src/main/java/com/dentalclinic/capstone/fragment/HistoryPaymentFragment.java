@@ -29,6 +29,8 @@ import com.dentalclinic.capstone.activities.MainActivity;
 import com.dentalclinic.capstone.adapter.PaymentAdapter;
 import com.dentalclinic.capstone.api.APIServiceManager;
 import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
+import com.dentalclinic.capstone.api.responseobject.QuotesResponse;
+import com.dentalclinic.capstone.api.services.ConverseService;
 import com.dentalclinic.capstone.api.services.PaymentService;
 import com.dentalclinic.capstone.models.Patient;
 import com.dentalclinic.capstone.models.Payment;
@@ -41,6 +43,9 @@ import com.dentalclinic.capstone.utils.CoreManager;
 import com.dentalclinic.capstone.utils.Utils;
 import com.google.android.gms.common.api.internal.ApiExceptionMapper;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
+import com.paypal.android.sdk.payments.PayPalItem;
+import com.paypal.android.sdk.payments.PayPalPayment;
+import com.paypal.android.sdk.payments.PayPalPaymentDetails;
 import com.paypal.android.sdk.payments.PayPalService;
 import com.paypal.android.sdk.payments.PaymentActivity;
 import com.paypal.android.sdk.payments.PaymentConfirmation;
@@ -49,6 +54,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,6 +66,8 @@ import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -68,6 +77,8 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private Disposable paymentDisposable;
+
+    private List<PayPalItem> productsInCart = new ArrayList<PayPalItem>();
 
     public HistoryPaymentFragment() {
         // Required empty public constructor
@@ -80,6 +91,7 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
     private static PayPalConfiguration paypalConfig = new PayPalConfiguration()
             .environment(Config.PAYPAL_ENVIRONMENT).clientId(
                     Config.PAYPAL_CLIENT_ID);
+    private Payment localPayment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,9 +114,97 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
         if (payments.isEmpty()) {
 //            prepareData();
         }
-        adapter = new PaymentAdapter(getContext(), payments, expandableListView,this);
+        adapter = new PaymentAdapter(
+                getContext(),
+                payments,
+                expandableListView,
+                this,
+                new PaymentAdapter.BtnCheckoutListenter() {
+
+                    @Override
+                    public void onClick(View view, Payment payment) {
+                        localPayment = payment;
+                        ConverseService service = APIServiceManager.getCurencyService(ConverseService.class);
+                        Call<QuotesResponse> call = service.getConvers(Config.ACCESS_KEY);
+                        call.enqueue(new Callback<QuotesResponse>() {
+                            @Override
+                            public void onResponse(Call<QuotesResponse> call, retrofit2.Response<QuotesResponse> response) {
+                                if (response.isSuccessful()) {
+                                    QuotesResponse quotes = response.body();
+                                    String dolaToVietNamDong = quotes == null ? "" : quotes.getQuotes().getVND();
+                                    Double money = Double.valueOf(dolaToVietNamDong);
+                                    Double dola =
+                                            new BigDecimal(
+                                                    Double.parseDouble(
+                                                             (payment.getTotalPrice() - payment.getPaid())+""
+                                                    ) / money)
+                                                    .setScale(2, RoundingMode.UP).doubleValue();
+//                            PayPalItem item = new PayPalItem("payment", 1,
+//                                    new BigDecimal(dola), Config.DEFAULT_CURRENCY, "123");
+//                            productsInCart.add(item);
+                                    launchPayPalPayment(dola);
+                                } else {
+                                    Toast.makeText(getContext(), "Error", Toast.LENGTH_LONG).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<QuotesResponse> call, Throwable t) {
+                                Toast.makeText(getContext(), "Error", Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                    }
+                });
+
         expandableListView.setAdapter(adapter);
         return v;
+    }
+
+    private void launchPayPalPayment(Double money) {
+
+        PayPalPayment thingsToBuy = prepareFinalCart(money);
+
+        Intent intent = new Intent(getContext(), PaymentActivity.class);
+
+        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, paypalConfig);
+//        intent.putExtra(AppConst.EXTRA_LOCAL_PAYMENT_ID, localPaymentId);
+        intent.putExtra(PaymentActivity.EXTRA_PAYMENT, thingsToBuy);
+
+        this.startActivityForResult(intent, REQUEST_CODE_PAYMENT);
+    }
+
+    private PayPalPayment prepareFinalCart(Double money) {
+
+        PayPalItem[] items = new PayPalItem[productsInCart.size()];
+        items = productsInCart.toArray(items);
+
+        // Total amount
+        BigDecimal subtotal = new BigDecimal(money);
+
+        // If you have shipping cost, add it here
+        BigDecimal shipping = new BigDecimal("0.0");
+
+        // If you have tax, add it here
+        BigDecimal tax = new BigDecimal("0.0");
+
+        PayPalPaymentDetails paymentDetails = new PayPalPaymentDetails(
+                shipping, subtotal, tax);
+
+        BigDecimal amount = subtotal.add(shipping).add(tax);
+
+        PayPalPayment payment = new PayPalPayment(
+                amount,
+                Config.DEFAULT_CURRENCY,
+                "Số tiền bản phải trả là:",
+                Config.PAYMENT_INTENT);
+
+//        payment.items(items).paymentDetails(paymentDetails);
+
+        // Custom field like invoice_number etc.,
+//        payment.custom("This is text that will be associated with the payment that the app can use.");
+
+        return payment;
     }
 
     private void expandAll() {
@@ -165,7 +265,6 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
             if (resultCode == Activity.RESULT_OK) {
                 PaymentConfirmation confirm = data
                         .getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
-                Bundle bundle = data.getExtras();
                 if (confirm != null) {
                     try {
                         Log.e(TAG, confirm.toJSONObject().toString(4));
@@ -177,12 +276,13 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
 
                         String paymentClient = confirm.getPayment()
                                 .toJSONObject().toString();
-                        int localPaymentId = bundle == null ? 0 : bundle.getInt(AppConst.EXTRA_LOCAL_PAYMENT_ID);
-                        Log.e(TAG, "paymentId: " + paymentId
-                                + ", payment_json: " + paymentClient);
 
                         // Now verify the payment on the server side
-                        verifyPaymentOnServer(localPaymentId,paymentId, paymentClient);
+                        if (localPayment != null) {
+                            verifyPaymentOnServer(localPayment.getId(), paymentId, paymentClient);
+                        } else {
+                            logError("onActivityResult", "Payment null");
+                        }
 
                     } catch (JSONException e) {
                         Log.e(TAG, "an extremely unlikely failure occurred: ",

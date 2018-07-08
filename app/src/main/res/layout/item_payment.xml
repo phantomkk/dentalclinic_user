@@ -92,7 +92,7 @@
                     android:text="Đã Trả" />
 
                 <TextView
-                    android:id="@+id/txt_prepaid"
+                    android:id="@+id/txt_paid"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
@@ -115,7 +115,7 @@
                     android:text="Còn Lại" />
 
                 <TextView
-                    android:id="@+id/txt_not_payable"
+                    android:id="@+id/txt_not_pay_yet"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="6"

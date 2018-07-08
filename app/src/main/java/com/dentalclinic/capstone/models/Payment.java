@@ -9,10 +9,8 @@ import java.util.List;
 public class Payment implements Serializable {
     @SerializedName("id")
     private int id;
-    @SerializedName("prepaid")
-    private Long prepaid;
-    @SerializedName("note_payable")
-    private Long notePayable;
+    @SerializedName("paid")
+    private Long paid;
     @SerializedName("total_price")
     private Long totalPrice;
     @SerializedName("user")
@@ -50,21 +48,6 @@ public class Payment implements Serializable {
         this.id = id;
     }
 
-    public Long getPrepaid() {
-        return prepaid;
-    }
-
-    public void setPrepaid(Long prepaid) {
-        this.prepaid = prepaid;
-    }
-
-    public Long getNotePayable() {
-        return notePayable;
-    }
-
-    public void setNotePayable(Long notePayable) {
-        this.notePayable = notePayable;
-    }
 
     public Long getTotalPrice() {
         return totalPrice;
@@ -110,4 +93,11 @@ public class Payment implements Serializable {
         return super.clone();
     }
 
+    public Long getPaid() {
+        return paid;
+    }
+
+    public void setPaid(Long paid) {
+        this.paid = paid;
+    }
 }
