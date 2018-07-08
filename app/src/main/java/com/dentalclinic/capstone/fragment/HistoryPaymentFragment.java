@@ -101,7 +101,7 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
         if (payments.isEmpty()) {
 //            prepareData();
         }
-        adapter = new PaymentAdapter(getContext(), payments, expandableListView);
+        adapter = new PaymentAdapter(getContext(), payments, expandableListView,this);
         expandableListView.setAdapter(adapter);
         return v;
     }

@@ -3,6 +3,7 @@ package com.dentalclinic.capstone.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +51,7 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
     private List<Payment> listDataHeader; // header titles
     private List<Payment> listDataHeaderOriginal = new ArrayList<>();
     private ExpandableListView listView;
+    private Fragment fragment;
 
     public PaymentAdapter(Context context, List<Payment> listDataHeader) {
         this.context = context;
@@ -65,10 +67,11 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
         this.listDataHeaderOriginal = listDataHeaderOriginal;
     }
 
-    public PaymentAdapter(Context context, List<Payment> listDataHeader, ExpandableListView listView) {
+    public PaymentAdapter(Context context, List<Payment> listDataHeader, ExpandableListView listView,Fragment  fragment) {
         this.context = context;
         this.listDataHeader = listDataHeader;
         this.listView = listView;
+        this.fragment = fragment;
     }
 
 
@@ -278,7 +281,7 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
 
         intent.putExtra(PaymentActivity.EXTRA_PAYMENT, thingsToBuy);
 
-        ((Activity) context).startActivityForResult(intent, REQUEST_CODE_PAYMENT);
+         this.fragment.startActivityForResult(intent, REQUEST_CODE_PAYMENT);
     }
 
     private List<PayPalItem> productsInCart = new ArrayList<PayPalItem>();
