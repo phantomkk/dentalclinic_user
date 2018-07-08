@@ -25,6 +25,7 @@ public class AppConst {
     public final static String IMAGE_OBJ = "IMAGE_OBJ";
     public final static String TREATMENT_HISTORY_OBJ = "TREATMENT_DETAIL_OBJ";
     public final static String BUNDLE = "BUNDLE";
+    public final static String EXTRA_LOCAL_PAYMENT_ID = "EXTRA_LOCAL_PAYMENT_ID";
     public final static String TREATMENT_DETAIL_BUNDLE = "TREATMENT_DETAIL_BUNDLE";
 
     //firebase
@@ -33,4 +34,5 @@ public class AppConst {
     public final static String RESPONSE_REMINDER = "RESPONSE_REMINDER";
     public final static int REQUEST_CODE_REMINDER = 123;
 
+    public final static String CURRENCY_BASE_URL = "http://apilayer.net/";
 }

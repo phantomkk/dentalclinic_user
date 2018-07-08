@@ -15,4 +15,12 @@ import retrofit2.http.Path;
 public interface PaymentService {
     @GET("api/payment/getByPhone/{phone}")
     Single<Response<List<Payment>>> getByPhone(@Path("phone") String phone);
+
+    @FormUrlEncoded
+    @POST("api/payment/verifyPayment")
+    Single<Response<String>> verifyPayment(
+            @Field("local_payment_id") int localPaymentId,
+            @Field("payment_id") String paymentId,
+            @Field("payment_client_json") String paymentClientJson
+    );
 }

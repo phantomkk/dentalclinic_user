@@ -34,9 +34,11 @@ import com.dentalclinic.capstone.models.Payment;
 import com.dentalclinic.capstone.models.PaymentDetail;
 import com.dentalclinic.capstone.models.Staff;
 import com.dentalclinic.capstone.models.TreatmentHistory;
+import com.dentalclinic.capstone.utils.AppConst;
 import com.dentalclinic.capstone.utils.Config;
 import com.dentalclinic.capstone.utils.CoreManager;
 import com.dentalclinic.capstone.utils.Utils;
+import com.google.android.gms.common.api.internal.ApiExceptionMapper;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalService;
 import com.paypal.android.sdk.payments.PaymentActivity;
@@ -162,6 +164,7 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
             if (resultCode == Activity.RESULT_OK) {
                 PaymentConfirmation confirm = data
                         .getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
+                Bundle bundle = data.getExtras();
                 if (confirm != null) {
                     try {
                         Log.e(TAG, confirm.toJSONObject().toString(4));
@@ -171,14 +174,14 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
                         String paymentId = confirm.toJSONObject()
                                 .getJSONObject("response").getString("id");
 
-                        String payment_client = confirm.getPayment()
+                        String paymentClient = confirm.getPayment()
                                 .toJSONObject().toString();
-
+                        int localPaymentId = bundle == null ? 0 : bundle.getInt(AppConst.EXTRA_LOCAL_PAYMENT_ID);
                         Log.e(TAG, "paymentId: " + paymentId
-                                + ", payment_json: " + payment_client);
+                                + ", payment_json: " + paymentClient);
 
                         // Now verify the payment on the server side
-                        verifyPaymentOnServer(paymentId, payment_client);
+                        verifyPaymentOnServer(localPaymentId,paymentId, paymentClient);
 
                     } catch (JSONException e) {
                         Log.e(TAG, "an extremely unlikely failure occurred: ",
@@ -194,65 +197,86 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
         }
     }
 
-    private void verifyPaymentOnServer(final String paymentId,
-                                       final String payment_client) {
+    private void verifyPaymentOnServer(int localPaymentId, final String paymentId,
+                                       final String paymentClient) {
         // Showing progress dialog before making request
-        showLoading();
-        StringRequest verifyReq = new StringRequest(Request.Method.POST,
-                Config.URL_VERIFY_PAYMENT, new Response.Listener<String>() {
+//        showLoading();
+//        StringRequest verifyReq = new StringRequest(Request.Method.POST,
+//                Config.URL_VERIFY_PAYMENT, new Response.Listener<String>() {
+//
+//            @Override
+//            public void onResponse(String response) {
+//                Log.d(TAG, "verify payment: " + response.toString());
+//
+//                try {
+//                    JSONObject res = new JSONObject(response);
+//                    boolean error = res.getBoolean("error");
+//                    String message = res.getString("message");
+//                    // user error boolean flag to check for errors
+//                    Toast.makeText(getContext(), message,
+//                            Toast.LENGTH_SHORT).show();
+//                    if (!error) {
+//                        // empty the cart
+//                        adapter.clearPayPalList();
+//                    }
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                hideLoading();
+//            }
+//        }, new Response.ErrorListener() {
+//
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.e(TAG, "Verify Error: " + error.getMessage());
+//                Toast.makeText(getContext(),
+//                        error.getMessage(), Toast.LENGTH_SHORT).show();
+//                // hiding the progress dialog
+//                hideLoading();
+//            }
+//        }) {
+//
+//            @Override
+//            protected Map<String, String> getParams() {
+//
+//                Map<String, String> params = new HashMap<String, String>();
+//                params.put("paymentId", paymentId);
+//                params.put("paymentClientJson", paymentClient);
+//
+//                return params;
+//            }
+//        };
+//
+//        // Setting timeout to volley request as verification request takes sometime
+//        int socketTimeout = 60000;
+//        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+//        verifyReq.setRetryPolicy(policy);
+//my request service
+        PaymentService service = APIServiceManager.getService(PaymentService.class);
+        service.verifyPayment(localPaymentId, paymentId, paymentClient).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<retrofit2.Response<String>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "verify payment: " + response.toString());
-
-                try {
-                    JSONObject res = new JSONObject(response);
-                    boolean error = res.getBoolean("error");
-                    String message = res.getString("message");
-                    // user error boolean flag to check for errors
-                    Toast.makeText(getContext(), message,
-                            Toast.LENGTH_SHORT).show();
-                    if (!error) {
-                        // empty the cart
-                        adapter.clearPayPalList();
                     }
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                    @Override
+                    public void onSuccess(retrofit2.Response<String> stringResponse) {
+                        String data = stringResponse.body();
+                        logError("getPayment", data);
+                    }
 
-                hideLoading();
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Verify Error: " + error.getMessage());
-                Toast.makeText(getContext(),
-                        error.getMessage(), Toast.LENGTH_SHORT).show();
-                // hiding the progress dialog
-                hideLoading();
-            }
-        }) {
-
-            @Override
-            protected Map<String, String> getParams() {
-
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("paymentId", paymentId);
-                params.put("paymentClientJson", payment_client);
-
-                return params;
-            }
-        };
-
-        // Setting timeout to volley request as verification request takes sometime
-        int socketTimeout = 60000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        verifyReq.setRetryPolicy(policy);
-
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        showErrorMessage("Có lỗi xảy ra");
+                    }
+                });
         // Adding request to request queue
     }
 

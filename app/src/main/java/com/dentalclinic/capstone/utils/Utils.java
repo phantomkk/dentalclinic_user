@@ -111,6 +111,10 @@ public class Utils {
 
     public static String formatMoney(Long money) {
         NumberFormat formatter = new DecimalFormat("#,###");
+        Log.d("DEBUG_TAG", "formatMoney: Monney: " + money);
+        if(money==null){
+            money = (long)(0);
+        }
         String formattedNumber = formatter.format(money);
 //        return (String.format("%,d", money)).replace(',', '.');
         return formattedNumber;

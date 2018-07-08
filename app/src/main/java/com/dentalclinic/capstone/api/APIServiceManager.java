@@ -12,5 +12,8 @@ public class APIServiceManager {
     public static <T> T getService(final Class<T> tClass) {
         return RetrofitClient.getClient().create(tClass);
     }
+    public static <T> T getCurencyService(final Class<T> tClass) {
+        return CurrencyConverterClient.getRetrofitInstance().create(tClass);
+    }
 
 }

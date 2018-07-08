@@ -16,15 +16,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dentalclinic.capstone.R;
-import com.dentalclinic.capstone.api.RetrofitInstance;
+import com.dentalclinic.capstone.api.APIServiceManager;
 import com.dentalclinic.capstone.api.responseobject.QuotesResponse;
 import com.dentalclinic.capstone.api.services.ConverseService;
 import com.dentalclinic.capstone.models.Payment;
 import com.dentalclinic.capstone.models.PaymentDetail;
-import com.dentalclinic.capstone.models.Quotes;
 import com.dentalclinic.capstone.models.Staff;
-import com.dentalclinic.capstone.models.Treatment;
-import com.dentalclinic.capstone.models.TreatmentHistory;
+import com.dentalclinic.capstone.utils.AppConst;
 import com.dentalclinic.capstone.utils.Config;
 import com.dentalclinic.capstone.utils.DateTimeFormat;
 import com.dentalclinic.capstone.utils.DateUtils;
@@ -39,14 +37,10 @@ import com.squareup.picasso.Picasso;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import io.reactivex.Single;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -56,6 +50,7 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
     private List<Payment> listDataHeader; // header titles
     private List<Payment> listDataHeaderOriginal = new ArrayList<>();
     private ExpandableListView listView;
+
     public PaymentAdapter(Context context, List<Payment> listDataHeader) {
         this.context = context;
         this.listDataHeader = listDataHeader;
@@ -75,7 +70,6 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
         this.listDataHeader = listDataHeader;
         this.listView = listView;
     }
-
 
 
     @Override
@@ -152,6 +146,7 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
     private static PayPalConfiguration paypalConfig = new PayPalConfiguration()
             .environment(Config.PAYPAL_ENVIRONMENT).clientId(
                     Config.PAYPAL_CLIENT_ID);
+
     @Override
     public long getGroupId(int groupPosition) {
         return groupPosition;
@@ -183,10 +178,10 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!isExpanded){
+                if (!isExpanded) {
                     listView.expandGroup(groupPosition);
 
-                }else{
+                } else {
                     listView.collapseGroup(groupPosition);
                 }
             }
@@ -196,28 +191,34 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View view) {
 //                launchPayPalPayment();
-                 ConverseService service = RetrofitInstance.getRetrofitInstance().create(ConverseService.class);
+                ConverseService service = APIServiceManager.getCurencyService(ConverseService.class);
                 Call<QuotesResponse> call = service.getConvers(Config.ACCESS_KEY);
                 call.enqueue(new Callback<QuotesResponse>() {
                     @Override
                     public void onResponse(Call<QuotesResponse> call, Response<QuotesResponse> response) {
-                        if(response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             QuotesResponse quotes = response.body();
-                            String dolaToVietNamDong = quotes.getQuotes().getVND();
-                            Double money = new Double(dolaToVietNamDong);
-                            Double dola = new BigDecimal(Double.parseDouble(payment.getNotePayable().toString())/ money).setScale(2, RoundingMode.UP).doubleValue();
+                            String dolaToVietNamDong = quotes == null ? "" : quotes.getQuotes().getVND();
+                            Double money = Double.valueOf(dolaToVietNamDong);
+                            Double dola =
+                                    new BigDecimal(
+                                            Double.parseDouble(
+                                                    payment.getNotePayable() == null ? "0" : payment.getNotePayable().toString()
+                                            ) / money)
+                                            .setScale(2, RoundingMode.UP).doubleValue();
 //                            PayPalItem item = new PayPalItem("payment", 1,
 //                                    new BigDecimal(dola), Config.DEFAULT_CURRENCY, "123");
 //                            productsInCart.add(item);
-                            launchPayPalPayment(dola);
-                        }else{
-                            Toast.makeText(context,"Error",Toast.LENGTH_LONG).show();
+//                            launchPayPalPayment(dola);
+                            launchPayPalPayment(payment.getId(),(double)1);
+                        } else {
+                            Toast.makeText(context, "Error", Toast.LENGTH_LONG).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<QuotesResponse> call, Throwable t) {
-                        Toast.makeText(context,"Error",Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Error", Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -230,11 +231,11 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
         }
         if (payment.getTreatmentNames() != null) {
             String treatmentName = "";
-            for (int i = 0; i< payment.getTreatmentNames().size();i++){
-                if (i==payment.getTreatmentNames().size()-1){
-                    treatmentName+=payment.getTreatmentNames().get(i);
-                }else{
-                    treatmentName+=payment.getTreatmentNames().get(i)+", ";
+            for (int i = 0; i < payment.getTreatmentNames().size(); i++) {
+                if (i == payment.getTreatmentNames().size() - 1) {
+                    treatmentName += payment.getTreatmentNames().get(i);
+                } else {
+                    treatmentName += payment.getTreatmentNames().get(i) + ", ";
                 }
             }
             viewHolder.txtTreatmentName.setText(treatmentName);
@@ -246,7 +247,7 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
             viewHolder.txtPrepaid.setText(Utils.formatMoney(payment.getPrepaid()) + context.getResources().getString(R.string.current_unit));
         }
         if (payment.getPrepaid() != null) {
-            viewHolder.txtNotePayable.setText(Utils.formatMoney(payment.getNotePayable()) + context.getResources().getString(R.string.current_unit));
+            viewHolder.txtNotePayable.setText(Utils.formatMoney(payment.getNotePayable()) + context.getString(R.string.current_unit));
         }
         if (payment.isDone() == 1) {
             viewHolder.lnStatus.setVisibility(View.VISIBLE);
@@ -259,23 +260,27 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
         }
         return convertView;
     }
+
     private static final int REQUEST_CODE_PAYMENT = 1;
 
-    public void clearPayPalList(){
+    public void clearPayPalList() {
         productsInCart.clear();
     }
-    private void launchPayPalPayment(Double money) {
+
+    private void launchPayPalPayment(int localPaymentId, Double money) {
 
         PayPalPayment thingsToBuy = prepareFinalCart(money);
 
         Intent intent = new Intent(context, PaymentActivity.class);
 
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, paypalConfig);
+        intent.putExtra(AppConst.EXTRA_LOCAL_PAYMENT_ID, localPaymentId);
 
         intent.putExtra(PaymentActivity.EXTRA_PAYMENT, thingsToBuy);
 
         ((Activity) context).startActivityForResult(intent, REQUEST_CODE_PAYMENT);
     }
+
     private List<PayPalItem> productsInCart = new ArrayList<PayPalItem>();
 
     private PayPalPayment prepareFinalCart(Double money) {
@@ -310,6 +315,7 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
 
         return payment;
     }
+
     public class GroupViewHolder {
         TextView txtTreatmentName, txtTotal, txtPrepaid, txtNotePayable, txtStatus;
         ImageView imgExpIcon;
@@ -343,7 +349,7 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
                 Log.v("paymentDetails", String.valueOf(paymentDetails.size()));
                 List<PaymentDetail> newPaymentDetails = new ArrayList<PaymentDetail>();
                 for (PaymentDetail paymentDetail : paymentDetails) {
-                    String date = DateUtils.changeDateFormat(paymentDetail.getDateCreate(),DateTimeFormat.DATE_TIME_DB, DateTimeFormat.DATE_APP_2);
+                    String date = DateUtils.changeDateFormat(paymentDetail.getDateCreate(), DateTimeFormat.DATE_TIME_DB, DateTimeFormat.DATE_APP_2);
                     if (paymentDetail.getDateCreate().contains(query.toLowerCase())) {
                         newPaymentDetails.add(paymentDetail);
                     }
@@ -366,7 +372,7 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
                     if (payment.getTreatmentHistories() != null) {
                         tPayment.setTreatmentHistories(payment.getTreatmentHistories());
                     }
-                    if(payment.getNotePayable() != null){
+                    if (payment.getNotePayable() != null) {
                         tPayment.setNotePayable(payment.getNotePayable());
                     }
 

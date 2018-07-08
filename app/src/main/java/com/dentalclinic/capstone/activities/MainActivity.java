@@ -1,6 +1,7 @@
 package com.dentalclinic.capstone.activities;
 
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -34,6 +35,7 @@ import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.api.APIServiceManager;
 import com.dentalclinic.capstone.api.RetrofitClient;
 import com.dentalclinic.capstone.api.responseobject.SuccessResponse;
+import com.dentalclinic.capstone.api.services.PaymentService;
 import com.dentalclinic.capstone.api.services.UserService;
 import com.dentalclinic.capstone.fragment.AppointmentFragment;
 import com.dentalclinic.capstone.fragment.DentalFragment;
@@ -80,8 +82,12 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.paypal.android.sdk.payments.PaymentActivity;
+import com.paypal.android.sdk.payments.PaymentConfirmation;
 import com.rupins.drawercardbehaviour.CardDrawerLayout;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -182,10 +188,10 @@ public class MainActivity extends BaseActivity
                 .withOnAccountHeaderProfileImageListener(new AccountHeader.OnAccountHeaderProfileImageListener() {
                     @Override
                     public boolean onProfileImageClick(View view, IProfile profile, boolean current) {
-                        CoreManager.setCurrentPatient((int)profile.getIdentifier(),MainActivity.this);
+                        CoreManager.setCurrentPatient((int) profile.getIdentifier(), MainActivity.this);
 //                        NewsFragment newFragment = new NewsFragment();
 //                        fragmentManager.beginTransaction().replace(R.id.main_fragment, newFragment).commit();
-                        result.setSelectionAtPosition(1,true);
+                        result.setSelectionAtPosition(1, true);
                         return false;
                     }
 
@@ -204,8 +210,8 @@ public class MainActivity extends BaseActivity
                                 Intent intent1 = new Intent(MainActivity.this, LoginActivity.class);
                                 startActivity(intent1);
                             }
-                        }else{
-                            CoreManager.setCurrentPatient((int)profile.getIdentifier(),MainActivity.this);
+                        } else {
+                            CoreManager.setCurrentPatient((int) profile.getIdentifier(), MainActivity.this);
 //                            result.setSelectionAtPosition(1,true);
                         }
 
@@ -279,7 +285,7 @@ public class MainActivity extends BaseActivity
                                 showWarningMessage("Đăng xuất");
                                 CoreManager.clearUser(MainActivity.this);
                                 user = null;
-                                result.setSelectionAtPosition(1,true);
+                                result.setSelectionAtPosition(1, true);
                                 listIprofile = new ArrayList<>();
                                 listIprofile.add(new ProfileSettingDrawerItem().withName("Đăng Nhập").withIcon(new IconicsDrawable(MainActivity.this, GoogleMaterial.Icon.gmd_add).actionBar().paddingDp(5).colorRes(R.color.material_drawer_primary_text)).withIdentifier(PROFILE_SETTING));
                                 headerResult.clear();
@@ -304,17 +310,18 @@ public class MainActivity extends BaseActivity
 
             //set the active profile
             User user = CoreManager.getUser(this);
-            if(user!=null){
-                if(user.getCurrentPatient()!=null){
-                    for (int i =0;i<arrayIProfile.length;i++){
-                        if(arrayIProfile[i].getIdentifier() == user.getCurrentPatient().getId()){
+            if (user != null) {
+                if (user.getCurrentPatient() != null) {
+                    for (int i = 0; i < arrayIProfile.length; i++) {
+                        if (arrayIProfile[i].getIdentifier() == user.getCurrentPatient().getId()) {
                             headerResult.setActiveProfile(arrayIProfile[i]);
                             break;
                         }
                     }
                 }
-            }else{
-            headerResult.setActiveProfile(arrayIProfile[0]);}
+            } else {
+                headerResult.setActiveProfile(arrayIProfile[0]);
+            }
         }
         result.setOnDrawerNavigationListener(new Drawer.OnDrawerNavigationListener() {
             @Override
@@ -365,16 +372,16 @@ public class MainActivity extends BaseActivity
             listIprofile.add(new ProfileSettingDrawerItem().withName("Đăng Nhập").withDescription("Đăng Nhập Tài Khoản").withIcon(new IconicsDrawable(context, GoogleMaterial.Icon.gmd_add).actionBar().paddingDp(5).colorRes(R.color.material_drawer_primary_text)).withIdentifier(PROFILE_SETTING));
         }
         headerResult.setProfiles(listIprofile);
-        if(user!=null){
-            if(user.getCurrentPatient()!=null){
-                for (int i =0;i<listIprofile.size();i++){
-                    if(listIprofile.get(i).getIdentifier() == user.getCurrentPatient().getId()){
+        if (user != null) {
+            if (user.getCurrentPatient() != null) {
+                for (int i = 0; i < listIprofile.size(); i++) {
+                    if (listIprofile.get(i).getIdentifier() == user.getCurrentPatient().getId()) {
                         headerResult.setActiveProfile(listIprofile.get(i));
                         break;
                     }
                 }
             }
-        }else {
+        } else {
             headerResult.setActiveProfile(listIprofile.get(0));
         }
     }
@@ -561,5 +568,85 @@ public class MainActivity extends BaseActivity
         });
     }
 
+    public static int REQUEST_CODE_PAYMENT = 1;
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_PAYMENT) {
+            if (resultCode == Activity.RESULT_OK) {
+                PaymentConfirmation confirm = data
+                        .getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
+                Bundle bundle = data.getExtras();
+                if (confirm != null) {
+                    try {
+                        Log.e("TAG", confirm.toJSONObject().toString(4));
+                        Log.e("TAG", confirm.getPayment().toJSONObject()
+                                .toString(4));
+
+                        String paymentId = confirm.toJSONObject()
+                                .getJSONObject("response").getString("id");
+
+                        String paymentClient = confirm.getPayment()
+                                .toJSONObject().toString();
+
+                        Log.e("TAG", "paymentId: " + paymentId
+                                + ", payment_json: " + paymentClient);
+
+                        // Now verify the payment on the server side
+
+                        int localPaymentId = Integer.parseInt(bundle.getString(AppConst.EXTRA_LOCAL_PAYMENT_ID));
+                        verifyPaymentOnServer(  localPaymentId, paymentId, paymentClient);
+
+                    } catch (JSONException e) {
+                        Log.e("TAG", "an extremely unlikely failure occurred: ",
+                                e);
+                    }
+                }
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Log.e("TAG", "The user canceled.");
+            } else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
+                Log.e("TAG",
+                        "An invalid Payment or PayPalConfiguration was submitted.");
+            }
+        }
+    }
+
+    private void verifyPaymentOnServer(int localPaymentId,final String paymentId,
+                                       final String paymentClient) {
+        PaymentService service = APIServiceManager.getService(PaymentService.class);
+        service.verifyPayment(localPaymentId,paymentId, paymentClient).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<retrofit2.Response<String>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(retrofit2.Response<String> stringResponse) {
+                        if (stringResponse.isSuccessful()) {
+
+
+                            String data = stringResponse.body();
+                            showSuccessMessage(data);
+                            logError("getPaymetn", data);
+                        } else if (stringResponse.code() == 500) {
+                            showFatalError(stringResponse.errorBody(), "verifyPaymentOnServer");
+                        } else if (stringResponse.code() == 401) {
+                            showErrorUnAuth();
+                        } else if (stringResponse.code() == 400) {
+                            showBadRequestError(stringResponse.errorBody(), "verifyPaymentOnServer");
+                        } else {
+                            showErrorMessage(getString(R.string.error_on_error_when_call_api));
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        showErrorMessage("Có lỗi xảy ra");
+                    }
+                });
+        // Adding request to request queue
+    }
 }

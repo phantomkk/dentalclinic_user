@@ -1,6 +1,7 @@
 package com.dentalclinic.capstone.fragment;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -148,7 +149,10 @@ public class HistoryFragment extends BaseFragment {
                 hideLoading();
                 e.printStackTrace();
                 logError("Error", e.getMessage());
-                Toast.makeText(getContext(), getResources().getString(R.string.error_on_error_when_call_api), Toast.LENGTH_SHORT).show();
+                Context context = getContext();
+                if(context!=null) {
+                    Toast.makeText(context, getString(R.string.error_on_error_when_call_api), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
