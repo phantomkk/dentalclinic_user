@@ -53,11 +53,25 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
     private ExpandableListView listView;
     private Fragment fragment;
 
+//    private Fragment fragment;
     public PaymentAdapter(Context context, List<Payment> listDataHeader) {
         this.context = context;
         this.listDataHeader = listDataHeader;
         this.listDataHeaderOriginal.addAll(listDataHeader);
     }
+
+    public PaymentAdapter(Context context, List<Payment> listDataHeader, Fragment fragment) {
+        this.context = context;
+        this.listDataHeader = listDataHeader;
+        this.fragment = fragment;
+    }
+
+//    public PaymentAdapter(Context context, List<Payment> listDataHeader, ExpandableListView listView, Fragment fragment) {
+//        this.context = context;
+//        this.listDataHeader = listDataHeader;
+//        this.listView = listView;
+//        this.fragment = fragment;
+//    }
 
     public List<Payment> getListDataHeaderOriginal() {
         return listDataHeaderOriginal;
@@ -213,7 +227,7 @@ public class PaymentAdapter extends BaseExpandableListAdapter {
 //                                    new BigDecimal(dola), Config.DEFAULT_CURRENCY, "123");
 //                            productsInCart.add(item);
 //                            launchPayPalPayment(dola);
-                            launchPayPalPayment(payment.getId(),(double)1);
+                            launchPayPalPayment(payment.getId(),dola);
                         } else {
                             Toast.makeText(context, "Error", Toast.LENGTH_LONG).show();
                         }

@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.NotificationCompat;
@@ -537,8 +538,16 @@ public class MainActivity extends BaseActivity
 
                     @Override
                     public void onSuccess(Response<SuccessResponse> successResponseResponse) {
-                        showMessage("Đăng xuất");
+//
+                        showWarningMessage("Đăng xuất");
                         CoreManager.clearUser(MainActivity.this);
+                        user = null;
+                        result.setSelectionAtPosition(1,true);
+                        listIprofile = new ArrayList<>();
+                        listIprofile.add(new ProfileSettingDrawerItem().withName("Đăng Nhập").withIcon(new IconicsDrawable(MainActivity.this, GoogleMaterial.Icon.gmd_add).actionBar().paddingDp(5).colorRes(R.color.material_drawer_primary_text)).withIdentifier(PROFILE_SETTING));
+                        headerResult.clear();
+                        headerResult.setProfiles(listIprofile);
+                        headerResult.setActiveProfile(listIprofile.get(0));
                     }
 
                     @Override
@@ -572,43 +581,48 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE_PAYMENT) {
-            if (resultCode == Activity.RESULT_OK) {
-                PaymentConfirmation confirm = data
-                        .getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
-                Bundle bundle = data.getExtras();
-                if (confirm != null) {
-                    try {
-                        Log.e("TAG", confirm.toJSONObject().toString(4));
-                        Log.e("TAG", confirm.getPayment().toJSONObject()
-                                .toString(4));
-
-                        String paymentId = confirm.toJSONObject()
-                                .getJSONObject("response").getString("id");
-
-                        String paymentClient = confirm.getPayment()
-                                .toJSONObject().toString();
-
-                        Log.e("TAG", "paymentId: " + paymentId
-                                + ", payment_json: " + paymentClient);
-
-                        // Now verify the payment on the server side
-
-                        int localPaymentId = Integer.parseInt(bundle.getString(AppConst.EXTRA_LOCAL_PAYMENT_ID));
-                        verifyPaymentOnServer(  localPaymentId, paymentId, paymentClient);
-
-                    } catch (JSONException e) {
-                        Log.e("TAG", "an extremely unlikely failure occurred: ",
-                                e);
-                    }
-                }
-            } else if (resultCode == Activity.RESULT_CANCELED) {
-                Log.e("TAG", "The user canceled.");
-            } else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
-                Log.e("TAG",
-                        "An invalid Payment or PayPalConfiguration was submitted.");
-            }
+        super.onActivityResult(requestCode, resultCode, data);
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            fragment.onActivityResult(requestCode, resultCode, data);
         }
+//        if (requestCode == REQUEST_CODE_PAYMENT) {
+//            if (resultCode == Activity.RESULT_OK) {
+//                PaymentConfirmation confirm = data
+//                        .getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
+//                Bundle bundle = data.getExtras();
+//                if (confirm != null) {
+//                    try {
+//                        Log.e("TAG", confirm.toJSONObject().toString(4));
+//                        Log.e("TAG", confirm.getPayment().toJSONObject()
+//                                .toString(4));
+//
+//                        String paymentId = confirm.toJSONObject()
+//                                .getJSONObject("response").getString("id");
+//
+//                        String paymentClient = confirm.getPayment()
+//                                .toJSONObject().toString();
+//
+//                        Log.e("TAG", "paymentId: " + paymentId
+//                                + ", payment_json: " + paymentClient);
+//
+//                        // Now verify the payment on the server side
+//
+//                        int localPaymentId = Integer.parseInt(bundle.getString(AppConst.EXTRA_LOCAL_PAYMENT_ID));
+//                        verifyPaymentOnServer(  localPaymentId, paymentId, paymentClient);
+//
+//                    } catch (JSONException e) {
+//                        Log.e("TAG", "an extremely unlikely failure occurred: ",
+//                                e);
+//                    }
+//                }
+//            } else if (resultCode == Activity.RESULT_CANCELED) {
+//                Log.e("TAG", "The user canceled.");
+//            } else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
+//                Log.e("TAG",
+//                        "An invalid Payment or PayPalConfiguration was submitted.");
+//            }
+
+
     }
 
     private void verifyPaymentOnServer(int localPaymentId,final String paymentId,

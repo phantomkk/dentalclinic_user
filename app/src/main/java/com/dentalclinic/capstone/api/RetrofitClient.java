@@ -19,9 +19,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
     private static Retrofit retrofit = null;
-    //    private static String baseUrl = "http://150.95.104.237";
+        private static String baseUrl = "http://150.95.104.237";
     private static String accessToken = "null";
-    private static String baseUrl = "http://10.0.2.2:8000";
+//    private static String baseUrl = "http://10.0.2.2:8000";
 
     public static Retrofit getClient() {
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
