@@ -4,47 +4,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_weight="1"
+    android:fillViewport="true"
     tools:context="com.dentalclinic.capstone.activities.LoginActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_height="match_parent"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:weightSum="2">
+        android:paddingRight="@dimen/activity_horizontal_margin" >
 
         <!-- Login progress -->
-        <ProgressBar
-            android:id="@+id/login_progress"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:visibility="gone" />
 
 
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center" />
 
-
-        <LinearLayout
-            android:id="@+id/dummy_focus_loginact"
-            android:layout_width="0px"
-            android:layout_height="0px"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:orientation="horizontal" />
+ <RelativeLayout
+     android:layout_width="match_parent"
+     android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:orientation="vertical">
 
             <android.support.design.widget.TextInputLayout
@@ -96,12 +80,6 @@
                 android:gravity="center"
                 android:textColor="@color/error_label" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="40dp"
-                android:orientation="vertical"
-                android:weightSum="2">
 
                 <Button
                     android:id="@+id/btn_signin_loginact"
@@ -118,24 +96,23 @@
                     android:layout_marginTop="20dp"
                     android:text="@string/label_suggest_quickbook"
                     android:textSize="@dimen/text_link_medium" />
-
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_link_quickregister"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_weight="1"
+                    android:autoLink="web"
+                    android:clickable="true"
+                    android:gravity="center_horizontal"
+                    android:linksClickable="true"
+                    android:text="@string/label_suggest_register"
+                    android:textColor="@color/color_light_blue_a400" />
         </LinearLayout>
+ </RelativeLayout>
 
 
-        <TextView
-            android:id="@+id/tv_link_quickregister"
-            style="?android:textAppearanceSmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_weight="1"
-            android:autoLink="web"
-            android:clickable="true"
-            android:gravity="center_horizontal"
-            android:linksClickable="true"
-            android:text="@string/label_suggest_register"
-            android:textColor="@color/color_light_blue_a400" />
-    </LinearLayout>
+        </LinearLayout>
 
 </ScrollView>

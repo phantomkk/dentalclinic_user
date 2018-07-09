@@ -102,7 +102,7 @@ public class LoginActivity extends BaseActivity {
         });
 
         mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+//        mProgressView = findViewById(R.id.login_progress);
         btnSingin = findViewById(R.id.btn_signin_loginact);
         btnSingin.setOnClickListener((view) ->
         {
@@ -111,8 +111,8 @@ public class LoginActivity extends BaseActivity {
         });
 
 
-        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.dummy_focus_loginact);
-        linearLayout.requestFocus();
+//        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.dummy_focus_loginact);
+//        linearLayout.requestFocus();
         txtPassword.clearFocus();
         txtPhone.clearFocus();
         User user = CoreManager.getUser(this);
@@ -202,6 +202,7 @@ public class LoginActivity extends BaseActivity {
                                 CoreManager.setUser(LoginActivity.this, u);
                                 RetrofitClient.setAccessToken(u.getAccessToken());
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                finish();
                             }
                         } else if (userResponse.code() == 500) {
                             showFatalError(userResponse.errorBody(), "callApiLogin");
