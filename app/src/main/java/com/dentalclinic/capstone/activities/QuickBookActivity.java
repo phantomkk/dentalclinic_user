@@ -158,7 +158,7 @@ public class QuickBookActivity extends BaseActivity {
 //        User user = CoreManager.getUser(this);
 //        if (user != null) {
 //            String phone = user.getPhone();
-        String phone = "01678589696";
+        String phone =  tvPhone.getText().toString().trim();
         String dateBooking = tvDate.getText().toString().trim();
         String note = comtvNote.getText().toString().trim();
         String name = tvFullname.getText().toString().trim();
