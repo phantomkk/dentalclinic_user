@@ -240,7 +240,10 @@ private BtnCheckoutListenter btnCheckOutClickListener;
             viewHolder.txtTotal.setText(Utils.formatMoney(payment.getTotalPrice()) + context.getResources().getString(R.string.current_unit));
         }
         if (payment.getPaid() != null) {
-//            viewHolder.txtPrepaid.setText(Utils.formatMoney(payment.getPaid()) + context.getResources().getString(R.string.current_unit));
+            viewHolder.txtPaid.setText(Utils.formatMoney(payment.getPaid()) + context.getResources().getString(R.string.current_unit));
+        }
+        if(payment.getTotalPrice()!=null && payment.getPaid()!=null){
+            viewHolder.txtNotPayYet.setText(Utils.formatMoney(payment.getTotalPrice()-payment.getPaid()) + context.getResources().getString(R.string.current_unit));
         }
         if (payment.isDone() == 1) {
             viewHolder.lnStatus.setVisibility(View.VISIBLE);

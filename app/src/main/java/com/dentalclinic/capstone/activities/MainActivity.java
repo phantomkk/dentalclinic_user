@@ -223,6 +223,13 @@ public class MainActivity extends BaseActivity
                 .withSavedInstance(savedInstanceState)
                 .build();
         //Create the drawer
+        PrimaryDrawerItem logout = new PrimaryDrawerItem();
+        if(CoreManager.getUser(MainActivity.this)!=null){
+            logout.withName(R.string.logout_titile).withIcon(R.drawable.ic_power_settings_new_black_24dp).withIdentifier(8).withSelectable(false);
+
+        }else{
+            logout = null;
+        }
         result = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
@@ -235,8 +242,8 @@ public class MainActivity extends BaseActivity
                         new PrimaryDrawerItem().withName(R.string.appointment_fragment_title).withIcon(R.drawable.ic_add_alert_black_24dp).withIdentifier(3).withSelectable(false),
                         new SectionDrawerItem().withName(R.string.account_nav_bar_title),
                         new PrimaryDrawerItem().withName(R.string.my_accout_fragment_title).withIcon(R.drawable.ic_account_circle_black_24dp).withIdentifier(4).withSelectable(true),
-                        new PrimaryDrawerItem().withName(R.string.histrory_fragment_title).withIcon(R.drawable.ic_history_black_24dp).withIdentifier(5).withSelectable(true).withBadgeStyle(new BadgeStyle().withTextColor(Color.WHITE).withColorRes(R.color.md_red_700)),
-                        new PrimaryDrawerItem().withName(R.string.logout_titile).withIcon(R.drawable.ic_power_settings_new_black_24dp).withIdentifier(8).withSelectable(false)
+                        new PrimaryDrawerItem().withName(R.string.histrory_fragment_title).withIcon(R.drawable.ic_history_black_24dp).withIdentifier(5).withSelectable(true).withBadgeStyle(new BadgeStyle().withTextColor(Color.WHITE).withColorRes(R.color.md_red_700))
+//                        new PrimaryDrawerItem().withName(R.string.logout_titile).withIcon(R.drawable.ic_power_settings_new_black_24dp).withIdentifier(8).withSelectable(false)
                 ) // add the items we want to use with our Drawer
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -283,15 +290,15 @@ public class MainActivity extends BaseActivity
 //                                }
 //                            }
                             else {
-                                showWarningMessage("Đăng xuất");
-                                CoreManager.clearUser(MainActivity.this);
-                                user = null;
-                                result.setSelectionAtPosition(1, true);
-                                listIprofile = new ArrayList<>();
-                                listIprofile.add(new ProfileSettingDrawerItem().withName("Đăng Nhập").withIcon(new IconicsDrawable(MainActivity.this, GoogleMaterial.Icon.gmd_add).actionBar().paddingDp(5).colorRes(R.color.material_drawer_primary_text)).withIdentifier(PROFILE_SETTING));
-                                headerResult.clear();
-                                headerResult.setProfiles(listIprofile);
-                                headerResult.setActiveProfile(listIprofile.get(0));
+//                                showWarningMessage("Đăng xuất");
+//                                CoreManager.clearUser(MainActivity.this);
+//                                user = null;
+//                                result.setSelectionAtPosition(1, true);
+//                                listIprofile = new ArrayList<>();
+//                                listIprofile.add(new ProfileSettingDrawerItem().withName("Đăng Nhập").withIcon(new IconicsDrawable(MainActivity.this, GoogleMaterial.Icon.gmd_add).actionBar().paddingDp(5).colorRes(R.color.material_drawer_primary_text)).withIdentifier(PROFILE_SETTING));
+//                                headerResult.clear();
+//                                headerResult.setProfiles(listIprofile);
+//                                headerResult.setActiveProfile(listIprofile.get(0));
                                 logoutOnServer();
 //                                result.resetDrawerContent();
                             }
@@ -338,6 +345,9 @@ public class MainActivity extends BaseActivity
 
         listenOrderNumber();
 //        logError("Active",headerResult.getActiveProfile().getName().toString());
+        if(CoreManager.getUser(MainActivity.this)!=null){
+            result.addItem(logout);
+        }
     }
 
     @Override
@@ -538,7 +548,6 @@ public class MainActivity extends BaseActivity
 
                     @Override
                     public void onSuccess(Response<SuccessResponse> successResponseResponse) {
-//
                         showWarningMessage("Đăng xuất");
                         CoreManager.clearUser(MainActivity.this);
                         user = null;
@@ -548,6 +557,7 @@ public class MainActivity extends BaseActivity
                         headerResult.clear();
                         headerResult.setProfiles(listIprofile);
                         headerResult.setActiveProfile(listIprofile.get(0));
+                        result.removeItem(8);
                     }
 
                     @Override
@@ -625,42 +635,5 @@ public class MainActivity extends BaseActivity
 
     }
 
-    private void verifyPaymentOnServer(int localPaymentId,final String paymentId,
-                                       final String paymentClient) {
-        PaymentService service = APIServiceManager.getService(PaymentService.class);
-        service.verifyPayment(localPaymentId,paymentId, paymentClient).subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<retrofit2.Response<String>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
 
-                    }
-
-                    @Override
-                    public void onSuccess(retrofit2.Response<String> stringResponse) {
-                        if (stringResponse.isSuccessful()) {
-
-
-                            String data = stringResponse.body();
-                            showSuccessMessage(data);
-                            logError("getPaymetn", data);
-                        } else if (stringResponse.code() == 500) {
-                            showFatalError(stringResponse.errorBody(), "verifyPaymentOnServer");
-                        } else if (stringResponse.code() == 401) {
-                            showErrorUnAuth();
-                        } else if (stringResponse.code() == 400) {
-                            showBadRequestError(stringResponse.errorBody(), "verifyPaymentOnServer");
-                        } else {
-                            showErrorMessage(getString(R.string.error_on_error_when_call_api));
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        showErrorMessage("Có lỗi xảy ra");
-                    }
-                });
-        // Adding request to request queue
-    }
 }

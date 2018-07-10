@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -68,6 +67,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -356,20 +356,22 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
 //                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
 //                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
 //        verifyReq.setRetryPolicy(policy);
-//my request service
         PaymentService service = APIServiceManager.getService(PaymentService.class);
         service.verifyPayment(localPaymentId, paymentId, paymentClient).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<retrofit2.Response<String>>() {
+                .subscribe(new SingleObserver<Response<List<Payment>>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onSuccess(retrofit2.Response<String> stringResponse) {
-                        String data = stringResponse.body();
-                        logError("getPayment", data);
+                    public void onSuccess(Response<List<Payment>> response) {
+                        showSuccessMessage("Thanh Toán Thành Công");
+                        payments.clear();
+                        payments.addAll(response.body());
+                        adapter.notifyDataSetChanged();
+//                        logError("getPayment", data);
                     }
 
                     @Override
@@ -472,47 +474,6 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
     public boolean onMenuItemActionCollapse(MenuItem menuItem) {
         return true;
     }
-
-//    private TreatmentCategoryService treatmentCategory = APIServiceManager.getService(TreatmentCategoryService.class);
-//    private Disposable treatmentCategoriesServiceDisposable;
-//
-//    public void callApiGetAllTreatmentCategories() {
-//        treatmentCategory.getAll().subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new SingleObserver<Response<List<TreatmentCategory>>>() {
-//                    @Override
-//                    public void onSubscribe(Disposable d) {
-//                        hideLoading();
-//                        treatmentCategoriesServiceDisposable = d;
-//                    }
-//
-//                    @Override
-//                    public void onSuccess(Response<List<TreatmentCategory>> listResponse) {
-//                        hideLoading();
-//                        if (listResponse.isSuccessful()) {
-//                            treatmentCategories.addAll(listResponse.body());
-//                            adapter.getListDataHeaderOriginal().addAll(treatmentCategories);
-//                            adapter.notifyDataSetChanged();
-//                            logError("treatmentCategories", String.valueOf(treatmentCategories.size()));
-//                        } else {
-////                            String erroMsg = Utils.getErrorMsg(listResponse.errorBody());
-////                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
-////                                    .setMessage(erroMsg)
-////                                    .setPositiveButton("Thử lại", (DialogInterface dialogInterface, int i) -> {
-////                                    }) ;
-////                            alertDialog.show();
-//                        }
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        hideLoading();
-//                        e.printStackTrace();
-//                        Toast.makeText(getActivity(), getResources().getString(R.string.error_on_error_when_call_api), Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//    }
 
 
 }

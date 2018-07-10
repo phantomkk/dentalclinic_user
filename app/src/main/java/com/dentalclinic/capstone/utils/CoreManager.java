@@ -8,6 +8,7 @@ import com.dentalclinic.capstone.api.requestobject.UpdatePatientRequest;
 import com.dentalclinic.capstone.databaseHelper.DatabaseHelper;
 import com.dentalclinic.capstone.models.City;
 import com.dentalclinic.capstone.models.District;
+import com.dentalclinic.capstone.models.FingerAuthObj;
 import com.dentalclinic.capstone.models.Patient;
 import com.dentalclinic.capstone.models.User;
 
@@ -20,6 +21,7 @@ import java.util.List;
 
 public class CoreManager {
     private static User mUser = null;
+    private static FingerAuthObj fingerAuthObj = null;
     private static Patient mCurrentPatient = null;
     private CoreManager() {
 
@@ -46,8 +48,25 @@ public class CoreManager {
             Log.d(AppConst.DEBUG_TAG, "class CoreManager.setUser(): USER IS NULL");
         }
         Utils.saveUserInSharePref(context, user);
-
     }
+
+    public static FingerAuthObj getFingerAuthObj(Context context) {
+        fingerAuthObj = Utils.getFingerAuthInSharePref(context);
+        return fingerAuthObj;
+    }
+
+    public static void setFingerAuthObj(Context context,FingerAuthObj fingerAuthObj) {
+        if(fingerAuthObj!=null){
+            if(fingerAuthObj.getPhone()!=null && !fingerAuthObj.getPhone().isEmpty()){
+                if(fingerAuthObj.getPassword()!=null && !fingerAuthObj.getPassword().isEmpty()){
+                    Utils.saveFingerAuthInSharePref(context,fingerAuthObj);
+                }
+            }else{
+                Utils.saveFingerAuthInSharePref(context,null);
+            }
+        }
+    }
+
     public static Patient getCurrentPatient(Context context){
         User u = Utils.getUserInSharePref(context);
         if(u!=null){

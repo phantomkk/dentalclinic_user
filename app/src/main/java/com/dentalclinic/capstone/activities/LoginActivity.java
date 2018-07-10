@@ -22,11 +22,14 @@ import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
 import com.dentalclinic.capstone.api.services.PatientService;
 import com.dentalclinic.capstone.api.services.UserService;
 //import com.dentalclinic.capstone.firebase.FirebaseDataReceiver;
+import com.dentalclinic.capstone.models.FingerAuthObj;
 import com.dentalclinic.capstone.models.Patient;
 import com.dentalclinic.capstone.models.User;
 import com.dentalclinic.capstone.utils.CoreManager;
 import com.dentalclinic.capstone.utils.Utils;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.marcoscg.fingerauth.FingerAuth;
+import com.marcoscg.fingerauth.FingerAuthDialog;
 
 import java.io.IOException;
 import java.util.List;
@@ -51,6 +54,7 @@ public class LoginActivity extends BaseActivity {
     private View btnSingin;
     private TextView txtErrorServer;
     private TextView tvLinkRegister;
+    private FingerAuthDialog fingerAuthDialog;
 
 
     private Disposable disposable;
@@ -109,8 +113,10 @@ public class LoginActivity extends BaseActivity {
             attemptLogin();
 //            showLoading();
         });
-
-
+        final boolean hasFingerprintSupport = FingerAuth.hasFingerprintSupport(this);
+        if (hasFingerprintSupport && CoreManager.getFingerAuthObj(LoginActivity.this)!=null) {
+            createAndShowDialog();
+        }
 //        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.dummy_focus_loginact);
 //        linearLayout.requestFocus();
         txtPassword.clearFocus();
@@ -200,6 +206,7 @@ public class LoginActivity extends BaseActivity {
                             if (userResponse.body() != null) {
                                 User u = userResponse.body();
                                 CoreManager.setUser(LoginActivity.this, u);
+                                CoreManager.setFingerAuthObj(LoginActivity.this,new FingerAuthObj(phone,password));
                                 RetrofitClient.setAccessToken(u.getAccessToken());
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                 finish();
@@ -232,6 +239,41 @@ public class LoginActivity extends BaseActivity {
         if (disposable != null) {
             disposable.dispose();
         }
+    }
+
+    private void createAndShowDialog() {
+        fingerAuthDialog = new FingerAuthDialog(this)
+                .setTitle("Đăng Nhập Vân Tay")
+                .setCancelable(false)
+                .setPositiveButton("Đăng Nhập", null)
+                .setNegativeButton("Hủy", null)
+                .setOnFingerAuthListener(new FingerAuth.OnFingerAuthListener() {
+                    @Override
+                    public void onSuccess() {
+                        FingerAuthObj fingerAuthObj= CoreManager.getFingerAuthObj(LoginActivity.this);
+                        if(fingerAuthObj!=null){
+                            callApiLogin(fingerAuthObj.getPhone(),fingerAuthObj.getPassword());
+                        }else{
+                            showErrorMessage("Đăng nhập vân tay không thành công.");
+                        }
+//                        Toast.makeText(LoginActivity.this, "onSuccess", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        showErrorMessage("Đăng nhập vân tay không thành công.");
+
+//                        Toast.makeText(LoginActivity.this, "onFailure", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError() {
+                        showErrorMessage("Đăng nhập vân tay không thành công.");
+
+//                        Toast.makeText(LoginActivity.this, "onError", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        fingerAuthDialog.show();
     }
 }
 

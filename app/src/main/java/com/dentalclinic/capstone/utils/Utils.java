@@ -8,11 +8,13 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 
+import com.dentalclinic.capstone.models.FingerAuthObj;
 import com.dentalclinic.capstone.models.Patient;
 import com.dentalclinic.capstone.models.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.marcoscg.fingerauth.FingerAuth;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,6 +40,7 @@ public class Utils {
 
     private static final String PREF_NAME = "ACCOUNT";
     private static final String USER_KEY = "USER_KEY";
+    private static final String FINGER_AUTH_KEY = "FINGER_AUTH_KEY";
     private static final String PATIENTS_KEY = "PATIENTS_KEY";
     public static final String CURRENT_UNIT = "đ";
     public static final String STATUS_DONE = "Hoàn Thành";
@@ -66,6 +69,22 @@ public class Utils {
         Gson gson = new Gson();
         User u = gson.fromJson(jsonUser, User.class);
         return u;
+    }
+
+    public static void saveFingerAuthInSharePref(Context context, FingerAuthObj fingerAuthObj) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        editor.putString(FINGER_AUTH_KEY, gson.toJson(fingerAuthObj));
+        editor.apply();
+    }
+
+    public static FingerAuthObj getFingerAuthInSharePref(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        String jsonUser = sharedPreferences.getString(FINGER_AUTH_KEY, null);
+        Gson gson = new Gson();
+        FingerAuthObj fingerAuthObj = gson.fromJson(jsonUser, FingerAuthObj.class);
+        return fingerAuthObj;
     }
 
     public static String getErrorMsg(ResponseBody responseBody) {

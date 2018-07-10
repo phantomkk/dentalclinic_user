@@ -18,9 +18,12 @@ public interface PaymentService {
 
     @FormUrlEncoded
     @POST("api/payment/verifyPayment")
-    Single<Response<String>> verifyPayment(
+    Single<Response<List<Payment>>> verifyPayment(
             @Field("local_payment_id") int localPaymentId,
             @Field("payment_id") String paymentId,
             @Field("payment_client_json") String paymentClientJson
     );
+
+
+
 }

@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.dentalclinic.capstone"
-        minSdkVersion 24
+        minSdkVersion 23
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -50,6 +50,7 @@ dependencies {
     implementation 'com.paypal.sdk:paypal-android-sdk:2.16.0'
     //converst money
 //    implementation 'com.github.Ritaja:java-exchange-rates:1.0'
+    implementation 'com.github.marcoscgdev:FingerAuth:1.0.0'
 
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.5.+'
     implementation 'com.muddzdev:styleabletoast:2.1.2'
