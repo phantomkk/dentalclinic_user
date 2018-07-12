@@ -17,7 +17,7 @@ public class AppConst {
     public final static String GENDER_MALE = "MALE";
     public final static String GENDER_FEMALE = "FEMALE";
     public final static String GENDER_OTHER = "OTHER";
-
+    public final static int REQUEST_LOGIN_ACTIVITY= 900;
 
 
 

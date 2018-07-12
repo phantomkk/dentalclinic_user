@@ -208,7 +208,6 @@ public class LoginActivity extends BaseActivity {
                                 CoreManager.setUser(LoginActivity.this, u);
                                 CoreManager.setFingerAuthObj(LoginActivity.this,new FingerAuthObj(phone,password));
                                 RetrofitClient.setAccessToken(u.getAccessToken());
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                 finish();
                             }
                         } else if (userResponse.code() == 500) {

@@ -2,6 +2,7 @@ package com.dentalclinic.capstone.fragment;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,7 @@ import com.dentalclinic.capstone.models.Appointment;
 import com.dentalclinic.capstone.models.News;
 import com.dentalclinic.capstone.models.Payment;
 import com.dentalclinic.capstone.models.TreatmentHistory;
+import com.dentalclinic.capstone.utils.AppConst;
 import com.dentalclinic.capstone.utils.CoreManager;
 
 import java.util.List;
@@ -155,8 +157,13 @@ public class HistoryFragment extends BaseFragment {
                 }
             }
         });
-
-
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == AppConst.REQUEST_CODE_REMINDER){
+            viewPager.setCurrentItem(2);
+        }
+    }
 }
