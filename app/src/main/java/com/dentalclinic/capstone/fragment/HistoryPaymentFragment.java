@@ -300,62 +300,7 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
 
     private void verifyPaymentOnServer(int localPaymentId, final String paymentId,
                                        final String paymentClient) {
-        // Showing progress dialog before making request
-//        showLoading();
-//        StringRequest verifyReq = new StringRequest(Request.Method.POST,
-//                Config.URL_VERIFY_PAYMENT, new Response.Listener<String>() {
-//
-//            @Override
-//            public void onResponse(String response) {
-//                Log.d(TAG, "verify payment: " + response.toString());
-//
-//                try {
-//                    JSONObject res = new JSONObject(response);
-//                    boolean error = res.getBoolean("error");
-//                    String message = res.getString("message");
-//                    // user error boolean flag to check for errors
-//                    Toast.makeText(getContext(), message,
-//                            Toast.LENGTH_SHORT).show();
-//                    if (!error) {
-//                        // empty the cart
-//                        adapter.clearPayPalList();
-//                    }
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                hideLoading();
-//            }
-//        }, new Response.ErrorListener() {
-//
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Log.e(TAG, "Verify Error: " + error.getMessage());
-//                Toast.makeText(getContext(),
-//                        error.getMessage(), Toast.LENGTH_SHORT).show();
-//                // hiding the progress dialog
-//                hideLoading();
-//            }
-//        }) {
-//
-//            @Override
-//            protected Map<String, String> getParams() {
-//
-//                Map<String, String> params = new HashMap<String, String>();
-//                params.put("paymentId", paymentId);
-//                params.put("paymentClientJson", paymentClient);
-//
-//                return params;
-//            }
-//        };
-//
-//        // Setting timeout to volley request as verification request takes sometime
-//        int socketTimeout = 60000;
-//        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout,
-//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-//        verifyReq.setRetryPolicy(policy);
+        showLoading();
         PaymentService service = APIServiceManager.getService(PaymentService.class);
         service.verifyPayment(localPaymentId, paymentId, paymentClient).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -367,17 +312,29 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
 
                     @Override
                     public void onSuccess(Response<List<Payment>> response) {
-                        showSuccessMessage("Thanh Toán Thành Công");
-                        payments.clear();
-                        payments.addAll(response.body());
-                        adapter.notifyDataSetChanged();
 //                        logError("getPayment", data);
+                        if (response.isSuccessful()) {
+                            if (response.body() != null) {
+                                showSuccessMessage("Thanh Toán Thành Công");
+                                payments.clear();
+                                payments.addAll(response.body());
+                                adapter.notifyDataSetChanged();
+                            }
+                        } else if (response.code() == 500) {
+                            showFatalError(response.errorBody(),"verifyPaymentOnServer");
+                        } else if (response.code() == 401) {
+                            showErrorUnAuth();
+                        } else if (response.code() == 400) {
+                            showBadRequestError(response.errorBody(),"verifyPaymentOnServer");
+                        }
+                        hideLoading();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
                         showErrorMessage("Có lỗi xảy ra");
+                        hideLoading();
                     }
                 });
         // Adding request to request queue

@@ -75,7 +75,13 @@ public class HistoryFragment extends BaseFragment {
     }
 
     private Disposable disposable;
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == AppConst.REQUEST_CODE_REMINDER){
+            viewPager.setCurrentItem(2);
+        }
+    }
     private void callAPI() {
         showLoading();
         Single appointment = APIServiceManager.getService(AppointmentService.class)
@@ -159,11 +165,4 @@ public class HistoryFragment extends BaseFragment {
         });
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == AppConst.REQUEST_CODE_REMINDER){
-            viewPager.setCurrentItem(2);
-        }
-    }
 }

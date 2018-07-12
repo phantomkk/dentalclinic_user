@@ -48,9 +48,10 @@ public class FirebaseMessageService extends FirebaseMessagingService {
         }else if(responseType!=null && responseType.equals(AppConst.RESPONSE_REMINDER)){ Map<String, String> map = message.getData();
             String title = map.get("title");
             String msg = map.get("message");
+            String body = map.get("body");
 
             Log.d(AppConst.DEBUG_TAG, message.getData().get("body"));
-            showNotifications(title, msg);
+            showNotifications(title, msg,body);
         }
     }///End oncreated
 
@@ -123,21 +124,24 @@ public class FirebaseMessageService extends FirebaseMessagingService {
         }
         manager.notify(0, notification);
     }
-  private void showNotifications(String title, String msg) {
+  private void showNotifications(String title, String msg,String body) {
         String channelId = AppConst.CHANNEL_FEEDBACK;
         Log.d(AppConst.DEBUG_TAG, "FirebaseMessageService:RUN");
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, AppConst.REQUEST_CODE_REMINDER,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                intent, PendingIntent.FLAG_CANCEL_CURRENT );
 
         NotificationManager manager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Notification notification = new NotificationCompat.Builder(this, channelId)
-                .setContentText(msg)
                 .setContentTitle(title)
+                .setContentText(msg)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(body))
+
                 .build();
 // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
