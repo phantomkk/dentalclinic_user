@@ -104,8 +104,13 @@ public class BaseFragment extends Fragment {
             try {
                 String error = errorBody.string();
                 ErrorResponse errorResponse = Utils.parseJson(error, ErrorResponse.class);
-                showErrorMessage(errorResponse.getErrorMessage());
-                logError(method, errorResponse.getExceptionMessage());
+                if(errorResponse!=null) {
+                    showErrorMessage(errorResponse.getErrorMessage());
+                    logError(method, errorResponse.getExceptionMessage());
+                }else{
+                    showErrorMessage("Lỗi không xác định!");
+                    logError("showBadRequestError", error);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
