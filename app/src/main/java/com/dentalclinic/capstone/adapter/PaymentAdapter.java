@@ -207,7 +207,6 @@ private BtnCheckoutListenter btnCheckOutClickListener;
             public void onClick(View view) {
                 if (!isExpanded) {
                     listView.expandGroup(groupPosition);
-
                 } else {
                     listView.collapseGroup(groupPosition);
                 }
@@ -245,14 +244,12 @@ private BtnCheckoutListenter btnCheckOutClickListener;
         if(payment.getTotalPrice()!=null && payment.getPaid()!=null){
             viewHolder.txtNotPayYet.setText(Utils.formatMoney(payment.getTotalPrice()-payment.getPaid()) + context.getResources().getString(R.string.current_unit));
         }
-        if (payment.isDone() == 1) {
-            viewHolder.lnStatus.setVisibility(View.VISIBLE);
+        if (payment.isDone() == 0) {
+            viewHolder.lnStatus.setVisibility(View.GONE);
             viewHolder.txtStatus.setText(context.getResources().getString(R.string.status_done));
             viewHolder.txtStatus.setTextColor(context.getResources().getColor(R.color.color_green_500));
         } else {
-            viewHolder.lnPayPal.setVisibility(View.VISIBLE);
-            viewHolder.txtStatus.setText(context.getResources().getString(R.string.status_not_done));
-            viewHolder.txtStatus.setTextColor(context.getResources().getColor(R.color.color_red_500));
+            viewHolder.lnPayPal.setVisibility(View.GONE);
         }
         return convertView;
     }

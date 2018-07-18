@@ -128,8 +128,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:orientation="vertical">
 
                 <View
                     android:layout_width="match_parent"
@@ -154,8 +153,7 @@
                 android:id="@+id/ln_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:orientation="vertical">
 
                 <View
                     android:layout_width="match_parent"
@@ -182,6 +180,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="6"
+                        android:text="Hoàn Thành"
                         android:textAlignment="textEnd"
                         android:textColor="@color/color_green_500" />
                 </LinearLayout>
