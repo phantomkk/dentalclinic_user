@@ -215,7 +215,8 @@ public class QuickBookActivity extends BaseActivity {
                     public void onSuccess(Response<List<Appointment>> response) {
                         if (response.isSuccessful()) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(QuickBookActivity.this)
-                                    .setTitle("Đặt lịch thành công")
+                                    .setTitle(getString(R.string.dialog_default_title))
+                                    .setMessage("Đặt lịch thành công")
                                     .setPositiveButton("Xác nhận", (DialogInterface var1, int var2) -> {
                                         finish();
                                     });
@@ -235,9 +236,8 @@ public class QuickBookActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-//                        e.printStackTrace();
+                        e.printStackTrace();
                         showWarningMessage(getResources().getString(R.string.error_on_error_when_call_api));
-                        logError(QuickBookActivity.class, "callApi", e.getMessage());
                         hideLoading();
                     }
                 });

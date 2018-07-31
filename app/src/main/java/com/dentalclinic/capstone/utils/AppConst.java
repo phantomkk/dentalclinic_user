@@ -33,6 +33,7 @@ public class AppConst {
     public final static String RESPONSE_FEEDBACK = "RESPONSE_FEEDBACK";
     public final static String RESPONSE_REMINDER = "RESPONSE_REMINDER";
     public final static int REQUEST_CODE_REMINDER = 123;
+    public final static String TOPIC_PROMOTION = "PROMOTION";
 
     public final static String CURRENCY_BASE_URL = "http://apilayer.net/";
 }
