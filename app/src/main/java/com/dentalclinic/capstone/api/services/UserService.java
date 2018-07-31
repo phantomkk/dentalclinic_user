@@ -64,4 +64,6 @@ public interface UserService {
 
     @GET("api/user/logout")
     Single<Response<SuccessResponse>> logout();
+    @GET("api/user/resetPassword/{phone}")
+    Single<Response<SuccessResponse>> resetPassword(@Path("phone")String phone);
 }

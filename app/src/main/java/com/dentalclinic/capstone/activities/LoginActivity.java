@@ -52,6 +52,7 @@ public class LoginActivity extends BaseActivity {
     private View mLoginFormView;
     private View btnLinkAppointment;
     private View btnSingin;
+    private TextView tvLinkForgotPassword;
     private TextView txtErrorServer;
     private TextView tvLinkRegister;
     private FingerAuthDialog fingerAuthDialog;
@@ -104,7 +105,11 @@ public class LoginActivity extends BaseActivity {
             Intent intent = new Intent(LoginActivity.this, QuickBookActivity.class);
             startActivity(intent);
         });
-
+        tvLinkForgotPassword = findViewById(R.id.tv_link_forgot_password);
+        tvLinkForgotPassword.setOnClickListener((v) -> {
+            Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+            startActivity(intent);
+        });
         mLoginFormView = findViewById(R.id.login_form);
 //        mProgressView = findViewById(R.id.login_progress);
         btnSingin = findViewById(R.id.btn_signin_loginact);
@@ -114,7 +119,7 @@ public class LoginActivity extends BaseActivity {
 //            showLoading();
         });
         final boolean hasFingerprintSupport = FingerAuth.hasFingerprintSupport(this);
-        if (hasFingerprintSupport && CoreManager.getFingerAuthObj(LoginActivity.this)!=null) {
+        if (hasFingerprintSupport && CoreManager.getFingerAuthObj(LoginActivity.this) != null) {
             createAndShowDialog();
         }
 //        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.dummy_focus_loginact);
@@ -206,7 +211,7 @@ public class LoginActivity extends BaseActivity {
                             if (userResponse.body() != null) {
                                 User u = userResponse.body();
                                 CoreManager.setUser(LoginActivity.this, u);
-                                CoreManager.setFingerAuthObj(LoginActivity.this,new FingerAuthObj(phone,password));
+                                CoreManager.setFingerAuthObj(LoginActivity.this, new FingerAuthObj(phone, password));
                                 RetrofitClient.setAccessToken(u.getAccessToken());
                                 finish();
                             }
@@ -249,10 +254,10 @@ public class LoginActivity extends BaseActivity {
                 .setOnFingerAuthListener(new FingerAuth.OnFingerAuthListener() {
                     @Override
                     public void onSuccess() {
-                        FingerAuthObj fingerAuthObj= CoreManager.getFingerAuthObj(LoginActivity.this);
-                        if(fingerAuthObj!=null){
-                            callApiLogin(fingerAuthObj.getPhone(),fingerAuthObj.getPassword());
-                        }else{
+                        FingerAuthObj fingerAuthObj = CoreManager.getFingerAuthObj(LoginActivity.this);
+                        if (fingerAuthObj != null) {
+                            callApiLogin(fingerAuthObj.getPhone(), fingerAuthObj.getPassword());
+                        } else {
                             showErrorMessage("Đăng nhập vân tay không thành công.");
                         }
 //                        Toast.makeText(LoginActivity.this, "onSuccess", Toast.LENGTH_SHORT).show();
