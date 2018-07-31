@@ -3,6 +3,8 @@ package com.dentalclinic.capstone.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +42,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class TreatmentDetailAdapter extends ArrayAdapter<TreatmentDetail> {
     private List<TreatmentDetail> treatmentDetails;
-
+    private ImageAdapter imageAdapter;
     public TreatmentDetailAdapter(Context context, List<TreatmentDetail> treatmentDetails) {
         super(context, 0, treatmentDetails);
         this.treatmentDetails = treatmentDetails;
@@ -48,7 +50,7 @@ public class TreatmentDetailAdapter extends ArrayAdapter<TreatmentDetail> {
 
     private static class ViewHolder {
         TextView mDentistName, mDate, mTreatmentStep, mNote, mPrescription;
-        MyGridView gridViewListimage;
+        RecyclerView recyclerView;
         LinearLayout llSteps, llPresctiption, llImages;
         CircleImageView imgDentistAvatar;
     }
@@ -71,7 +73,7 @@ public class TreatmentDetailAdapter extends ArrayAdapter<TreatmentDetail> {
             viewHolder.mTreatmentStep = convertView.findViewById(R.id.txt_treatment_step);
             viewHolder.mNote = convertView.findViewById(R.id.txt_note);
             viewHolder.mPrescription = convertView.findViewById(R.id.txt_medicine);
-            viewHolder.gridViewListimage = convertView.findViewById(R.id.gv_list_image);
+            viewHolder.recyclerView = convertView.findViewById(R.id.recyclerView);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -129,18 +131,37 @@ public class TreatmentDetailAdapter extends ArrayAdapter<TreatmentDetail> {
                 if (treatmentDetail.getImages().isEmpty()) {
                     viewHolder.llImages.setVisibility(View.GONE);
                 } else {
-                    ImageAdapter imageAdapter = new ImageAdapter(getContext(), treatmentDetail.getImages());
-                    viewHolder.gridViewListimage.setAdapter(imageAdapter);
-                    viewHolder.gridViewListimage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                    imageAdapter = new ImageAdapter(getContext(), treatmentDetail.getImages(), new ImageAdapter.OnItemClickListener() {
                         @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        public void onItemClick(TreatmentImage item, int position) {
                             Intent intent = new Intent(getContext(), PhotoViewActivity.class);
                             Bundle bundle = new Bundle();
-                            bundle.putSerializable(AppConst.IMAGE_OBJ, treatmentDetail.getImages().get(i));
+                            bundle.putSerializable(AppConst.IMAGE_OBJ, treatmentDetail.getImages().get(position));
                             intent.putExtra(AppConst.BUNDLE, bundle);
                             getContext().startActivity(intent);
                         }
                     });
+
+//                    new ImageFileAdapter.OnItemClickListener() {
+//                        @Override
+//                        public void onItemClick(Image item, int position) {
+//                            Intent intent = new Intent(getContext(), PhotoViewActivity.class);
+//                            Bundle bundle = new Bundle();
+//                            bundle.putSerializable(AppConst.IMAGE_OBJ, treatmentDetail.getImages().get(position));
+//                            intent.putExtra(AppConst.BUNDLE, bundle);
+//                            getContext().startActivity(intent);
+//                        }
+//
+//                        @Override
+//                        public void onItemDelete(Image item, int position) {
+//                            showDialog("Bạn có chắc muốn xóa hình ảnh này");
+//                            imageAdapter.deleteItem(position);
+//                        }
+//                    });
+                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                    viewHolder.recyclerView.setLayoutManager(layoutManager);
+                    viewHolder.recyclerView.setAdapter(imageAdapter);
                 }
             } else {
                 viewHolder.llImages.setVisibility(View.GONE);
