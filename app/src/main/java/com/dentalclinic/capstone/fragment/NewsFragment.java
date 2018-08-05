@@ -149,7 +149,7 @@ public class NewsFragment extends BaseFragment {
             public void onError(Throwable e) {
                 hideLoading();
                 e.printStackTrace();
-                showWarningMessage(getResources().getString(R.string.error_on_error_when_call_api));
+                showWarningMessage(getString(R.string.error_on_error_when_call_api));
 //                Toast.makeText(getContext(), ), Toast.LENGTH_SHORT).show();
             }
         });

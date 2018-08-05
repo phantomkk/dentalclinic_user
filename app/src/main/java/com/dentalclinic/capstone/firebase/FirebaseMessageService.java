@@ -19,7 +19,9 @@ import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.activities.FeedbackActivity;
 import com.dentalclinic.capstone.activities.MainActivity;
 import com.dentalclinic.capstone.api.responseobject.FeedbackResponse;
+import com.dentalclinic.capstone.models.Setting;
 import com.dentalclinic.capstone.utils.AppConst;
+import com.dentalclinic.capstone.utils.SettingManager;
 import com.dentalclinic.capstone.utils.Utils;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -32,7 +34,7 @@ public class FirebaseMessageService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage message) {
         String responseType = message.getData().get("type");
-        if (responseType!=null &&responseType.equals(AppConst.RESPONSE_FEEDBACK)) {
+        if (responseType != null && responseType.equals(AppConst.RESPONSE_FEEDBACK)) {
             try {
                 Log.d(AppConst.DEBUG_TAG, message.getData().get("body"));
                 FeedbackResponse response =
@@ -41,17 +43,18 @@ public class FirebaseMessageService extends FirebaseMessagingService {
                 String title = map.get("title");
                 String msg = map.get("message");
                 showNotifications(title, msg, response);
-            } catch(JsonSyntaxException ex) {
+            } catch (JsonSyntaxException ex) {
                 ex.printStackTrace();
                 showToast(ex.getMessage());
             }
-        }else if(responseType!=null && responseType.equals(AppConst.RESPONSE_REMINDER)){ Map<String, String> map = message.getData();
+        } else if (responseType != null && responseType.equals(AppConst.RESPONSE_REMINDER)) {
+            Map<String, String> map = message.getData();
             String title = map.get("title");
             String msg = map.get("message");
             String body = map.get("body");
 
             Log.d(AppConst.DEBUG_TAG, message.getData().get("body"));
-            showNotifications(title, msg,body);
+            showNotifications(title, msg, body);
         }
     }///End oncreated
 
@@ -103,18 +106,25 @@ public class FirebaseMessageService extends FirebaseMessagingService {
         Intent i = new Intent(this, FeedbackActivity.class);
         i.putExtra(AppConst.TREATMENT_DETAIL_BUNDLE, response);
         Log.d(AppConst.DEBUG_TAG, "FirebaseMessageService:RUN");
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
                 i, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationManager manager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        Notification notification = new NotificationCompat.Builder(this, channelId)
+        NotificationCompat.Builder notiBuilder = new NotificationCompat.Builder(this, channelId)
                 .setContentText(msg)
                 .setContentTitle(title)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
-                .setSmallIcon(R.mipmap.ic_launcher_round)
-                .build();
+                .setSound(defaultSoundUri)
+                .setSmallIcon(R.mipmap.ic_launcher_round);
+        Setting setting = SettingManager.getSettingPref(this);
+        if (setting != null && setting.isVibrate()) {
+            notiBuilder.setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
+                    .setSound(defaultSoundUri);
+        }
+        Notification notification = notiBuilder.build();
 // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(channelId,
@@ -124,25 +134,32 @@ public class FirebaseMessageService extends FirebaseMessagingService {
         }
         manager.notify(0, notification);
     }
-  private void showNotifications(String title, String msg,String body) {
+
+    private void showNotifications(String title, String msg, String body) {
         String channelId = AppConst.CHANNEL_FEEDBACK;
         Log.d(AppConst.DEBUG_TAG, "FirebaseMessageService:RUN");
         Intent intent = new Intent(this, MainActivity.class);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, AppConst.REQUEST_CODE_REMINDER,
-                intent, PendingIntent.FLAG_CANCEL_CURRENT );
+                intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         NotificationManager manager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        Notification notification = new NotificationCompat.Builder(this, channelId)
+        NotificationCompat.Builder notiBuilder = new NotificationCompat.Builder(this, channelId)
                 .setContentTitle(title)
                 .setContentText(msg)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(body))
+                        .bigText(body));
+        Setting setting = SettingManager.getSettingPref(this);
+        if (setting != null && setting.isVibrate()) {
+            notiBuilder.setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
+                    .setSound(defaultSoundUri);
+        }
 
-                .build();
+        Notification notification = notiBuilder.build();
 // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(channelId,

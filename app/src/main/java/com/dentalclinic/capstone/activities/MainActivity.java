@@ -47,6 +47,7 @@ import com.dentalclinic.capstone.fragment.HistoryTreatmentFragment;
 import com.dentalclinic.capstone.fragment.MyAccoutFragment;
 import com.dentalclinic.capstone.fragment.NewsFragment;
 import com.dentalclinic.capstone.fragment.PromotionFragment;
+import com.dentalclinic.capstone.fragment.SettingFragment;
 import com.dentalclinic.capstone.models.Patient;
 import com.dentalclinic.capstone.models.Staff;
 import com.dentalclinic.capstone.models.Treatment;
@@ -56,6 +57,7 @@ import com.dentalclinic.capstone.utils.AppConst;
 import com.dentalclinic.capstone.utils.CoreManager;
 import com.dentalclinic.capstone.utils.DateTimeFormat;
 import com.dentalclinic.capstone.utils.DateUtils;
+import com.dentalclinic.capstone.utils.SettingManager;
 import com.dentalclinic.capstone.utils.Utils;
 import com.dentalclinic.capstone.view.DigitalView;
 import com.google.firebase.database.DataSnapshot;
@@ -130,7 +132,7 @@ public class MainActivity extends BaseActivity
         setSupportActionBar(toolbar);
         setTitle(getResources().getString(R.string.new_fragment_title));
         Utils.setVNLocale(this);
-        FirebaseMessaging.getInstance().subscribeToTopic(AppConst.TOPIC_PROMOTION);
+        SettingManager.initSetting(this);
         digitalView = findViewById(R.id.digital);
         currentDate = findViewById(R.id.txt_date);
         currentDate.setText(DateUtils.getCurrentDateFormat());
@@ -225,7 +227,8 @@ public class MainActivity extends BaseActivity
                         new PrimaryDrawerItem().withName(R.string.appointment_fragment_title).withIcon(R.drawable.ic_add_alert_black_24dp).withIdentifier(3).withSelectable(false),
                         new SectionDrawerItem().withName(R.string.account_nav_bar_title),
                         new PrimaryDrawerItem().withName(R.string.my_accout_fragment_title).withIcon(R.drawable.ic_account_circle_black_24dp).withIdentifier(4).withSelectable(true),
-                        new PrimaryDrawerItem().withName(R.string.histrory_fragment_title).withIcon(R.drawable.ic_history_black_24dp).withIdentifier(5).withSelectable(true).withBadgeStyle(new BadgeStyle().withTextColor(Color.WHITE).withColorRes(R.color.md_red_700))
+                        new PrimaryDrawerItem().withName(R.string.histrory_fragment_title).withIcon(R.drawable.ic_history_black_24dp).withIdentifier(5).withSelectable(true).withBadgeStyle(new BadgeStyle().withTextColor(Color.WHITE).withColorRes(R.color.md_red_700)),
+                        new PrimaryDrawerItem().withName(R.string.setting_title).withIcon(R.drawable.ic_settings_black_24dp).withIdentifier(99).withSelectable(true).withBadgeStyle(new BadgeStyle().withTextColor(Color.WHITE).withColorRes(R.color.md_red_700))
 //                        new PrimaryDrawerItem().withName(R.string.logout_titile).withIcon(R.drawable.ic_power_settings_new_black_24dp).withIdentifier(8).withSelectable(false)
                 ) // add the items we want to use with our Drawer
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -266,7 +269,13 @@ public class MainActivity extends BaseActivity
                                     HistoryFragment dentalFragment = new HistoryFragment();
                                     fragmentManager.beginTransaction().replace(R.id.main_fragment, dentalFragment).commit();
                                 }
-                            } else {
+                            } else if (drawerItem.getIdentifier() == 99) {
+                                setTitle("Cài đặt");
+                                SettingFragment settingFragment = new SettingFragment();
+                                fragmentManager.beginTransaction().replace(R.id.main_fragment, settingFragment).commit();
+                               //donothing
+                            }
+                            else {
 
                                 logoutOnServer();
                             }
@@ -515,7 +524,7 @@ public class MainActivity extends BaseActivity
 
                     @Override
                     public void onSuccess(Response<SuccessResponse> successResponseResponse) {
-                        showWarningMessage("Đăng xuất");
+//                        showWarningMessage("Đăng xuất");
                         CoreManager.clearUser(MainActivity.this);
                         user = null;
                         result.setSelectionAtPosition(1, true);
@@ -529,7 +538,7 @@ public class MainActivity extends BaseActivity
 
                     @Override
                     public void onError(Throwable e) {
-
+e.printStackTrace();
                     }
                 });
     }
