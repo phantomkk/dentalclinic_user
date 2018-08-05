@@ -50,6 +50,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="history_appointment_title">Lịch Đặt</string>
     <string name="histrory_fragment_title">Lịch Sử Điều Trị</string>
+    <string name="setting_title">Cài đặt</string>
     <string name="text_make_quickly_appointment">Đặt Lịch Khám</string>
     <!-- Quick register section -->
     <string name="tv_quickbook">Đặt lịch nhanh</string>
