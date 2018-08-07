@@ -31,6 +31,7 @@ import com.dentalclinic.capstone.api.APIServiceManager;
 import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
 import com.dentalclinic.capstone.api.responseobject.SuccessResponse;
 import com.dentalclinic.capstone.api.services.UserService;
+import com.dentalclinic.capstone.models.AnamnesisCatalog;
 import com.dentalclinic.capstone.models.City;
 import com.dentalclinic.capstone.models.District;
 import com.dentalclinic.capstone.models.Patient;
@@ -70,7 +71,7 @@ public class MyAccoutFragment extends BaseFragment implements View.OnClickListen
     public static int REQUEST_CHANGE_PASSWORD = 10000;
     Button btnChangeAvatar, btnEdit, btnChangePhone, btnChangePassword;
     CircleImageView cvAvatar;
-    TextView txtName, txtGender, txtPhone, txtAddress, txtDateOfBirth;
+    TextView txtName, txtGender, txtPhone, txtAddress, txtDateOfBirth, txtAnamnesis;
     Patient patient;
 
     public MyAccoutFragment() {
@@ -97,6 +98,7 @@ public class MyAccoutFragment extends BaseFragment implements View.OnClickListen
         txtGender = v.findViewById(R.id.txt_gender);
         txtPhone = v.findViewById(R.id.txt_phone);
         txtAddress = v.findViewById(R.id.txt_address);
+        txtAnamnesis = v.findViewById(R.id.txt_list_anamnesis);
 //        prepareData();
         setData(CoreManager.getCurrentPatient(getContext()));
 
@@ -130,6 +132,13 @@ public class MyAccoutFragment extends BaseFragment implements View.OnClickListen
                     }
                 }
                 txtAddress.setText(address);
+            }
+            if (patient.getListAnamnesis() != null) {
+                String anamensis = "";
+                for (AnamnesisCatalog c : patient.getListAnamnesis()) {
+                    anamensis += "- " +c.getName() + "\n";
+                }
+                txtAnamnesis.setText(anamensis);
             }
         }
     }
