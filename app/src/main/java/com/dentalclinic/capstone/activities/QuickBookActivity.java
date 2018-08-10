@@ -1,13 +1,18 @@
 package com.dentalclinic.capstone.activities;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.content.res.AppCompatResources;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -54,7 +59,8 @@ public class QuickBookActivity extends BaseActivity {
     private Disposable appointmentDisposable;
     private User user;
     private Patient patient;
-    private boolean  isDateValid = true;
+    private boolean isDateValid = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +80,19 @@ public class QuickBookActivity extends BaseActivity {
         tvPhone = findViewById(R.id.tv_phone_quickbook);
         btnQuickBook = findViewById(R.id.btn_quickbook);
         comtvNote = findViewById(R.id.comtv_content_quickbook);
-
+        TelephonyManager tMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        String mPhoneNumber = tMgr.getLine1Number();
+        tvPhone.setText(mPhoneNumber);
 //        img.requestFocus();
         tvPhone.clearFocus();
 //        tvFullname.clearFocus();

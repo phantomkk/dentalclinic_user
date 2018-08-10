@@ -231,7 +231,9 @@ public class NewsPageViewFragment extends BaseFragment {
 
     public void notificationAdapter(List<News> news) {
         listNews.addAll(news);
-        adapter.notifyDataSetChanged();
+        if(adapter!=null) {
+            adapter.notifyDataSetChanged();
+        }
     }
 
     public void preparedData() {

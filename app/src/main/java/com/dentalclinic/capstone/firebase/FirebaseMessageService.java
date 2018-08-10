@@ -34,6 +34,7 @@ public class FirebaseMessageService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage message) {
         String responseType = message.getData().get("type");
+        Log.d(AppConst.DEBUG_TAG, "FIREBASE message received");
         if (responseType != null && responseType.equals(AppConst.RESPONSE_FEEDBACK)) {
             try {
                 Log.d(AppConst.DEBUG_TAG, message.getData().get("body"));
@@ -48,6 +49,14 @@ public class FirebaseMessageService extends FirebaseMessagingService {
                 showToast(ex.getMessage());
             }
         } else if (responseType != null && responseType.equals(AppConst.RESPONSE_REMINDER)) {
+            Map<String, String> map = message.getData();
+            String title = map.get("title");
+            String msg = map.get("message");
+            String body = map.get("body");
+
+            Log.d(AppConst.DEBUG_TAG, message.getData().get("body"));
+            showNotifications(title, msg, body);
+        }else if (responseType != null && responseType.equals(AppConst.RESPONSE_REMINDER)) {
             Map<String, String> map = message.getData();
             String title = map.get("title");
             String msg = map.get("message");
@@ -105,34 +114,36 @@ public class FirebaseMessageService extends FirebaseMessagingService {
         String channelId = AppConst.CHANNEL_FEEDBACK;
         Intent i = new Intent(this, FeedbackActivity.class);
         i.putExtra(AppConst.TREATMENT_DETAIL_BUNDLE, response);
-        Log.d(AppConst.DEBUG_TAG, "FirebaseMessageService:RUN");
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
-                i, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationManager manager =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        NotificationCompat.Builder notiBuilder = new NotificationCompat.Builder(this, channelId)
-                .setContentText(msg)
-                .setContentTitle(title)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true)
-                .setSound(defaultSoundUri)
-                .setSmallIcon(R.mipmap.ic_launcher_round);
-        Setting setting = SettingManager.getSettingPref(this);
-        if (setting != null && setting.isVibrate()) {
-            notiBuilder.setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
-                    .setSound(defaultSoundUri);
-        }
-        Notification notification = notiBuilder.build();
-// Since android Oreo notification channel is needed.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId,
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_DEFAULT);
-            manager.createNotificationChannel(channel);
-        }
-        manager.notify(0, notification);
+        Context c = getApplicationContext();
+        c.startActivity(i);
+//        Log.d(AppConst.DEBUG_TAG, "FirebaseMessageService:RUN");
+//        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+//                i, PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//        NotificationManager manager =
+//                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+//        NotificationCompat.Builder notiBuilder = new NotificationCompat.Builder(this, channelId)
+//                .setContentText(msg)
+//                .setContentTitle(title)
+//                .setContentIntent(pendingIntent)
+//                .setAutoCancel(true)
+//                .setSound(defaultSoundUri)
+//                .setSmallIcon(R.mipmap.ic_launcher_round);
+//        Setting setting = SettingManager.getSettingPref(this);
+//        if (setting != null && setting.isVibrate()) {
+//            notiBuilder.setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
+//                    .setSound(defaultSoundUri);
+//        }
+//        Notification notification = notiBuilder.build();
+//// Since android Oreo notification channel is needed.
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            NotificationChannel channel = new NotificationChannel(channelId,
+//                    "Channel human readable title",
+//                    NotificationManager.IMPORTANCE_DEFAULT);
+//            manager.createNotificationChannel(channel);
+//        }
+//        manager.notify(0, notification);
     }
 
     private void showNotifications(String title, String msg, String body) {

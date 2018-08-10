@@ -1,6 +1,7 @@
 package com.dentalclinic.capstone.activities;
 
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Notification;
@@ -8,13 +9,16 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -144,6 +148,7 @@ public class MainActivity extends BaseActivity
 
 
         user = CoreManager.getUser(this);
+        requestPermission();
         listIprofile = new ArrayList<>();
         if (user != null) {
             RetrofitClient.setAccessToken(user.getAccessToken());
@@ -208,8 +213,8 @@ public class MainActivity extends BaseActivity
                 .withSavedInstance(savedInstanceState)
                 .build();
         //Create the drawer
-        logout = new PrimaryDrawerItem();
         if (CoreManager.getUser(MainActivity.this) != null) {
+            logout = new PrimaryDrawerItem();
             logout.withName(R.string.logout_titile).withIcon(R.drawable.ic_power_settings_new_black_24dp).withIdentifier(8).withSelectable(false);
 
         } else {
@@ -273,10 +278,12 @@ public class MainActivity extends BaseActivity
                                 setTitle("Cài đặt");
                                 SettingFragment settingFragment = new SettingFragment();
                                 fragmentManager.beginTransaction().replace(R.id.main_fragment, settingFragment).commit();
-                               //donothing
-                            }
-                            else {
-
+                                //donothing
+                            } else {
+                                if (result != null) {
+                                    result.removeItem(8);
+                                }
+                                logout();
                                 logoutOnServer();
                             }
                         }
@@ -525,22 +532,27 @@ public class MainActivity extends BaseActivity
                     @Override
                     public void onSuccess(Response<SuccessResponse> successResponseResponse) {
 //                        showWarningMessage("Đăng xuất");
-                        CoreManager.clearUser(MainActivity.this);
-                        user = null;
-                        result.setSelectionAtPosition(1, true);
-                        listIprofile = new ArrayList<>();
-                        listIprofile.add(new ProfileSettingDrawerItem().withName("Đăng Nhập").withIcon(new IconicsDrawable(MainActivity.this, GoogleMaterial.Icon.gmd_add).actionBar().paddingDp(5).colorRes(R.color.material_drawer_primary_text)).withIdentifier(PROFILE_SETTING));
-                        headerResult.clear();
-                        headerResult.setProfiles(listIprofile);
-                        headerResult.setActiveProfile(listIprofile.get(0));
-                        result.removeItem(8);
+
+//                        result.removeItem(8);
+                        logError("LogoutOnServer", "Logout success response");
                     }
 
                     @Override
                     public void onError(Throwable e) {
-e.printStackTrace();
+                        e.printStackTrace();
                     }
                 });
+    }
+
+    private void logout() {
+        CoreManager.clearUser(MainActivity.this);
+        user = null;
+        result.setSelectionAtPosition(1, true);
+        listIprofile = new ArrayList<>();
+        listIprofile.add(new ProfileSettingDrawerItem().withName("Đăng Nhập").withIcon(new IconicsDrawable(MainActivity.this, GoogleMaterial.Icon.gmd_add).actionBar().paddingDp(5).colorRes(R.color.material_drawer_primary_text)).withIdentifier(PROFILE_SETTING));
+        headerResult.clear();
+        headerResult.setProfiles(listIprofile);
+        headerResult.setActiveProfile(listIprofile.get(0));
     }
 
     private void listenOrderNumber() {
@@ -576,9 +588,37 @@ e.printStackTrace();
         }
         if (requestCode == AppConst.REQUEST_LOGIN_ACTIVITY) {
             resetHeader(MainActivity.this);
-            result.addItem(logout);
+            if (CoreManager.getUser(MainActivity.this) != null) {
+                logout = new PrimaryDrawerItem();
+                logout.withName(R.string.logout_titile).withIcon(R.drawable.ic_power_settings_new_black_24dp).withIdentifier(8).withSelectable(false);
+                result.addItem(logout);
+            }
         }
     }
 
+    static final int REQUEST_READ_PHONE_NUMBERS = 142;
 
+    private void requestPermission() {
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
+
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, REQUEST_READ_PHONE_NUMBERS);
+        } else {
+            //TODO
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_READ_PHONE_NUMBERS:
+                if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    //TODO
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
 }
