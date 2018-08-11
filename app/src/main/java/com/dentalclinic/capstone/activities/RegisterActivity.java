@@ -4,22 +4,15 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.DataSetObserver;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,28 +21,19 @@ import com.dentalclinic.capstone.adapter.CitySpinnerAdapter;
 import com.dentalclinic.capstone.adapter.DistrictSpinnerAdapter;
 import com.dentalclinic.capstone.api.APIServiceManager;
 import com.dentalclinic.capstone.api.requestobject.RegisterRequest;
-import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
 import com.dentalclinic.capstone.api.services.AddressService;
-import com.dentalclinic.capstone.api.services.GuestService;
-import com.dentalclinic.capstone.api.services.PatientService;
 import com.dentalclinic.capstone.api.services.UserService;
 import com.dentalclinic.capstone.databaseHelper.DatabaseHelper;
 import com.dentalclinic.capstone.models.City;
 import com.dentalclinic.capstone.models.District;
 import com.dentalclinic.capstone.models.User;
 import com.dentalclinic.capstone.utils.AppConst;
-import com.dentalclinic.capstone.utils.Utils;
 import com.dentalclinic.capstone.utils.Validation;
 
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -335,8 +319,8 @@ public class RegisterActivity extends BaseActivity {
 
     public void callApiRegister(RegisterRequest requestObj) {
         showLoading();
-        GuestService guestService = APIServiceManager.getService(GuestService.class);
-        guestService.register(requestObj)
+        UserService userService = APIServiceManager.getService(UserService.class);
+        userService.register(requestObj)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Response<User>>() {

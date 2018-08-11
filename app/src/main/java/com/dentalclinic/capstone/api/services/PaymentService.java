@@ -23,7 +23,4 @@ public interface PaymentService {
             @Field("payment_id") String paymentId,
             @Field("payment_client_json") String paymentClientJson
     );
-
-
-
 }

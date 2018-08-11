@@ -13,7 +13,6 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface TreatmentCategoryService {
-
     @GET("api/treatmentcategory/all")
     Single<Response<List<TreatmentCategory>>> getAll();
 }

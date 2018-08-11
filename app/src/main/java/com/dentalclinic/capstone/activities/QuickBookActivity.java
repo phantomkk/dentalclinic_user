@@ -25,6 +25,7 @@ import com.dentalclinic.capstone.api.APIServiceManager;
 import com.dentalclinic.capstone.api.requestobject.AppointmentRequest;
 import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
 import com.dentalclinic.capstone.api.services.AppointmentService;
+import com.dentalclinic.capstone.api.services.UserService;
 import com.dentalclinic.capstone.models.Appointment;
 import com.dentalclinic.capstone.utils.CoreManager;
 import com.dentalclinic.capstone.utils.DateTimeFormat;
@@ -218,8 +219,8 @@ public class QuickBookActivity extends BaseActivity {
 
     public void callApi(AppointmentRequest requestObj) {
         showLoading();
-        AppointmentService appointmentService =
-                APIServiceManager.getService(AppointmentService.class);
+        UserService appointmentService =
+                APIServiceManager.getService(UserService.class);
         appointmentService.bookAppointment(requestObj)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())

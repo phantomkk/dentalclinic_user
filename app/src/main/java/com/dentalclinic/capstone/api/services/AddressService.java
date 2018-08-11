@@ -17,6 +17,7 @@ public interface AddressService {
 
     @GET("api/city/all")
     Single<Response<List<City>>> getAllCities();
+
     @GET("api/city/{id}/districts")
     Single<Response<List<District>>> getDistrictByCityID(@Path("id") int id);
 }

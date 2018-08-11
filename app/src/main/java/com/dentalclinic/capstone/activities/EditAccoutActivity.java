@@ -1,9 +1,6 @@
 package com.dentalclinic.capstone.activities;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.view.View;
@@ -21,26 +18,20 @@ import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.adapter.CitySpinnerAdapter;
 import com.dentalclinic.capstone.adapter.DistrictSpinnerAdapter;
 import com.dentalclinic.capstone.api.APIServiceManager;
-import com.dentalclinic.capstone.api.requestobject.RegisterRequest;
 import com.dentalclinic.capstone.api.requestobject.UpdatePatientRequest;
-import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
 import com.dentalclinic.capstone.api.responseobject.SuccessResponse;
 import com.dentalclinic.capstone.api.services.AddressService;
-import com.dentalclinic.capstone.api.services.GuestService;
+import com.dentalclinic.capstone.api.services.PatientService;
 import com.dentalclinic.capstone.api.services.UserService;
 import com.dentalclinic.capstone.databaseHelper.DatabaseHelper;
 import com.dentalclinic.capstone.databaseHelper.DistrictDatabaseHelper;
-import com.dentalclinic.capstone.fragment.MyAccoutFragment;
 import com.dentalclinic.capstone.models.City;
 import com.dentalclinic.capstone.models.District;
 import com.dentalclinic.capstone.models.Patient;
-import com.dentalclinic.capstone.models.User;
 import com.dentalclinic.capstone.utils.AppConst;
 import com.dentalclinic.capstone.utils.CoreManager;
-import com.dentalclinic.capstone.utils.Utils;
 import com.dentalclinic.capstone.utils.Validation;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -396,8 +387,8 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
 
     public void callApiUpdate(UpdatePatientRequest requestObj) {
         showLoading();
-        UserService userService = APIServiceManager.getService(UserService.class);
-        userService.changePatientInfo(requestObj)
+        PatientService patientService = APIServiceManager.getService(PatientService.class);
+        patientService.changePatientInfo(requestObj)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Response<SuccessResponse>>() {

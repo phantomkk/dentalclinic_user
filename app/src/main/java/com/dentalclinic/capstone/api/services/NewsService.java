@@ -18,16 +18,9 @@ public interface NewsService {
     @GET("api/news/{id}")
     Single<Response<News>> getNewById(@Path("id") int newId);
 
-//    @GET("api/news/loadmore")
-//    Single<Response<List<News>>> loadMore(@Query("currentIndex") int currentIndex,
-//                                          @Query("numItem") int numItem
-//    );
-
     @GET("api/news/loadmore")
     Single<Response<List<News>>> loadMoreByType(@Query("currentIndex") int currentIndex,
                                                 @Query("numItem") int numItem,
                                                 @Query("typeId") int typeID
     );
-
-
 }
