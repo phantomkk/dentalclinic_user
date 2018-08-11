@@ -1,24 +1,16 @@
 package com.dentalclinic.capstone.fragment;
 
 
-import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,11 +18,9 @@ import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.activities.EditAccoutActivity;
 import com.dentalclinic.capstone.activities.EditPasswordActivity;
 import com.dentalclinic.capstone.activities.MainActivity;
-import com.dentalclinic.capstone.adapter.PatientProfileAdapter;
 import com.dentalclinic.capstone.api.APIServiceManager;
-import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
 import com.dentalclinic.capstone.api.responseobject.SuccessResponse;
-import com.dentalclinic.capstone.api.services.UserService;
+import com.dentalclinic.capstone.api.services.PatientService;
 import com.dentalclinic.capstone.models.AnamnesisCatalog;
 import com.dentalclinic.capstone.models.City;
 import com.dentalclinic.capstone.models.District;
@@ -40,8 +30,6 @@ import com.dentalclinic.capstone.utils.CoreManager;
 import com.dentalclinic.capstone.utils.DateTimeFormat;
 import com.dentalclinic.capstone.utils.DateUtils;
 import com.dentalclinic.capstone.utils.GenderUtils;
-import com.dentalclinic.capstone.utils.Utils;
-import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -49,8 +37,6 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.reactivex.SingleObserver;
@@ -60,8 +46,6 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
@@ -169,8 +153,8 @@ public class MyAccoutFragment extends BaseFragment implements View.OnClickListen
         return byteBuff.toByteArray();
     }
 
-    private UserService userService = APIServiceManager.getService(UserService.class);
-    private Disposable userServiceDisposable;
+    private PatientService patientService = APIServiceManager.getService(PatientService.class);
+    private Disposable patientServiceDisposal;
 
     private void uploadImage(byte[] imageBytes) {
 
@@ -178,12 +162,12 @@ public class MyAccoutFragment extends BaseFragment implements View.OnClickListen
         MultipartBody.Part image = MultipartBody.Part.createFormData("image", "image.jpg", requestFile);
         MultipartBody.Part id = MultipartBody.Part.createFormData("id", CoreManager.getCurrentPatient(getContext()).getId() + "");
         //cột username đang bị null hết chỉ có 2 record dc add vào: luc2, luc12345678
-        userService.changeAvatar(image, id).subscribeOn(Schedulers.io())
+        patientService.changeAvatar(image, id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Response<SuccessResponse>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        userServiceDisposable = d;
+                        patientServiceDisposal = d;
                     }
 
                     @Override
