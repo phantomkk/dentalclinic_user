@@ -123,6 +123,9 @@ public class QuickBookActivity extends BaseActivity {
                                 ContextCompat.getColor(QuickBookActivity.this, R.color.color_black)
                         );
                     }, year, month, day);
+            dialog.setButton(DatePickerDialog.BUTTON_POSITIVE,getString(R.string.OK), dialog);
+            dialog.setButton(DatePickerDialog.BUTTON_NEGATIVE, getString(R.string.Cancel), (DialogInterface.OnClickListener)null);
+
             dialog.show();
         });
 //        int hour = c.get(Calendar.HOUR_OF_DAY);

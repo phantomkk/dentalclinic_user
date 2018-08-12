@@ -173,7 +173,7 @@ public class EditAccoutActivity extends BaseActivity implements View.OnClickList
                                 txtDateError.setText("");
 
                             }
-                        }, year, month, day);
+                        }, 2000, month, day);
                 dialog.setButton(DatePickerDialog.BUTTON_POSITIVE,getString(R.string.OK), dialog);
                 dialog.setButton(DatePickerDialog.BUTTON_NEGATIVE, getString(R.string.Cancel), (DialogInterface.OnClickListener)null);
                 dialog.show();
