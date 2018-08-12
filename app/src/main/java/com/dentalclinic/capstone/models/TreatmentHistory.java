@@ -25,9 +25,10 @@ public class TreatmentHistory implements Serializable {
     private Treatment treatment;
     @SerializedName("details")
     private List<TreatmentDetail> treatmentDetails;
+    @SerializedName("symptoms")
+    private List<Symptom> symptoms;
     @SerializedName("tooth")
     private Tooth tooth;
-
 
     public TreatmentHistory(String createDate, String finishDate, Long price, Long totalPrice, Treatment treatment, Tooth tooth) {
         this.createDate = createDate;
@@ -126,5 +127,13 @@ public class TreatmentHistory implements Serializable {
 
     public void setTotalPrice(Long totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public List<Symptom> getSymptoms() {
+        return symptoms;
+    }
+
+    public void setSymptoms(List<Symptom> symptoms) {
+        this.symptoms = symptoms;
     }
 }
