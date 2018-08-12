@@ -55,6 +55,6 @@ public interface UserService {
                                                      @Field("password") String password);
 
     @POST("api/user/bookAppointment")
-    Single<Response<List<Appointment>>> bookAppointment(@Body AppointmentRequest appointmentRequest);
+    Single<Response<SuccessResponse>> bookAppointment(@Body AppointmentRequest appointmentRequest);
 
 }

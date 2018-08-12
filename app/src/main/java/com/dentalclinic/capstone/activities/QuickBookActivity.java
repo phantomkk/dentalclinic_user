@@ -24,6 +24,7 @@ import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.api.APIServiceManager;
 import com.dentalclinic.capstone.api.requestobject.AppointmentRequest;
 import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
+import com.dentalclinic.capstone.api.responseobject.SuccessResponse;
 import com.dentalclinic.capstone.api.services.AppointmentService;
 import com.dentalclinic.capstone.api.services.UserService;
 import com.dentalclinic.capstone.models.Appointment;
@@ -224,18 +225,22 @@ public class QuickBookActivity extends BaseActivity {
         appointmentService.bookAppointment(requestObj)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<Response<List<Appointment>>>() {
+                .subscribe(new SingleObserver<Response<SuccessResponse>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         appointmentDisposable = d;
                     }
 
                     @Override
-                    public void onSuccess(Response<List<Appointment>> response) {
+                    public void onSuccess(Response<SuccessResponse> response) {
                         if (response.isSuccessful()) {
+                            String successMsg = "Đặt lịch thành công";
+                            if (response.body() != null) {
+                                successMsg = response.body().getMessage();
+                            }
                             AlertDialog.Builder builder = new AlertDialog.Builder(QuickBookActivity.this)
                                     .setTitle(getString(R.string.dialog_default_title))
-                                    .setMessage("Đặt lịch thành công")
+                                    .setMessage(successMsg)
                                     .setPositiveButton("Xác nhận", (DialogInterface var1, int var2) -> {
                                         finish();
                                     });
