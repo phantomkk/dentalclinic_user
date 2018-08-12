@@ -133,6 +133,9 @@ public class RegisterActivity extends BaseActivity {
 
                         }
                     }, year, month, day);
+            dialog.setButton(DatePickerDialog.BUTTON_POSITIVE,getString(R.string.OK), dialog);
+            dialog.setButton(DatePickerDialog.BUTTON_NEGATIVE, getString(R.string.Cancel), (DialogInterface.OnClickListener)null);
+
             dialog.show();
         });
 
