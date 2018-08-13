@@ -59,6 +59,7 @@
             android:layout_below="@+id/rate_bar"
             android:layout_marginTop="@dimen/input_margin_top"
             android:numStars="5"
+            android:theme="@style/RatingBar"
             android:stepSize="1.0" />
 
         <android.support.design.widget.TextInputLayout
