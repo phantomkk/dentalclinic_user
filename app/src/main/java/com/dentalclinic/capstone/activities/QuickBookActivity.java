@@ -257,7 +257,6 @@ public class QuickBookActivity extends BaseActivity {
                         } else {
                             showErrorMessage(getString(R.string.error_on_error_when_call_api));
                         }
-
                         hideLoading();
                     }
 
@@ -275,5 +274,7 @@ public class QuickBookActivity extends BaseActivity {
         finish();
         return true;
     }
+
+
 
 }

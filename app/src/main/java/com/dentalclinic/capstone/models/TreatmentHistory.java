@@ -30,6 +30,7 @@ public class TreatmentHistory implements Serializable {
     @SerializedName("tooth")
     private Tooth tooth;
 
+
     public TreatmentHistory(String createDate, String finishDate, Long price, Long totalPrice, Treatment treatment, Tooth tooth) {
         this.createDate = createDate;
         this.finishDate = finishDate;

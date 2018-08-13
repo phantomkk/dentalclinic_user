@@ -417,8 +417,6 @@ public class MainActivity extends BaseActivity
         if (treatmentDetail.getDentist().getAvatar() != null) {
             Picasso.get().load("https://thumbs.dreamstime.com/b/dentist-avatar-flat-icon-isolated-white-series-caucasian-blue-coat-background-eps-file-available-95672861.jpg").into(imgAvatar);
         }
-
-
         dialog.show();
     }
 
@@ -621,4 +619,6 @@ public class MainActivity extends BaseActivity
                 break;
         }
     }
+
+
 }

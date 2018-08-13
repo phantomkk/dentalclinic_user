@@ -20,6 +20,11 @@ public class CombineHistoryClass {
         this.appointment = appointment;
     }
 
+    public CombineHistoryClass(Response<List<Payment>> payments, Response<List<Appointment>> appointment) {
+        this.payments = payments;
+        this.appointment = appointment;
+    }
+
     public Response<List<TreatmentHistory>> getTreatmentHistories() {
         return treatmentHistories;
     }

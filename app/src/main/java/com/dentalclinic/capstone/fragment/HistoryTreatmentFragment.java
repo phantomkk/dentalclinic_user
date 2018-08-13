@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.activities.TreatmentDetailActivity;
@@ -57,6 +58,7 @@ public class HistoryTreatmentFragment extends BaseFragment {
     public TreatmentHistoryAdapter adapter;
     private List<TreatmentHistory> treatmentHistories = new ArrayList<TreatmentHistory>();
     private static HistoryTreatmentFragment instance = new HistoryTreatmentFragment();
+    TextView txtEmptyList;
 
     public static HistoryTreatmentFragment newInstance() {
         instance = new HistoryTreatmentFragment();
@@ -72,6 +74,9 @@ public class HistoryTreatmentFragment extends BaseFragment {
     }
 
     public void notificationAdapter(List<TreatmentHistory> treatmentHistories) {
+        if(!treatmentHistories.isEmpty()){
+            txtEmptyList.setVisibility(View.GONE);
+        }
         this.treatmentHistories.addAll(treatmentHistories);
         adapter.notifyDataSetChanged();
     }
@@ -82,6 +87,7 @@ public class HistoryTreatmentFragment extends BaseFragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_history_treatment, container, false);
         listView = (ListView) v.findViewById(R.id.list_profile);
+        txtEmptyList = v.findViewById(R.id.txt_list_empty);
 //        prepareListData();
         adapter = new TreatmentHistoryAdapter(getContext(), treatmentHistories);
         listView.setAdapter(adapter);

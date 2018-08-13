@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import io.reactivex.functions.BiFunction;
 
 import com.dentalclinic.capstone.R;
 import com.dentalclinic.capstone.adapter.HistoryPageAdapter;
@@ -84,85 +85,155 @@ public class HistoryFragment extends BaseFragment {
     }
     private void callAPI() {
         showLoading();
-        Single appointment = APIServiceManager.getService(AppointmentService.class)
-                .getByPhone(CoreManager.getUser(getContext()).getPhone()).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-        Single payment = APIServiceManager.getService(PaymentService.class)
-                .getByPhone(CoreManager.getUser(getContext()).getPhone()).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-        Single treatmentHistories = APIServiceManager.getService(HistoryTreatmentService.class)
-                .getHistoryTreatmentById(CoreManager.getCurrentPatient(getContext()).getId()).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        if(CoreManager.getCurrentPatient(getContext()) !=null){
+            Single appointment = APIServiceManager.getService(AppointmentService.class)
+                    .getByPhone(CoreManager.getUser(getContext()).getPhone()).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+            Single payment = APIServiceManager.getService(PaymentService.class)
+                    .getByPhone(CoreManager.getUser(getContext()).getPhone()).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+            Single treatmentHistories = APIServiceManager.getService(HistoryTreatmentService.class)
+                    .getHistoryTreatmentById(CoreManager.getCurrentPatient(getContext()).getId()).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
 
-        Single<CombineHistoryClass> combine = Single.zip(treatmentHistories, payment, appointment,
-                new Function3<Response<List<TreatmentHistory>>, Response<List<Payment>>, Response<List<Appointment>>, CombineHistoryClass>() {
-                    @Override
-                    public CombineHistoryClass apply(Response<List<TreatmentHistory>> treatmentHistoriesResponse, Response<List<Payment>> paymentsResponse, Response<List<Appointment>> appointmentRespone) throws Exception {
-                        return new CombineHistoryClass(treatmentHistoriesResponse, paymentsResponse, appointmentRespone);
-                    }
-                });
-        combine.subscribe(new SingleObserver<CombineHistoryClass>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-                disposable = d;
-            }
+            Single<CombineHistoryClass> combine = Single.zip(treatmentHistories, payment, appointment,
+                    new Function3<Response<List<TreatmentHistory>>, Response<List<Payment>>, Response<List<Appointment>>, CombineHistoryClass>() {
+                        @Override
+                        public CombineHistoryClass apply(Response<List<TreatmentHistory>> treatmentHistoriesResponse, Response<List<Payment>> paymentsResponse, Response<List<Appointment>> appointmentRespone) throws Exception {
+                            return new CombineHistoryClass(treatmentHistoriesResponse, paymentsResponse, appointmentRespone);
+                        }
+                    });
+            combine.subscribe(new SingleObserver<CombineHistoryClass>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+                    disposable = d;
+                }
 
-            @Override
-            public void onSuccess(CombineHistoryClass combineClass) {
-                if (combineClass.getTreatmentHistories() != null) {
-                    if (combineClass.getTreatmentHistories().isSuccessful()) {
-                        historyTreatmentFragment.notificationAdapter(combineClass.getTreatmentHistories().body());
-                    } else if (combineClass.getTreatmentHistories().code() == 500) {
-                        showFatalError(combineClass.getTreatmentHistories().errorBody(), "callAPI.getTreatmentHistories");
-                    } else if (combineClass.getTreatmentHistories().code() == 401) {
-                        showErrorUnAuth();
-                    } else if (combineClass.getTreatmentHistories().code() == 400) {
-                        showBadRequestError(combineClass.getTreatmentHistories().errorBody(), "callAPI.getTreatmentHistories");
-                    } else {
-                        showDialog(getContext().getResources().getString(R.string.error_message_api));
+                @Override
+                public void onSuccess(CombineHistoryClass combineClass) {
+                    if (combineClass.getTreatmentHistories() != null) {
+                        if (combineClass.getTreatmentHistories().isSuccessful()) {
+                            historyTreatmentFragment.notificationAdapter(combineClass.getTreatmentHistories().body());
+                        } else if (combineClass.getTreatmentHistories().code() == 500) {
+                            showFatalError(combineClass.getTreatmentHistories().errorBody(), "callAPI.getTreatmentHistories");
+                        } else if (combineClass.getTreatmentHistories().code() == 401) {
+                            showErrorUnAuth();
+                        } else if (combineClass.getTreatmentHistories().code() == 400) {
+                            showBadRequestError(combineClass.getTreatmentHistories().errorBody(), "callAPI.getTreatmentHistories");
+                        } else {
+                            showDialog(getContext().getResources().getString(R.string.error_message_api));
+                        }
                     }
-                }
-                if (combineClass.getPayments() != null) {
-                    if (combineClass.getPayments().isSuccessful()) {
-                        //
-                        historyPaymentFragment.notificationAdapter(combineClass.getPayments().body());
-                    } else if (combineClass.getPayments().code() == 500) {
-                        showFatalError(combineClass.getPayments().errorBody(), "callAPI.getPayments");
-                    } else if (combineClass.getPayments().code() == 401) {
-                        showErrorUnAuth();
-                    } else if (combineClass.getPayments().code() == 400) {
-                        showBadRequestError(combineClass.getPayments().errorBody(), "callAPI.getPayments");
-                    } else {
-                        showDialog(getContext().getResources().getString(R.string.error_message_api));
+                    if (combineClass.getPayments() != null) {
+                        if (combineClass.getPayments().isSuccessful()) {
+                            //
+                            historyPaymentFragment.notificationAdapter(combineClass.getPayments().body());
+                        } else if (combineClass.getPayments().code() == 500) {
+                            showFatalError(combineClass.getPayments().errorBody(), "callAPI.getPayments");
+                        } else if (combineClass.getPayments().code() == 401) {
+                            showErrorUnAuth();
+                        } else if (combineClass.getPayments().code() == 400) {
+                            showBadRequestError(combineClass.getPayments().errorBody(), "callAPI.getPayments");
+                        } else {
+                            showDialog(getContext().getResources().getString(R.string.error_message_api));
+                        }
                     }
-                }
-                if (combineClass.getAppointment() != null) {
-                    if (combineClass.getAppointment().isSuccessful()) {
-                        historyAppointmentFragment.notificationAdapter(combineClass.getAppointment().body());
-                    } else if (combineClass.getAppointment().code() == 500) {
-                        showFatalError(combineClass.getAppointment().errorBody(), "callAPI.getAppointment");
-                    } else if (combineClass.getAppointment().code() == 401) {
-                        showErrorUnAuth();
-                    } else if (combineClass.getAppointment().code() == 400) {
-                        showBadRequestError(combineClass.getAppointment().errorBody(), "callAPI.getAppointment");
-                    } else {
-                        showDialog(getContext().getResources().getString(R.string.error_message_api));
+                    if (combineClass.getAppointment() != null) {
+                        if (combineClass.getAppointment().isSuccessful()) {
+                            historyAppointmentFragment.notificationAdapter(combineClass.getAppointment().body());
+                        } else if (combineClass.getAppointment().code() == 500) {
+                            showFatalError(combineClass.getAppointment().errorBody(), "callAPI.getAppointment");
+                        } else if (combineClass.getAppointment().code() == 401) {
+                            showErrorUnAuth();
+                        } else if (combineClass.getAppointment().code() == 400) {
+                            showBadRequestError(combineClass.getAppointment().errorBody(), "callAPI.getAppointment");
+                        } else {
+                            showDialog(getContext().getResources().getString(R.string.error_message_api));
+                        }
                     }
+                    hideLoading();
                 }
-                hideLoading();
-            }
 
-            @Override
-            public void onError(Throwable e) {
-                hideLoading();
-                e.printStackTrace();
-                logError("Error", e.getMessage());
-                Context context = getContext();
-                if(context!=null) {
-                    Toast.makeText(context, getString(R.string.error_on_error_when_call_api), Toast.LENGTH_SHORT).show();
+                @Override
+                public void onError(Throwable e) {
+                    hideLoading();
+                    e.printStackTrace();
+                    logError("Error", e.getMessage());
+                    Context context = getContext();
+                    if(context!=null) {
+                        Toast.makeText(context, getString(R.string.error_on_error_when_call_api), Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-        });
+            });
+        }else{
+            Single appointment = APIServiceManager.getService(AppointmentService.class)
+                    .getByPhone(CoreManager.getUser(getContext()).getPhone()).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+            Single payment = APIServiceManager.getService(PaymentService.class)
+                    .getByPhone(CoreManager.getUser(getContext()).getPhone()).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+//            Single treatmentHistories = APIServiceManager.getService(HistoryTreatmentService.class)
+//                    .getHistoryTreatmentById(CoreManager.getCurrentPatient(getContext()).getId()).subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread());
+
+            Single<CombineHistoryClass> combine = Single.zip(payment, appointment,
+                    new BiFunction<Response<List<Payment>>, Response<List<Appointment>>, CombineHistoryClass>() {
+                        @Override
+                        public CombineHistoryClass apply(Response<List<Payment>> paymentsResponse, Response<List<Appointment>> appointmentRespone) throws Exception {
+                            return new CombineHistoryClass(paymentsResponse, appointmentRespone);
+                        }
+                    });
+            combine.subscribe(new SingleObserver<CombineHistoryClass>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+                    disposable = d;
+                }
+
+                @Override
+                public void onSuccess(CombineHistoryClass combineClass) {
+                    if (combineClass.getPayments() != null) {
+                        if (combineClass.getPayments().isSuccessful()) {
+                            //
+                            historyPaymentFragment.notificationAdapter(combineClass.getPayments().body());
+                        } else if (combineClass.getPayments().code() == 500) {
+                            showFatalError(combineClass.getPayments().errorBody(), "callAPI.getPayments");
+                        } else if (combineClass.getPayments().code() == 401) {
+                            showErrorUnAuth();
+                        } else if (combineClass.getPayments().code() == 400) {
+                            showBadRequestError(combineClass.getPayments().errorBody(), "callAPI.getPayments");
+                        } else {
+                            showDialog(getContext().getResources().getString(R.string.error_message_api));
+                        }
+                    }
+                    if (combineClass.getAppointment() != null) {
+                        if (combineClass.getAppointment().isSuccessful()) {
+                            historyAppointmentFragment.notificationAdapter(combineClass.getAppointment().body());
+                        } else if (combineClass.getAppointment().code() == 500) {
+                            showFatalError(combineClass.getAppointment().errorBody(), "callAPI.getAppointment");
+                        } else if (combineClass.getAppointment().code() == 401) {
+                            showErrorUnAuth();
+                        } else if (combineClass.getAppointment().code() == 400) {
+                            showBadRequestError(combineClass.getAppointment().errorBody(), "callAPI.getAppointment");
+                        } else {
+                            showDialog(getContext().getResources().getString(R.string.error_message_api));
+                        }
+                    }
+                    hideLoading();
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    hideLoading();
+                    e.printStackTrace();
+                    logError("Error", e.getMessage());
+                    Context context = getContext();
+                    if(context!=null) {
+                        Toast.makeText(context, getString(R.string.error_on_error_when_call_api), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+
     }
 
 }

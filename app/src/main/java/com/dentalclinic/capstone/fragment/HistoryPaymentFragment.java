@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -75,6 +76,7 @@ import retrofit2.Response;
 public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnActionExpandListener
         , SearchView.OnQueryTextListener, SearchView.OnCloseListener {
     private static final String TAG = MainActivity.class.getSimpleName();
+    TextView txtEmptyList;
 
     private Disposable paymentDisposable;
 
@@ -114,6 +116,8 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
         if (payments.isEmpty()) {
 //            prepareData();
         }
+        txtEmptyList = v.findViewById(R.id.txt_list_empty);
+
         adapter = new PaymentAdapter(
                 getContext(),
                 payments,
@@ -222,6 +226,9 @@ public class HistoryPaymentFragment extends BaseFragment implements MenuItem.OnA
     }
 
     public void notificationAdapter(List<Payment> payments) {
+        if(!payments.isEmpty()){
+            txtEmptyList.setVisibility(View.GONE);
+        }
         this.payments.addAll(payments);
         adapter.notifyDataSetChanged();
     }

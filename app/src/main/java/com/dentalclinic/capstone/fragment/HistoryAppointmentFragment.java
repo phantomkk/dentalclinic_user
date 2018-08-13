@@ -23,10 +23,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dentalclinic.capstone.R;
+import com.dentalclinic.capstone.activities.MainActivity;
 import com.dentalclinic.capstone.activities.QuickBookActivity;
 import com.dentalclinic.capstone.adapter.AppointmentAdapter;
 import com.dentalclinic.capstone.api.APIServiceManager;
 import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
+import com.dentalclinic.capstone.api.responseobject.SuccessResponse;
 import com.dentalclinic.capstone.api.services.AppointmentService;
 import com.dentalclinic.capstone.models.Appointment;
 import com.dentalclinic.capstone.models.Patient;
@@ -93,13 +95,8 @@ public class HistoryAppointmentFragment extends BaseFragment implements View.OnC
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         int selectpos = info.position; //position in the adapter
         switch (item.getItemId()) {
-            case R.id.edit:
-                showDatePicker();
-
-                // edit stuff here
-                return true;
             case R.id.delete:
-                showConfirmDialog();
+                showConfirmDialog(selectpos);
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -176,7 +173,7 @@ public class HistoryAppointmentFragment extends BaseFragment implements View.OnC
         }
     }
 
-    private void showConfirmDialog() {
+    private void showConfirmDialog(int pos) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         builder.setMessage("Bạn có chắc muốn xóa lịch đặt này?").setTitle("Xác nhận xóa")
@@ -184,7 +181,7 @@ public class HistoryAppointmentFragment extends BaseFragment implements View.OnC
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         // Yes-code
-
+                        changeStatus(4,pos);
                     }
                 })
                 .setNegativeButton("Không", new DialogInterface.OnClickListener() {
@@ -194,6 +191,43 @@ public class HistoryAppointmentFragment extends BaseFragment implements View.OnC
                     }
                 })
                 .show();
+    }
+    public void changeStatus(int status, int position) {
+        showLoading();
+        AppointmentService service = APIServiceManager.getService(AppointmentService.class);
+        service.changeStatus(appointments.get(position).getId(), status)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<Response<SuccessResponse>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onSuccess(Response<SuccessResponse> successResponseResponse) {
+                        if (successResponseResponse.isSuccessful()) {
+                            appointments.remove(position);
+                            adapter.notifyDataSetChanged();
+                        } else if (successResponseResponse.code() == 500) {
+                            showFatalError(successResponseResponse.errorBody(), "appointmentService");
+                        } else if (successResponseResponse.code() == 401) {
+                            showErrorUnAuth();
+                        } else if (successResponseResponse.code() == 400) {
+                            showBadRequestError(successResponseResponse.errorBody(), "appointmentService");
+                        } else {
+                            showErrorMessage(getString(R.string.error_on_error_when_call_api));
+                        }
+                        hideLoading();
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        showWarningMessage(getResources().getString(R.string.error_on_error_when_call_api));
+                        logError(MainActivity.class, "callApi", e.getMessage());
+                        hideLoading();
+                    }
+                });
     }
 
     private void showDatePicker() {

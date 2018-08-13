@@ -46,6 +46,7 @@ public class Utils {
     public static final String STATUS_DONE = "Hoàn Thành";
     public static final String STATUS_NOT_DONE = "Hoàn Thành";
     public static final String PATTERN_DATE = "dd-MM-yyyy";
+    public static String linkServer = "http://150.95.104.237/";
 
     public static boolean isEmulator() {
         return Build.FINGERPRINT.startsWith("generic")
