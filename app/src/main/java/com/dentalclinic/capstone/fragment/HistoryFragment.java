@@ -14,6 +14,7 @@ import android.widget.Toast;
 import io.reactivex.functions.BiFunction;
 
 import com.dentalclinic.capstone.R;
+import com.dentalclinic.capstone.activities.MainActivity;
 import com.dentalclinic.capstone.adapter.HistoryPageAdapter;
 import com.dentalclinic.capstone.adapter.PageAdapter;
 import com.dentalclinic.capstone.api.APIServiceManager;
@@ -21,13 +22,17 @@ import com.dentalclinic.capstone.api.CombineClass;
 import com.dentalclinic.capstone.api.CombineHistoryClass;
 import com.dentalclinic.capstone.api.services.AppointmentService;
 import com.dentalclinic.capstone.api.services.HistoryTreatmentService;
+import com.dentalclinic.capstone.api.services.PatientService;
 import com.dentalclinic.capstone.api.services.PaymentService;
 import com.dentalclinic.capstone.models.Appointment;
 import com.dentalclinic.capstone.models.News;
+import com.dentalclinic.capstone.models.Patient;
 import com.dentalclinic.capstone.models.Payment;
 import com.dentalclinic.capstone.models.TreatmentHistory;
+import com.dentalclinic.capstone.models.User;
 import com.dentalclinic.capstone.utils.AppConst;
 import com.dentalclinic.capstone.utils.CoreManager;
+import com.dentalclinic.capstone.utils.Utils;
 
 import java.util.List;
 
@@ -59,7 +64,11 @@ public class HistoryFragment extends BaseFragment {
         setupViewPager(viewPager);
         viewPager.setOffscreenPageLimit(4);
         tabLayout.setupWithViewPager(viewPager);
-        callAPI();
+        if(CoreManager.getUser(getContext()).getPatients()==null || CoreManager.getUser(getContext()).getPatients().isEmpty()){
+            callApiCheck(CoreManager.getUser(getContext()).getPhone());
+        }else{
+            callAPI();
+        }
         return v;
     }
 
@@ -172,10 +181,6 @@ public class HistoryFragment extends BaseFragment {
             Single payment = APIServiceManager.getService(PaymentService.class)
                     .getByPhone(CoreManager.getUser(getContext()).getPhone()).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread());
-//            Single treatmentHistories = APIServiceManager.getService(HistoryTreatmentService.class)
-//                    .getHistoryTreatmentById(CoreManager.getCurrentPatient(getContext()).getId()).subscribeOn(Schedulers.io())
-//                    .observeOn(AndroidSchedulers.mainThread());
-
             Single<CombineHistoryClass> combine = Single.zip(payment, appointment,
                     new BiFunction<Response<List<Payment>>, Response<List<Appointment>>, CombineHistoryClass>() {
                         @Override
@@ -233,7 +238,49 @@ public class HistoryFragment extends BaseFragment {
                 }
             });
         }
+    }
 
+    public void callApiCheck(String phone) {
+        showLoading();
+        PatientService service = APIServiceManager.getService(PatientService.class);
+        service.getPatientByPhone(phone)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<Response<List<Patient>>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable = d;
+                    }
+
+                    @Override
+                    public void onSuccess(Response<List<Patient>> listResponse) {
+                        if (listResponse.isSuccessful()) {
+                            if (!listResponse.body().isEmpty()) {
+                                User user = CoreManager.getUser(getContext());
+                                user.setPatients(listResponse.body());
+                                CoreManager.setUser(getContext(),user);
+                                MainActivity.resetHeader(getContext());
+                            }
+                            callAPI();
+                        } else if (listResponse.code() == 500) {
+                            showFatalError(listResponse.errorBody(), "callApiLogin");
+                        } else if (listResponse.code() == 401) {
+                            showErrorUnAuth();
+                        } else if (listResponse.code() == 400) {
+                            showBadRequestError(listResponse.errorBody(), "callApiLogin");
+                        } else {
+                            showErrorMessage(getString(R.string.error_on_error_when_call_api));
+                        }
+                        hideLoading();
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        showWarningMessage(getResources().getString(R.string.error_on_error_when_call_api));
+                        hideLoading();
+                    }
+                });
     }
 
 }

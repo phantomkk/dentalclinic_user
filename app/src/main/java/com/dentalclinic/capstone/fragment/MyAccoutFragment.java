@@ -25,6 +25,7 @@ import com.dentalclinic.capstone.models.AnamnesisCatalog;
 import com.dentalclinic.capstone.models.City;
 import com.dentalclinic.capstone.models.District;
 import com.dentalclinic.capstone.models.Patient;
+import com.dentalclinic.capstone.models.User;
 import com.dentalclinic.capstone.utils.AppConst;
 import com.dentalclinic.capstone.utils.CoreManager;
 import com.dentalclinic.capstone.utils.DateTimeFormat;
@@ -37,6 +38,7 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.reactivex.SingleObserver;
@@ -84,7 +86,11 @@ public class MyAccoutFragment extends BaseFragment implements View.OnClickListen
         txtAddress = v.findViewById(R.id.txt_address);
         txtAnamnesis = v.findViewById(R.id.txt_list_anamnesis);
 //        prepareData();
-        setData(CoreManager.getCurrentPatient(getContext()));
+        if(CoreManager.getUser(getContext()).getPatients()==null|| CoreManager.getUser(getContext()).getPatients().isEmpty()){
+            callApiCheck(CoreManager.getUser(getContext()).getPhone());
+        }else{
+            setData(CoreManager.getCurrentPatient(getContext()));
+        }
 
         return v;
     }
@@ -253,6 +259,48 @@ public class MyAccoutFragment extends BaseFragment implements View.OnClickListen
             }
         }
     }
+    private Disposable disposable;
+    public void callApiCheck(String phone) {
+        showLoading();
+        PatientService service = APIServiceManager.getService(PatientService.class);
+        service.getPatientByPhone(phone)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<Response<List<Patient>>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable = d;
+                    }
 
+                    @Override
+                    public void onSuccess(Response<List<Patient>> listResponse) {
+                        if (listResponse.isSuccessful()) {
+                            if (!listResponse.body().isEmpty()) {
+                                User user = CoreManager.getUser(getContext());
+                                user.setPatients(listResponse.body());
+                                CoreManager.setUser(getContext(),user);
+                                MainActivity.resetHeader(getContext());
+                            }
+                            setData(CoreManager.getCurrentPatient(getContext()));
+                        } else if (listResponse.code() == 500) {
+                            showFatalError(listResponse.errorBody(), "callApiLogin");
+                        } else if (listResponse.code() == 401) {
+                            showErrorUnAuth();
+                        } else if (listResponse.code() == 400) {
+                            showBadRequestError(listResponse.errorBody(), "callApiLogin");
+                        } else {
+                            showErrorMessage(getString(R.string.error_on_error_when_call_api));
+                        }
+                        hideLoading();
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        showWarningMessage(getResources().getString(R.string.error_on_error_when_call_api));
+                        hideLoading();
+                    }
+                });
+    }
 
 }

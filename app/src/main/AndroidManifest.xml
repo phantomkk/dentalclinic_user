@@ -35,17 +35,16 @@
         <activity
             android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="stateVisible|adjustResize"/>
         <activity
-            android:name=".activities.QuickBookActivity" />
+            android:name=".activities.QuickBookActivity"/>
         <activity android:name=".activities.Appointment" />
-        <activity android:name=".activities.RegisterActivity" />
+        <activity android:name=".activities.RegisterActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".activities.SelectDentistActivity" />
         <activity android:name=".activities.TreatmentDetailActivity" />
         <activity android:name=".activities.NewsActivity" />
-        <activity android:name=".activities.TesttActivity" >
-
-        </activity>
         <activity
             android:name=".activities.NewsDetailActivity"
             android:label="@string/title_activity_news_detail"

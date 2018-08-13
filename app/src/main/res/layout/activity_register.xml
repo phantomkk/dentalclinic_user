@@ -3,210 +3,215 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/color_white"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/header">
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        tools:context="com.dentalclinic.capstone.activities.RegisterActivity">
+        android:layout_margin="20dp"
+        app:cardCornerRadius="10dp"
+        android:layout_height="wrap_content">
 
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/edt_fullname_register"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_account_circle_black_24dp"
-                android:drawablePadding="@dimen/drawable_padding"
-                android:hint="@string/tv_promt_fullname"
-                android:imeOptions="actionNext"
-                android:inputType="text"
-                android:textSize="@dimen/input_size_normal"
-                android:maxLines="1" />
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/input_margin_top"
-
-            >
-
-            <EditText
-                android:id="@+id/edt_phone_register"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_phone_iphone_black_24dp"
-                android:drawablePadding="@dimen/drawable_padding"
-                android:hint="@string/label_phone_quickbook"
-                android:imeOptions="actionNext"
-                android:inputType="phone"
-                android:textSize="@dimen/input_size_normal"
-                android:maxLines="1" />
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:layout_marginTop="@dimen/input_margin_top">
-
-            <EditText
-                android:id="@+id/edt_password_register"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_lock_outline_black_24dp"
-                android:drawablePadding="@dimen/drawable_padding"
-                android:hint="@string/label_password_promt"
-                android:imeOptions="actionNext"
-                android:inputType="textPassword"
-                android:textSize="@dimen/input_size_normal"
-                android:maxLines="1" />
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:layout_marginTop="@dimen/input_margin_top">
-
-            <EditText
-                android:id="@+id/edt_confirm_password_register"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_lock_outline_black_24dp"
-                android:drawablePadding="@dimen/drawable_padding"
-                android:hint="@string/label_confirm_password_promt"
-                android:imeOptions="actionNext"
-                android:inputType="textPassword"
-                android:textSize="@dimen/input_size_normal"
-                android:maxLines="1" />
-        </android.support.design.widget.TextInputLayout>
-
-        <RadioGroup
-            android:id="@+id/rg_gender_register"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/input_margin_top"
-            android:orientation="horizontal"
-
-            android:weightSum="100">
-
-            <RadioButton
-                android:id="@+id/rbt_male_register"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="33"
-                android:textSize="@dimen/input_size_normal"
-                android:text="Nam" />
-
-            <RadioButton
-                android:id="@+id/rbt_female_register"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="33"
-                android:textSize="@dimen/input_size_normal"
-                android:text="Nữ" />
-
-            <RadioButton
-                android:id="@+id/rbt_others_register"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="33"
-                android:textSize="@dimen/input_size_normal"
-                android:text="Khác" />
-        </RadioGroup>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:orientation="horizontal"
-            android:weightSum="100">
-
-            <TextView
-                android:id="@+id/tv_birthday_register"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="40"
-                android:clickable="true"
-                android:drawablePadding="9dp"
-                android:drawableStart="@drawable/ic_date_range_black_24dp"
-                android:focusable="true"
-                android:paddingStart="5dp"
-                android:textSize="@dimen/input_size_normal"
-                android:text="@string/label_birthday_register"
-                android:textColor="@color/color_blue_grey_300"  />
-
-            <TextView
-                android:id="@+id/txt_error_date_register"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="60"
-                android:gravity="left"
-                android:paddingStart="9dp"
-                android:paddingEnd="1dp"
-                android:text=""
-                android:textColor="@color/error_label" />
-        </LinearLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/input_margin_top">
-
-            <AutoCompleteTextView
-                android:id="@+id/edt_address_register"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top|left"
-                android:drawableStart="@drawable/ic_home_black_24dp"
-                android:drawablePadding="9dp"
-                android:hint="@string/label_address_quickbook"
-                android:textSize="@dimen/input_size_normal"
-                android:imeOptions="actionNext"
-                android:inputType="textCapSentences|textMultiLine"
-                android:maxLength="2000"
-                android:maxLines="4"
-                android:minLines="3"
-                android:paddingStart="6dp"
-                android:paddingEnd="2dp"
-                android:singleLine="true" />
-        </android.support.design.widget.TextInputLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:weightSum="100">
-            <Spinner
-                android:id="@+id/spinner_district_register"
+            android:padding="16dp"
+            tools:context="com.dentalclinic.capstone.activities.RegisterActivity">
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/edt_fullname_register"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/drawable_padding"
+                    android:drawableStart="@drawable/ic_account_circle_black_24dp"
+                    android:hint="@string/tv_promt_fullname"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textSize="@dimen/input_size_normal" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/input_margin_top">            </Spinner>
-            <Spinner
-                android:id="@+id/spinner_city_register"
+                android:layout_marginTop="@dimen/input_margin_top">
+
+                <EditText
+                    android:id="@+id/edt_phone_register"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_phone_iphone_black_24dp"
+                    android:drawablePadding="@dimen/drawable_padding"
+                    android:hint="@string/label_phone_quickbook"
+                    android:imeOptions="actionNext"
+                    android:inputType="phone"
+                    android:maxLines="1"
+                    android:textSize="@dimen/input_size_normal" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-            </Spinner>
+
+                android:layout_marginTop="@dimen/input_margin_top">
+
+                <EditText
+                    android:id="@+id/edt_password_register"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/drawable_padding"
+                    android:drawableStart="@drawable/ic_lock_outline_black_24dp"
+                    android:hint="@string/label_password_promt"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:textSize="@dimen/input_size_normal" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_marginTop="@dimen/input_margin_top">
+
+                <EditText
+                    android:id="@+id/edt_confirm_password_register"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/drawable_padding"
+                    android:drawableStart="@drawable/ic_lock_outline_black_24dp"
+                    android:hint="@string/label_confirm_password_promt"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:textSize="@dimen/input_size_normal" />
+            </android.support.design.widget.TextInputLayout>
+
+            <RadioGroup
+                android:id="@+id/rg_gender_register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/input_margin_top"
+                android:orientation="horizontal"
+
+                android:weightSum="100">
+
+                <RadioButton
+                    android:id="@+id/rbt_male_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="33"
+                    android:text="Nam"
+                    android:textSize="@dimen/input_size_normal" />
+
+                <RadioButton
+                    android:id="@+id/rbt_female_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="33"
+                    android:text="Nữ"
+                    android:textSize="@dimen/input_size_normal" />
+
+                <RadioButton
+                    android:id="@+id/rbt_others_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="33"
+                    android:text="Khác"
+                    android:textSize="@dimen/input_size_normal" />
+            </RadioGroup>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal"
+                android:weightSum="100">
+
+                <TextView
+                    android:id="@+id/tv_birthday_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="40"
+                    android:clickable="true"
+                    android:drawablePadding="9dp"
+                    android:drawableStart="@drawable/ic_date_range_black_24dp"
+                    android:focusable="true"
+                    android:paddingStart="5dp"
+                    android:text="@string/label_birthday_register"
+                    android:textColor="@color/color_blue_grey_300"
+                    android:textSize="@dimen/input_size_normal" />
+
+                <TextView
+                    android:id="@+id/txt_error_date_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="60"
+                    android:gravity="left"
+                    android:paddingEnd="1dp"
+                    android:paddingStart="9dp"
+                    android:text=""
+                    android:textColor="@color/error_label" />
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/input_margin_top">
+
+                <AutoCompleteTextView
+                    android:id="@+id/edt_address_register"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|left"
+                    android:drawablePadding="9dp"
+                    android:drawableStart="@drawable/ic_home_black_24dp"
+                    android:hint="@string/label_address_quickbook"
+                    android:imeOptions="actionNext"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:maxLength="2000"
+                    android:maxLines="4"
+                    android:minLines="3"
+                    android:paddingEnd="2dp"
+                    android:paddingStart="6dp"
+                    android:singleLine="true"
+                    android:textSize="@dimen/input_size_normal" />
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:weightSum="100">
+
+                <Spinner
+                    android:id="@+id/spinner_district_register"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/input_margin_top"></Spinner>
+
+                <Spinner
+                    android:id="@+id/spinner_city_register"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"></Spinner>
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/btn_register"
+                style="@style/custom_button_blue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:text="@string/label_button_register" />
         </LinearLayout>
-
-
-
-        <Button
-            android:id="@+id/btn_register"
-            style="@style/custom_button_blue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="15dp"
-            android:text="@string/label_button_register" />
-    </LinearLayout>
-
+    </android.support.v7.widget.CardView>
 </ScrollView>

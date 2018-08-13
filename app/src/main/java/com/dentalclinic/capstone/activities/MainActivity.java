@@ -175,7 +175,7 @@ public class MainActivity extends BaseActivity
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withTranslucentStatusBar(true)
-                .withHeaderBackground(R.drawable.header2)
+                .withHeaderBackground(R.drawable.header)
 //                .addProfiles((IProfile) (listIprofile.toArray()))
                 .addProfiles(arrayIProfile)
                 .withOnAccountHeaderProfileImageListener(new AccountHeader.OnAccountHeaderProfileImageListener() {
