@@ -339,7 +339,6 @@ public class RegisterActivity extends BaseActivity {
                     @Override
                     public void onSuccess(Response<User> userResponse) {
                         if (userResponse.isSuccessful()) {
-                            Toast.makeText(RegisterActivity.this, "Success", Toast.LENGTH_SHORT).show();
                             AlertDialog.Builder alertDialog = new AlertDialog.Builder(RegisterActivity.this)
                                     .setMessage("Đăng kí tài khoản thành công")
                                     .setPositiveButton("Đăng nhập", (DialogInterface dialogInterface, int i) -> {
