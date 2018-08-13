@@ -333,7 +333,6 @@ public class RegisterActivity extends BaseActivity {
                     @Override
                     public void onSubscribe(Disposable d) {
                         registerServiceDisposable = d;
-                        hideLoading();
                     }
 
                     @Override
