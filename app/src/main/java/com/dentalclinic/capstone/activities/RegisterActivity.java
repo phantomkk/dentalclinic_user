@@ -343,6 +343,7 @@ public class RegisterActivity extends BaseActivity {
                                     .setPositiveButton("Đăng nhập", (DialogInterface dialogInterface, int i) -> {
                                         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                         startActivity(intent);
+                                        finish();
                                     });
                             alertDialog.show();
                         } else if (userResponse.code() == 500) {
