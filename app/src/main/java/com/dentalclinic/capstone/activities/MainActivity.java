@@ -166,7 +166,7 @@ public class MainActivity extends BaseActivity
                 }
             }
         } else {
-            listIprofile.add(new ProfileSettingDrawerItem().withName("Đăng Nhập").withDescription("Đăng Nhập Tài Khoản").withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_add).actionBar().paddingDp(5).colorRes(R.color.material_drawer_primary_text)).withIdentifier(PROFILE_SETTING));
+            listIprofile.add(new ProfileSettingDrawerItem().withName("Đăng Nhập").withDescription("Đăng Nhập Tài Khoản").withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_add).actionBar().paddingDp(5).colorRes(R.color.color_white)).withIdentifier(PROFILE_SETTING));
         }
 //        listIprofile.add(new ProfileSettingDrawerItem().withName("Quản Lý Bệnh Nhân").withIcon(GoogleMaterial.Icon.gmd_settings).withIdentifier(100001));
         IProfile[] arrayIProfile = new IProfile[listIprofile.size()];
@@ -363,7 +363,7 @@ public class MainActivity extends BaseActivity
                 }
             }
         } else {
-            listIprofile.add(new ProfileSettingDrawerItem().withName("Đăng Nhập").withDescription("Đăng Nhập Tài Khoản").withIcon(new IconicsDrawable(context, GoogleMaterial.Icon.gmd_add).actionBar().paddingDp(5).colorRes(R.color.material_drawer_primary_text)).withIdentifier(PROFILE_SETTING));
+            listIprofile.add(new ProfileSettingDrawerItem().withName("Đăng Nhập").withDescription("Đăng Nhập Tài Khoản").withIcon(new IconicsDrawable(context, GoogleMaterial.Icon.gmd_add).actionBar().paddingDp(5).colorRes(R.color.color_white)).withIdentifier(PROFILE_SETTING));
         }
         headerResult.setProfiles(listIprofile);
         if (user != null) {
@@ -547,7 +547,7 @@ public class MainActivity extends BaseActivity
         user = null;
         result.setSelectionAtPosition(1, true);
         listIprofile = new ArrayList<>();
-        listIprofile.add(new ProfileSettingDrawerItem().withName("Đăng Nhập").withIcon(new IconicsDrawable(MainActivity.this, GoogleMaterial.Icon.gmd_add).actionBar().paddingDp(5).colorRes(R.color.material_drawer_primary_text)).withIdentifier(PROFILE_SETTING));
+        listIprofile.add(new ProfileSettingDrawerItem().withName("Đăng Nhập").withIcon(new IconicsDrawable(MainActivity.this, GoogleMaterial.Icon.gmd_add).actionBar().paddingDp(5).colorRes(R.color.color_white)).withIdentifier(PROFILE_SETTING));
         headerResult.clear();
         headerResult.setProfiles(listIprofile);
         headerResult.setActiveProfile(listIprofile.get(0));
