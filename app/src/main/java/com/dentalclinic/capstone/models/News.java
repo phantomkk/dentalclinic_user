@@ -14,7 +14,7 @@ public class News implements Serializable{
     private String title;
     @SerializedName("content")
     private String content;
-    @SerializedName("create_date")
+    @SerializedName("created_date")
     private String createDate;
     @SerializedName("staff")
     private Staff author;
