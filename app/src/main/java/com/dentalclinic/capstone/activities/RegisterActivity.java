@@ -135,7 +135,7 @@ public class RegisterActivity extends BaseActivity {
                             tvErrorBirthday.setText("");
 
                         }
-                    }, year, month, day);
+                    }, 2000, month, day);
             dialog.setButton(DatePickerDialog.BUTTON_POSITIVE,getString(R.string.OK), dialog);
             dialog.setButton(DatePickerDialog.BUTTON_NEGATIVE, getString(R.string.Cancel), (DialogInterface.OnClickListener)null);
 

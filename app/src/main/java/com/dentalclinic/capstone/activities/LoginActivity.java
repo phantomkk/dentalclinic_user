@@ -181,7 +181,7 @@ public class LoginActivity extends BaseActivity {
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 8;
+        return password.length() >= 6;
     }
 
     @Override
