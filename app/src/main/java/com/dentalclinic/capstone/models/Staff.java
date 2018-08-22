@@ -1,5 +1,6 @@
 package com.dentalclinic.capstone.models;
 
+import com.dentalclinic.capstone.utils.Utils;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -81,8 +82,7 @@ public class Staff implements Serializable {
     }
 
     public String getAvatar() {
-        return avatar;
-    }
+        return Utils.linkServer + avatar;    }
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
