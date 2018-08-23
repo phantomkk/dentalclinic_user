@@ -5,7 +5,7 @@ package com.dentalclinic.capstone.utils;
  */
 
 public class AppConst {
-    public final static String SERVER_NAME = "http://api61984.azurewebsites.net/";
+    public final static String SERVER_NAME = "http://150.95.104.237";
 
     public final static String DATE_NO_TIME = "dd/MM/yyyy";
     public final static String DATE_AND_TIME = "dd/MM/yyyy HH:mm";

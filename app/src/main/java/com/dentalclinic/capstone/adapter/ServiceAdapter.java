@@ -47,6 +47,7 @@ public class ServiceAdapter extends BaseExpandableListAdapter {
     public Object getChild(int groupPosition, int childPosititon) {
         return listDataHeader.get(groupPosition).getTreatments().get(childPosititon);
     }
+
     @Override
     public long getChildId(int groupPosition, int childPosition) {
         return childPosition;
@@ -92,7 +93,12 @@ public class ServiceAdapter extends BaseExpandableListAdapter {
         TextView mName = convertView.findViewById(R.id.txt_name);
         mName.setText(treatment.getName());
         TextView mPrice = convertView.findViewById(R.id.txt_price);
-        mPrice.setText(Utils.formatMoney(treatment.getMinPrice()) + "-" + Utils.formatMoney(treatment.getMaxPrice()) + context.getResources().getString(R.string.current_unit));
+        String priceStr = "";
+        if (treatment.getMinPrice().longValue() == treatment.getMaxPrice().longValue()) {
+            mPrice.setText("giá cố định: " + Utils.formatMoney(treatment.getMinPrice()) + "đ");
+        } else {
+            mPrice.setText(Utils.formatMoney(treatment.getMinPrice()) + "đ đến " + Utils.formatMoney(treatment.getMaxPrice()) + context.getResources().getString(R.string.current_unit));
+        }
         TextView mDescription = convertView.findViewById(R.id.txt_description);
         if (treatment.getDescription() != null) {
             mDescription.setVisibility(View.VISIBLE);
@@ -180,7 +186,7 @@ public class ServiceAdapter extends BaseExpandableListAdapter {
                     if (treatmentCategory.getDescription() != null) {
                         category.setDescription(treatmentCategory.getDescription());
                     }
-                    if(treatmentCategory.getIconLink()!=null){
+                    if (treatmentCategory.getIconLink() != null) {
                         category.setIconLink(treatmentCategory.getIconLink());
                     }
                     category.setName(treatmentCategory.getName());

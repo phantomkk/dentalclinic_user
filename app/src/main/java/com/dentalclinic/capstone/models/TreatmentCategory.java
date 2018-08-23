@@ -1,5 +1,6 @@
 package com.dentalclinic.capstone.models;
 
+import com.dentalclinic.capstone.utils.AppConst;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -69,7 +70,7 @@ public class TreatmentCategory implements Serializable {
         if(iconLink==null ||iconLink.length()==0){
             iconLink = "https://www.impactnyc.org/wp-content/uploads/2018/02/missing-image-avatar.png";
         }
-        return iconLink;
+        return AppConst.SERVER_NAME + iconLink;
     }
 
     public void setIconLink(String iconLink) {
