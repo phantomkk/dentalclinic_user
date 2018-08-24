@@ -74,11 +74,13 @@ public class HistoryTreatmentFragment extends BaseFragment {
     }
 
     public void notificationAdapter(List<TreatmentHistory> treatmentHistories) {
-        if(!treatmentHistories.isEmpty()){
+        if (!treatmentHistories.isEmpty()) {
             txtEmptyList.setVisibility(View.GONE);
         }
         this.treatmentHistories.addAll(treatmentHistories);
-        adapter.notifyDataSetChanged();
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @Override

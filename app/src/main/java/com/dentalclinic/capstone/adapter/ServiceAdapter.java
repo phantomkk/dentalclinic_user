@@ -95,9 +95,9 @@ public class ServiceAdapter extends BaseExpandableListAdapter {
         TextView mPrice = convertView.findViewById(R.id.txt_price);
         String priceStr = "";
         if (treatment.getMinPrice().longValue() == treatment.getMaxPrice().longValue()) {
-            mPrice.setText("giá cố định: " + Utils.formatMoney(treatment.getMinPrice()) + "đ");
+            mPrice.setText("giá cố định " + Utils.formatMoney(treatment.getMinPrice()) + "đ");
         } else {
-            mPrice.setText(Utils.formatMoney(treatment.getMinPrice()) + "đ đến " + Utils.formatMoney(treatment.getMaxPrice()) + context.getResources().getString(R.string.current_unit));
+            mPrice.setText("Giá từ " + Utils.formatMoney(treatment.getMinPrice()) + "đ đến " + Utils.formatMoney(treatment.getMaxPrice()) + context.getResources().getString(R.string.current_unit));
         }
         TextView mDescription = convertView.findViewById(R.id.txt_description);
         if (treatment.getDescription() != null) {
