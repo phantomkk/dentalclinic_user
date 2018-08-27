@@ -16,8 +16,10 @@ import com.dentalclinic.capstone.api.requestobject.RegisterRequest;
 import com.dentalclinic.capstone.api.responseobject.ErrorResponse;
 import com.dentalclinic.capstone.api.responseobject.SuccessResponse;
 import com.dentalclinic.capstone.api.services.UserService;
+import com.dentalclinic.capstone.models.FingerAuthObj;
 import com.dentalclinic.capstone.models.Patient;
 import com.dentalclinic.capstone.utils.AppConst;
+import com.dentalclinic.capstone.utils.CoreManager;
 import com.dentalclinic.capstone.utils.Utils;
 import com.dentalclinic.capstone.utils.Validation;
 import com.google.gson.JsonSyntaxException;
@@ -133,7 +135,9 @@ public class EditPasswordActivity extends BaseActivity implements View.OnClickLi
                     @Override
                     public void onSuccess(Response<SuccessResponse> response) {
                         if (response.isSuccessful()) {
-
+                            FingerAuthObj obj = CoreManager.getFingerAuthObj(EditPasswordActivity.this);
+                            obj.setPassword(newPassword);
+                            CoreManager.setFingerAuthObj(EditPasswordActivity.this,obj);
                             showSuccessMessage(getResources().getString(R.string.success_message_api));
                             finish();
                         } else if (response.code() == 500) {

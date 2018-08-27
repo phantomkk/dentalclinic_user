@@ -11,7 +11,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Danh sách bác sĩ phù hợp với yêu cầu của bạn" />
+        android:text="Danh sách nha sĩ phù hợp với yêu cầu của bạn" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rcv_dentist_sltdentist"
@@ -24,7 +24,7 @@
         android:layout_marginTop="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Bác sĩ được đề xuất" />
+        android:text="Nha sĩ được đề xuất" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rcv_suggest_dentist_sltdentist"
@@ -35,6 +35,6 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Chọn bác sĩ"
+        android:text="Chọn nha sĩ"
         />
 </LinearLayout>

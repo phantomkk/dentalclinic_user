@@ -250,10 +250,12 @@ private BtnCheckoutListenter btnCheckOutClickListener;
                 viewHolder.txtStatus.setTextColor(context.getResources().getColor(R.color.color_red_500));
                 break;
             case 1:
+                viewHolder.lnPayPal.setVisibility(View.GONE);
                 viewHolder.txtStatus.setText(context.getResources().getString(R.string.status_done));
                 viewHolder.txtStatus.setTextColor(context.getResources().getColor(R.color.color_green_500));
                 break;
             case 2:
+                viewHolder.lnPayPal.setVisibility(View.GONE);
                 viewHolder.txtStatus.setText(context.getResources().getString(R.string.status_cancle));
                 viewHolder.txtStatus.setTextColor(context.getResources().getColor(R.color.color_red_500));
                 break;
